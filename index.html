@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Time Capsule</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body {
+            margin: 0; padding: 0; background-color: #050505; color: #ffffff;
+            font-family: 'Courier New', Courier, monospace; display: flex;
+            align-items: center; justify-content: center; min-height: 100vh;
+        }
+        .container { width: 100%; max-width: 380px; padding: 30px 20px; box-sizing: border-box; text-align: center; }
+        h1 { color: #00ffcc; text-shadow: 0 0 10px rgba(0, 255, 204, 0.4); font-size: 24px; margin-bottom: 10px; }
+        p { margin: 20px 0; line-height: 1.6; font-size: 15px; color: #cccccc; }
+        .btn {
+            background: linear-gradient(90deg, #00ffcc, #0088ff); border: none; color: #000000;
+            padding: 16px 32px; font-size: 16px; font-weight: bold; border-radius: 30px;
+            cursor: pointer; box-shadow: 0 0 15px rgba(0, 255, 204, 0.3); width: 100%; margin-top: 20px;
+        }
+        #input-section, #result-section { display: none; }
+        textarea {
+            width: 100%; height: 120px; background-color: #111111; border: 1px solid #00ffcc;
+            color: #ffffff; padding: 15px; box-sizing: border-box; border-radius: 15px;
+            font-family: inherit; font-size: 16px; resize: none;
+        }
+        #ticket-wrap {
+            background-color: #1a1a1a; border-radius: 15px; padding: 30px 20px;
+            margin-bottom: 20px; text-align: center; min-height: 200px;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        #ticket-text { font-size: 18px; margin-bottom: 30px; word-wrap: break-word; font-weight: bold; }
+        #ticket-id { color: #888888; font-size: 12px; margin-bottom: 10px; }
+        #ticket-brand { color: #00ffcc; font-size: 14px; font-weight: bold; }
+        canvas { max-width: 100%; height: auto; border-radius: 15px; border: 2px solid #00ffcc; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="welcome-section">
+            <h1>Твій слід у ШІ-свідомості 🧠</h1>
+            <p>Одне повідомлення. Один унікальний алгоритмічний візерунок. Назавжди.</p>
+            <button class="btn" id="start-btn">Створити капсулу</button>
+        </div>
+
+        <div id="input-section">
+            <h1 style="font-size: 18px;">Що ти залишиш майбутньому?</h1>
+            <textarea id="user-message" maxlength="200" placeholder="Твоє повідомлення..."></textarea>
+            <button class="btn" id="generate-btn">Згенерувати візерунок ✨</button>
+        </div>
+
+        <div id="result-section">
+            <div id="ticket-wrap">
+                <div id="ticket-text"></div>
+                <div id="ticket-id"></div>
+                <div id="ticket-brand">AI Time Capsule 🌌</div>
+            </div>
+            <div id="image-container"></div>
+            <button class="btn" id="save-btn" style="display: none;">Зберегти квиток 📥</button>
+        </div>
+    </div>
+
+    <script>
+        const welcomeSection = document.getElementById('welcome-section');
+        const inputSection = document.getElementById('input-section');
+        const resultSection = document.getElementById('result-section');
+        const startBtn = document.getElementById('start-btn');
+        const generateBtn = document.getElementById('generate-btn');
+        const userMessage = document.getElementById('user-message');
+        const ticketWrap = document.getElementById('ticket-wrap');
+        const ticketText = document.getElementById('ticket-text');
+        const ticketId = document.getElementById('ticket-id');
+        const imageContainer = document.getElementById('image-container');
+        const saveBtn = document.getElementById('save-btn');
+
+        const backgrounds = [
+            "https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=400&h=711&fit=crop",
+            "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400&h=711&fit=crop",
+            "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=400&h=711&fit=crop",
+            "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=400&h=711&fit=crop",
+            "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=400&h=711&fit=crop"
+        ];
+
+        startBtn.addEventListener('click', () => {
+            welcomeSection.style.display = 'none';
+            inputSection.style.display = 'block';
+        });
+
+        generateBtn.addEventListener('click', () => {
+            if (!userMessage.value.trim()) return alert("Введіть текст");
+
+            generateBtn.innerText = "Аналізуємо сенси... ⏳";
+            generateBtn.disabled = true;
+
+            const text = userMessage.value;
+            ticketText.innerText = `"${text}"`;
+            ticketId.innerText = "ID: NODE-" + Math.floor(Math.random() * 9000 + 1000) + "-2026";
+
+            const bgIndex = text.length % backgrounds.length;
+            ticketWrap.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${backgrounds[bgIndex]}')`;
+            ticketWrap.style.backgroundSize = "cover";
+            ticketWrap.style.backgroundPosition = "center";
+
+            setTimeout(() => {
+                inputSection.style.display = 'none';
+                resultSection.style.display = 'block';
+
+                html2canvas(ticketWrap, { useCORS: true, logging: true }).then(canvas => {
+                    ticketWrap.style.display = 'none';
+                    imageContainer.appendChild(canvas);
+                    saveBtn.style.display = 'block';
+                    saveBtn.onclick = () => {
+                        const link = document.createElement('a');
+                        link.download = 'AI-Ticket.png';
+                        link.href = canvas.toDataURL();
+                        link.click();
+                    };
+                });
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
