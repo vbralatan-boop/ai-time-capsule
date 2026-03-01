@@ -56,13 +56,13 @@
 <body>
     <div class="container">
         <div id="welcome-section">
-            <h1>Твій слід у ШІ-свідомості 🧠</h1>
+            <h1 id="main-title">Твій слід у ШІ-свідомості 🧠</h1>
             <p>Одне повідомлення. Один унікальний алгоритмічний візерунок. Назавжди.</p>
             <button class="btn" id="start-btn">Створити капсулу</button>
         </div>
 
         <div id="input-section">
-            <h1 style="font-size: 18px;">Що ти залишиш майбутньому?</h1>
+            <h1 id="input-title" style="font-size: 18px; margin-bottom: 10px; color: #00ffcc;">Що ти залишиш майбутньому?</h1>
             <textarea id="user-message" maxlength="200" placeholder="Твоє повідомлення..."></textarea>
             <button class="btn" id="generate-btn">Згенерувати візерунок ✨</button>
         </div>
@@ -142,19 +142,29 @@
             }, 2000);
         });
         // 1. Наш словник з перекладами
+// 1. Повний словник з перекладами
 const translations = {
   en: {
+    mainTitle: "Your footprint in AI consciousness 🧠",
     subtitle: "One message. One unique algorithmic signature. For eternity.",
+    inputTitle: "What will you leave for the future?",
+    inputPlaceholder: "Your message...",
     startButton: "Create a capsule",
     generateButton: "Generate signature ✨"
   },
   de: {
+    mainTitle: "Dein Fußabdruck im KI-Bewusstsein 🧠",
     subtitle: "Eine Botschaft. Eine unikale KI-Signatur. Für die Ewigkeit.",
+    inputTitle: "Was wirst du der Zukunft hinterlassen?",
+    inputPlaceholder: "Deine Nachricht...",
     startButton: "Kapsel erstellen",
     generateButton: "KI-Signatur erzeugen ✨"
   },
   uk: {
+    mainTitle: "Твій слід у ШІ-свідомості 🧠",
     subtitle: "Одне повідомлення. Один унікальний алгоритмічний візерунок. Назавжди.",
+    inputTitle: "Що ти залишиш майбутньому?",
+    inputPlaceholder: "Твоє повідомлення...",
     startButton: "Створити капсулу",
     generateButton: "Згенерувати візерунок ✨"
   }
@@ -166,11 +176,13 @@ const flags = document.querySelectorAll('.flag');
 // 3. Додаємо команду для кожного прапорця
 flags.forEach(flag => {
     flag.addEventListener('click', function() {
-        // Читаємо, яку саме мову обрав користувач
         const lang = this.getAttribute('data-lang');
 
-        // Знаходимо елементи і підставляємо переклад зі словника
+        // Замінюємо текст у всіх елементах
+        document.getElementById('main-title').innerText = translations[lang].mainTitle;
         document.querySelector('#welcome-section p').innerText = translations[lang].subtitle;
+        document.getElementById('input-title').innerText = translations[lang].inputTitle;
+        document.getElementById('user-message').placeholder = translations[lang].inputPlaceholder;
         document.getElementById('start-btn').innerText = translations[lang].startButton;
         document.getElementById('generate-btn').innerText = translations[lang].generateButton;
     });
