@@ -141,6 +141,40 @@
                 });
             }, 2000);
         });
+        // 1. Наш словник з перекладами
+const translations = {
+  en: {
+    subtitle: "One message. One unique algorithmic signature. For eternity.",
+    startButton: "Create a capsule",
+    generateButton: "Generate signature ✨"
+  },
+  de: {
+    subtitle: "Eine Botschaft. Eine unikale KI-Signatur. Für die Ewigkeit.",
+    startButton: "Kapsel erstellen",
+    generateButton: "KI-Signatur erzeugen ✨"
+  },
+  uk: {
+    subtitle: "Одне повідомлення. Один унікальний алгоритмічний візерунок. Назавжди.",
+    startButton: "Створити капсулу",
+    generateButton: "Згенерувати візерунок ✨"
+  }
+};
+
+// 2. Знаходимо всі прапорці на сторінці
+const flags = document.querySelectorAll('.flag');
+
+// 3. Додаємо команду для кожного прапорця
+flags.forEach(flag => {
+    flag.addEventListener('click', function() {
+        // Читаємо, яку саме мову обрав користувач
+        const lang = this.getAttribute('data-lang');
+
+        // Знаходимо елементи і підставляємо переклад зі словника
+        document.querySelector('#welcome-section p').innerText = translations[lang].subtitle;
+        document.getElementById('start-btn').innerText = translations[lang].startButton;
+        document.getElementById('generate-btn').innerText = translations[lang].generateButton;
+    });
+});
     </script>
 </body>
 </html>
