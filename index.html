@@ -34,6 +34,23 @@
         #ticket-id { color: #888888; font-size: 12px; margin-bottom: 10px; }
         #ticket-brand { color: #00ffcc; font-size: 14px; font-weight: bold; }
         canvas { max-width: 100%; height: auto; border-radius: 15px; border: 2px solid #00ffcc; }
+    #language-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+    padding-bottom: 20px;
+}
+
+.flag {
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.flag:hover {
+    transform: scale(1.2);
+}
     </style>
 </head>
 <body>
@@ -59,6 +76,11 @@
             <div id="image-container"></div>
             <button class="btn" id="save-btn" style="display: none;">Зберегти квиток 📥</button>
         </div>
+        <div id="language-switcher">
+    <span class="flag" data-lang="uk" title="Українська">🇺🇦</span>
+    <span class="flag" data-lang="en" title="English">🇬🇧</span>
+    <span class="flag" data-lang="de" title="Deutsch">🇩🇪</span>
+</div>
     </div>
 
     <script>
