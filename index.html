@@ -92,6 +92,7 @@
 
     <script>
         const welcomeSection = document.getElementById('welcome-section');
+        let currentLang = 'uk';
         const inputSection = document.getElementById('input-section');
         const resultSection = document.getElementById('result-section');
         const startBtn = document.getElementById('start-btn');
@@ -130,9 +131,9 @@ function createSignature(text) {
         });
 
         generateBtn.addEventListener('click', () => {
-            if (!userMessage.value.trim()) return alert("Введіть текст");
+            if (!userMessage.value.trim()) if (!userMessage.value.trim()) return alert(translations[currentLang].errorAlert);
 
-            generateBtn.innerText = "Аналізуємо сенси... ⏳";
+            generateBtn.innerText = translations[currentLang].analyzing;
             generateBtn.disabled = true;
 
             const text = userMessage.value;
@@ -164,6 +165,7 @@ function createSignature(text) {
         // 1. Наш словник з перекладами
 // 1. Повний словник з перекладами
 const translations = {
+const translations = {
     en: {
         mainTitle: "Your footprint in AI consciousness",
         subtitle: "One message. One unique signature.",
@@ -171,7 +173,9 @@ const translations = {
         inputPlaceholder: "Your message...",
         startButton: "Create a capsule",
         generateButton: "Generate signature",
-        saveButton: "Download Ticket 📥"
+        saveButton: "Download Ticket 📥",
+        analyzing: "Analyzing meanings... ⏳",
+        errorAlert: "Please enter your message!"
     },
     de: {
         mainTitle: "Dein Fußabdruck im KI-Bewusstsein",
@@ -180,7 +184,9 @@ const translations = {
         inputPlaceholder: "Deine Nachricht...",
         startButton: "Kapsel erstellen",
         generateButton: "KI-Signatur erzeugen",
-        saveButton: "Ticket herunterladen 📥"
+        saveButton: "Ticket herunterladen 📥",
+        analyzing: "Sinne analysieren... ⏳",
+        errorAlert: "Bitte geben Sie Ihre Nachricht ein!"
     },
     uk: {
         mainTitle: "Твій слід у ШІ-свідомості",
@@ -189,7 +195,9 @@ const translations = {
         inputPlaceholder: "Твоє повідомлення...",
         startButton: "Створити капсулу",
         generateButton: "Згенерувати візерунок",
-        saveButton: "Завантажити квиток 📥"
+        saveButton: "Завантажити квиток 📥",
+        analyzing: "Аналізуємо сенси... ⏳",
+        errorAlert: "Будь ласка, введіть ваше повідомлення!"
     }
 };
 
@@ -200,7 +208,7 @@ const flags = document.querySelectorAll('.flag');
 flags.forEach(flag => {
     flag.addEventListener('click', function() {
         const lang = this.getAttribute('data-lang');
-
+currentLang = lang;
         // Замінюємо текст у всіх елементах
         document.getElementById('main-title').innerText = translations[lang].mainTitle;
         document.querySelector('#welcome-section p').innerText = translations[lang].subtitle;
