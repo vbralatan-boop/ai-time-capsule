@@ -164,30 +164,33 @@ function createSignature(text) {
         // 1. Наш словник з перекладами
 // 1. Повний словник з перекладами
 const translations = {
-  en: {
-    mainTitle: "Your footprint in AI consciousness 🧠",
-    subtitle: "One message. One unique algorithmic signature. For eternity.",
-    inputTitle: "What will you leave for the future?",
-    inputPlaceholder: "Your message...",
-    startButton: "Create a capsule",
-    generateButton: "Generate signature ✨"
-  },
-  de: {
-    mainTitle: "Dein Fußabdruck im KI-Bewusstsein 🧠",
-    subtitle: "Eine Botschaft. Eine unikale KI-Signatur. Für die Ewigkeit.",
-    inputTitle: "Was wirst du der Zukunft hinterlassen?",
-    inputPlaceholder: "Deine Nachricht...",
-    startButton: "Kapsel erstellen",
-    generateButton: "KI-Signatur erzeugen ✨"
-  },
-  uk: {
-    mainTitle: "Твій слід у ШІ-свідомості 🧠",
-    subtitle: "Одне повідомлення. Один унікальний алгоритмічний візерунок. Назавжди.",
-    inputTitle: "Що ти залишиш майбутньому?",
-    inputPlaceholder: "Твоє повідомлення...",
-    startButton: "Створити капсулу",
-    generateButton: "Згенерувати візерунок ✨"
-  }
+    en: {
+        mainTitle: "Your footprint in AI consciousness",
+        subtitle: "One message. One unique signature.",
+        inputTitle: "What will you leave for the future?",
+        inputPlaceholder: "Your message...",
+        startButton: "Create a capsule",
+        generateButton: "Generate signature",
+        saveButton: "Download Ticket 📥"
+    },
+    de: {
+        mainTitle: "Dein Fußabdruck im KI-Bewusstsein",
+        subtitle: "Eine Botschaft. Eine unikate Signatur.",
+        inputTitle: "Was wirst du der Zukunft hinterlassen?",
+        inputPlaceholder: "Deine Nachricht...",
+        startButton: "Kapsel erstellen",
+        generateButton: "KI-Signatur erzeugen",
+        saveButton: "Ticket herunterladen 📥"
+    },
+    uk: {
+        mainTitle: "Твій слід у ШІ-свідомості",
+        subtitle: "Одне повідомлення. Один унікальний підпис.",
+        inputTitle: "Що ти залишиш майбутньому?",
+        inputPlaceholder: "Твоє повідомлення...",
+        startButton: "Створити капсулу",
+        generateButton: "Згенерувати візерунок",
+        saveButton: "Завантажити квиток 📥"
+    }
 };
 
 // 2. Знаходимо всі прапорці на сторінці
@@ -205,6 +208,7 @@ flags.forEach(flag => {
         document.getElementById('user-message').placeholder = translations[lang].inputPlaceholder;
         document.getElementById('start-btn').innerText = translations[lang].startButton;
         document.getElementById('generate-btn').innerText = translations[lang].generateButton;
+        saveBtn.innerText = translations[lang].saveButton;
     });
 });
     </script>
