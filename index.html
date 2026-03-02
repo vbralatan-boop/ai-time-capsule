@@ -131,7 +131,7 @@ function createSignature(text) {
         });
 
         generateBtn.addEventListener('click', () => {
-            if (!userMessage.value.trim()) if (!userMessage.value.trim()) return alert(translations[currentLang].errorAlert);
+            if (!userMessage.value.trim()) return alert(translations[currentLang].errorAlert);
 
             generateBtn.innerText = translations[currentLang].analyzing;
             generateBtn.disabled = true;
