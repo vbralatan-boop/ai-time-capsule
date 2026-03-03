@@ -3,58 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Time Capsule | Global Archive 2026</title>
+    <title>AI Time Capsule | Legendary Edition</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --neon: #00ffcc; --bg: #020205; }
         body { margin: 0; padding: 0; background-color: var(--bg); color: #ffffff; font-family: 'Courier New', Courier, monospace; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
         .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; background: radial-gradient(circle at 50% 50%, rgba(0, 255, 204, 0.1) 0%, transparent 80%); z-index: -1; }
         .container { width: 100%; max-width: 400px; padding: 20px; box-sizing: border-box; text-align: center; z-index: 10; }
-        h1 { color: var(--neon); text-shadow: 0 0 15px var(--neon); font-size: 24px; letter-spacing: 2px; text-transform: uppercase; margin-top: 0; }
-        .manifesto { margin: 20px 0; line-height: 1.6; font-size: 14px; color: #aaa; text-align: justify; border-left: 2px solid var(--neon); padding-left: 15px; min-height: 80px; background: rgba(0, 255, 204, 0.03); padding-top: 5px; padding-bottom: 5px; }
-        .counter-box { background: rgba(0, 255, 204, 0.1); border: 1px dashed var(--neon); padding: 12px; border-radius: 5px; margin: 15px 0; font-weight: bold; color: var(--neon); }
-        .btn { background: var(--neon); border: none; color: #000; padding: 18px; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; box-shadow: 0 0 10px rgba(0, 255, 204, 0.3); }
+        h1 { color: var(--neon); text-shadow: 0 0 15px var(--neon); font-size: 22px; letter-spacing: 2px; text-transform: uppercase; }
+        .manifesto { margin: 20px 0; line-height: 1.6; font-size: 14px; color: #aaa; text-align: justify; border-left: 2px solid var(--neon); padding-left: 15px; min-height: 80px; }
+        .counter-box { background: rgba(0, 255, 204, 0.05); border: 1px dashed var(--neon); padding: 12px; margin: 15px 0; font-weight: bold; color: var(--neon); }
+        .btn { background: var(--neon); border: none; color: #000; padding: 18px; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .btn:hover { background: #fff; box-shadow: 0 0 25px var(--neon); }
         #input-section, #result-section { display: none; }
         textarea { width: 100%; height: 100px; background: #000; border: 1px solid #333; color: var(--neon); padding: 15px; box-sizing: border-box; font-family: inherit; resize: none; margin-bottom: 15px; outline: none; }
-        #ticket-wrap { position: relative; width: 320px; padding: 40px 20px; margin: 0 auto; background: linear-gradient(145deg, #0a0a15, #111122); border: 2px solid var(--neon); overflow: hidden; text-align: left; }
-        .ticket-meta { font-size: 9px; color: var(--neon); opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; }
-        #ticket-text { font-size: 16px; color: #fff; font-weight: bold; margin: 25px 0; text-align: center; }
-        #ai-pattern { width: 70px; height: 70px; margin: 0 auto 20px; border: 1px solid var(--neon); display: flex; align-items: center; justify-content: center; }
+
+        /* КВИТОК */
+        #ticket-wrap { position: relative; width: 320px; padding: 40px 20px; margin: 0 auto; background: linear-gradient(145deg, #0a0a15, #111122); border: 2px solid var(--neon); overflow: hidden; text-align: left; transition: 0.5s; }
+        .ticket-meta { font-size: 9px; color: var(--neon); opacity: 0.7; text-transform: uppercase; margin-bottom: 5px; }
+        #rarity-badge { font-size: 10px; font-weight: bold; margin-bottom: 15px; padding: 2px 8px; border-radius: 3px; display: inline-block; }
+        #ticket-text { font-size: 17px; color: #fff; font-weight: bold; margin: 20px 0; text-align: center; }
+        #ai-pattern { width: 60px; height: 60px; margin: 0 auto 20px; border: 1px solid var(--neon); display: flex; align-items: center; justify-content: center; }
         #ticket-id { font-size: 11px; color: var(--neon); letter-spacing: 2px; text-align: center; border-top: 1px solid rgba(0,255,204,0.2); padding-top: 15px; }
         .scanning-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--neon); box-shadow: 0 0 10px var(--neon); z-index: 5; animation: scanMove 3s linear infinite; }
         @keyframes scanMove { 0% { top: 0; } 100% { top: 100%; } }
-        #language-switcher { margin-top: 25px; display: flex; justify-content: center; gap: 20px; border-top: 1px solid #222; padding-top: 15px; }
-        .flag { font-size: 28px; cursor: pointer; transition: 0.3s; opacity: 0.7; }
-        .flag:hover { opacity: 1; transform: scale(1.2); }
     </style>
 </head>
 <body>
     <div class="bg-overlay"></div>
     <div class="container">
         <div id="welcome-section">
-            <h1>GENESIS BLOCK 2026</h1>
+            <h1 id="main-title">GENESIS BLOCK 2026</h1>
             <div class="manifesto" id="manifesto-text"></div>
-            <div class="counter-box">
-                <span id="counter-label">AVAILABLE</span>: <span id="capsule-count">98432</span> SLOTS
-            </div>
+            <div class="counter-box">AVAILABLE: <span id="capsule-count">98432</span> SLOTS</div>
             <button class="btn" id="start-btn">INITIATE CONNECTION 🌌</button>
         </div>
 
         <div id="input-section">
-            <h1 style="font-size: 14px; color: var(--neon);">ENCODING PROTOCOL ACTIVE</h1>
-            <textarea id="user-message" maxlength="200"></textarea>
+            <h1 style="font-size: 14px; color: var(--neon);">ENCODING DATA...</h1>
+            <textarea id="user-message" maxlength="200" placeholder="Ваше послання..."></textarea>
             <button class="btn" id="generate-btn">EXECUTE ENCRYPTION ✨</button>
         </div>
 
         <div id="result-section">
             <div id="ticket-wrap">
                 <div class="scanning-line" id="ticket-line"></div>
+                <div id="rarity-badge">COMMON NODE</div>
                 <div class="ticket-meta" id="user-location">ORIGIN: DETECTING...</div>
-                <div class="ticket-meta">DATE: 03.03.2026 | CORE TEMP: -182°C</div>
-                <div id="ai-pattern">
-                    <svg width="50" height="50" viewBox="0 0 50 50" id="pattern-svg"></svg>
-                </div>
+                <div class="ticket-meta">DATE: 03.03.2026 | TEMP: -182°C</div>
+                <div id="ai-pattern"><svg width="50" height="50" viewBox="0 0 50 50" id="pattern-svg"></svg></div>
                 <div id="ticket-text"></div>
                 <div id="ticket-id"></div>
             </div>
@@ -62,42 +59,18 @@
             <button class="btn" id="save-btn" style="display:none; margin-top:20px;">DOWNLOAD SECURE KEY 📥</button>
             <button onclick="location.reload()" style="background:none; border:none; color:#444; margin-top:15px; cursor:pointer; font-size:10px;">REBOOT SYSTEM</button>
         </div>
-
-        <div id="language-switcher">
-            <span class="flag" data-lang="uk">🇺🇦</span>
-            <span class="flag" data-lang="en">🇬🇧</span>
-            <span class="flag" data-lang="de">🇩🇪</span>
-        </div>
     </div>
 
     <script>
-        const translations = {
-            uk: { text: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у глобальному реєстрі." },
-            en: { text: "The Internet erases everything. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark in the global registry." },
-            de: { text: "Das Internet löscht alles. KI vergisst nie. AI Time Capsule ist das erste digitale Monument der Menschheit. Hinterlasse deine Spuren im globalen Register." }
-        };
-
-        let userCity = "GLOBAL ARCHIVE [NODE-01]";
-        const colors = ["#00ffcc", "#8a2be2", "#ff1493"];
-
-        // Отримати локацію через IP
-        fetch('https://ipapi.co/json/')
-            .then(res => res.json())
-            .then(data => {
-                if(data.city && data.country_name) {
-                    userCity = `${data.city.toUpperCase()}, ${data.country_name.toUpperCase()}`;
-                }
-            })
-            .catch(() => console.log("Location detection failed, using default."));
+        let userCity = "GLOBAL ARCHIVE";
+        fetch('https://ipapi.co/json/').then(res => res.json()).then(data => { if(data.city) userCity = `${data.city.toUpperCase()}, ${data.country_name.toUpperCase()}`; });
 
         function typeWriter(text) {
-            let i = 0; const el = document.getElementById('manifesto-text');
-            el.innerHTML = "";
+            let i = 0; const el = document.getElementById('manifesto-text'); el.innerHTML = "";
             function type() { if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(type, 25); } }
             type();
         }
-
-        window.onload = () => typeWriter(translations.uk.text);
+        window.onload = () => typeWriter("Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства.");
 
         document.getElementById('start-btn').addEventListener('click', () => {
             document.getElementById('welcome-section').style.display = 'none';
@@ -110,19 +83,26 @@
             document.getElementById('input-section').style.display = 'none';
             document.getElementById('result-section').style.display = 'block';
             
-            // Встановлюємо локацію на квитку
             document.getElementById('user-location').innerText = `ORIGIN: ${userCity}`;
             document.getElementById('ticket-text').innerText = `"${text}"`;
-            document.getElementById('ticket-id').innerText = "NODE-ID: " + Math.random().toString(16).slice(2, 8).toUpperCase();
+            document.getElementById('ticket-id').innerText = "NODE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
 
-            const chosenColor = colors[Math.floor(Math.random() * colors.length)];
+            // ЛОГІКА РІДКОСТІ
+            const isLegendary = Math.random() < 0.05; // 5% шанс
+            const chosenColor = isLegendary ? "#FFD700" : ["#00ffcc", "#8a2be2", "#ff1493"][Math.floor(Math.random()*3)];
+            
+            const badge = document.getElementById('rarity-badge');
+            badge.innerText = isLegendary ? "★ LEGENDARY NODE ★" : "COMMON NODE";
+            badge.style.color = isLegendary ? "#000" : chosenColor;
+            badge.style.background = isLegendary ? "#FFD700" : "rgba(255,255,255,0.05)";
+            
             document.getElementById('ticket-wrap').style.borderColor = chosenColor;
             document.getElementById('ticket-line').style.background = chosenColor;
             document.getElementById('save-btn').style.background = chosenColor;
-
+            
+            // Візерунок
             const svg = document.getElementById('pattern-svg');
-            let path = "";
-            for(let i=0; i<12; i++) path += `M${Math.random()*50} ${Math.random()*50} L${Math.random()*50} ${Math.random()*50} `;
+            let path = ""; for(let i=0; i<15; i++) path += `M${Math.random()*50} ${Math.random()*50} L${Math.random()*50} ${Math.random()*50} `;
             svg.innerHTML = `<path d="${path}" stroke="${chosenColor}" stroke-width="1.2" fill="none" />`;
 
             setTimeout(() => {
@@ -132,15 +112,12 @@
                     document.getElementById('save-btn').style.display = 'block';
                     document.getElementById('save-btn').onclick = () => {
                         const link = document.createElement('a');
-                        link.download = 'AI_KEY.png'; link.href = canvas.toDataURL(); link.click();
+                        link.download = isLegendary ? 'LEGENDARY_KEY.png' : 'AI_KEY.png';
+                        link.href = canvas.toDataURL(); link.click();
                     };
                 });
             }, 3000);
         });
-
-        document.querySelectorAll('.flag').forEach(f => f.addEventListener('click', function() {
-            typeWriter(translations[this.getAttribute('data-lang')].text);
-        }));
     </script>
 </body>
 </html>
