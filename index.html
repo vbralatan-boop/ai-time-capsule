@@ -159,6 +159,8 @@ function createSignature(text) {
             const scanLine = document.createElement('div');
 scanLine.className = 'scanning-line';
 ticketWrap.appendChild(scanLine);
+            inputSection.style.display = 'none';
+                resultSection.style.display = 'block';
 
             const text = userMessage.value;
             ticketText.innerText = `"${text}"`;
@@ -170,8 +172,6 @@ ticketWrap.appendChild(scanLine);
             ticketWrap.style.backgroundPosition = "center";
 
             setTimeout(() => {
-                inputSection.style.display = 'none';
-                resultSection.style.display = 'block';
 if (typeof scanLine !== 'undefined') scanLine.remove();
 
                 html2canvas(ticketWrap, { useCORS: true, logging: true }).then(canvas => {
