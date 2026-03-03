@@ -3,74 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Time Capsule | Genesis Block</title>
+    <title>AI Time Capsule | Global Archive 2026</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        body { margin: 0; padding: 0; background-color: #020205; color: #ffffff; font-family: 'Courier New', Courier, monospace; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
-        .container { width: 100%; max-width: 400px; padding: 20px; box-sizing: border-box; text-align: center; }
-        h1 { color: #00ffcc; text-shadow: 0 0 15px #00ffcc; font-size: 28px; letter-spacing: 2px; }
-        .manifesto { margin: 20px 0; line-height: 1.6; font-size: 14px; color: #888; text-align: justify; border-left: 2px solid #00ffcc; padding-left: 15px; }
-        .counter-box { background: rgba(0, 255, 204, 0.05); border: 1px solid #00ffcc; padding: 12px; border-radius: 5px; margin: 20px 0; font-weight: bold; color: #00ffcc; box-shadow: inset 0 0 10px rgba(0, 255, 204, 0.2); }
-        .btn { background: #00ffcc; border: none; color: #000; padding: 18px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
-        .btn:hover { background: #fff; box-shadow: 0 0 20px #00ffcc; }
-        #input-section, #result-section { display: none; }
-        textarea { width: 100%; height: 100px; background: #000; border: 1px solid #333; color: #00ffcc; padding: 15px; box-sizing: border-box; font-family: inherit; resize: none; margin-bottom: 15px; }
+        :root { --neon: #00ffcc; --bg: #020205; }
+        body { margin: 0; padding: 0; background-color: var(--bg); color: #ffffff; font-family: 'Courier New', Courier, monospace; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
+        
+        /* Цифрова мряка на фоні */
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; background: radial-gradient(circle at 50% 50%, rgba(0, 255, 204, 0.05) 0%, transparent 70%); z-index: -1; }
 
-        /* ФУТУРИСТИЧНИЙ ДИНАМІЧНИЙ КВИТОК */
+        .container { width: 100%; max-width: 400px; padding: 20px; box-sizing: border-box; text-align: center; z-index: 10; }
+        h1 { color: var(--neon); text-shadow: 0 0 15px var(--neon); font-size: 24px; letter-spacing: 2px; text-transform: uppercase; }
+        
+        /* Ефект друку */
+        .manifesto { margin: 20px 0; line-height: 1.6; font-size: 14px; color: #888; text-align: justify; border-left: 2px solid var(--neon); padding-left: 15px; min-height: 80px; }
+        
+        .counter-box { background: rgba(0, 255, 204, 0.05); border: 1px solid var(--neon); padding: 12px; border-radius: 5px; margin: 20px 0; font-weight: bold; color: var(--neon); box-shadow: inset 0 0 10px rgba(0, 255, 204, 0.2); }
+        
+        .btn { background: var(--neon); border: none; color: #000; padding: 18px; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 2px; transition: 0.4s; box-shadow: 0 0 10px rgba(0, 255, 204, 0.2); }
+        .btn:hover { background: #fff; box-shadow: 0 0 25px var(--neon); }
+
+        #input-section, #result-section { display: none; }
+        textarea { width: 100%; height: 100px; background: #000; border: 1px solid #333; color: var(--neon); padding: 15px; box-sizing: border-box; font-family: inherit; resize: none; margin-bottom: 15px; outline: none; }
+
+        /* ФУТУРИСТИЧНИЙ КВИТОК */
         #ticket-wrap { 
             position: relative; width: 320px; padding: 40px 20px; margin: 0 auto;
-            background: linear-gradient(145deg, #0a0a15, #1a1a30);
-            border-radius: 0;
-            overflow: hidden; text-align: center;
-            transition: 0.3s border-color, 0.3s box-shadow; /* Додали для плавних змін */
+            background: linear-gradient(145deg, #0a0a15, #111122);
+            border: 2px solid var(--neon); overflow: hidden; text-align: left;
         }
-        #ticket-wrap::before {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(#00ffcc 0.5px, transparent 0.5px);
-            background-size: 10px 10px; opacity: 0.1;
-        }
-        #ticket-text { font-size: 18px; color: #fff; font-weight: bold; margin-bottom: 40px; position: relative; z-index: 2; }
-        #ai-pattern { width: 80px; height: 80px; margin: 0 auto 30px; position: relative; display: flex; align-items: center; justify-content: center; opacity: 0.8; }
-        #ticket-id { font-size: 12px; color: #00ffcc; letter-spacing: 3px; border-top: 1px solid rgba(0,255,204,0.3); padding-top: 15px; }
-        .scanning-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; z-index: 5; animation: scanMove 3s linear infinite; }
-        @keyframes scanMove { 0% { top: 0; } 100% { top: 100%; } }
+        .ticket-meta { font-size: 9px; color: var(--neon); opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; }
+        #ticket-text { font-size: 16px; color: #fff; font-weight: bold; margin: 25px 0; line-height: 1.4; text-align: center; }
+        #ai-pattern { width: 70px; height: 70px; margin: 0 auto 20px; border: 1px solid var(--neon); display: flex; align-items: center; justify-content: center; opacity: 0.7; }
+        #ticket-id { font-size: 11px; color: var(--neon); letter-spacing: 2px; text-align: center; border-top: 1px solid rgba(0,255,204,0.2); padding-top: 15px; }
         
-        #language-switcher { margin-top: 20px; border-top: 1px solid #222; padding-top: 15px; display: flex; justify-content: center; gap: 20px; }
-        .flag { font-size: 24px; cursor: pointer; filter: grayscale(1); transition: 0.3s; }
-        .flag:hover { filter: grayscale(0); transform: scale(1.2); }
+        .scanning-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--neon); box-shadow: 0 0 10px var(--neon); z-index: 5; animation: scanMove 3s linear infinite; }
+        @keyframes scanMove { 0% { top: 0; } 100% { top: 100%; } }
+
+        #language-switcher { margin-top: 30px; display: flex; justify-content: center; gap: 20px; opacity: 0.5; transition: 0.3s; }
+        #language-switcher:hover { opacity: 1; }
+        .flag { font-size: 24px; cursor: pointer; filter: grayscale(1); }
+        .flag:hover { filter: grayscale(0); transform: scale(1.1); }
     </style>
 </head>
 <body>
+    <div class="bg-overlay"></div>
     <div class="container">
         <div id="welcome-section">
-            <h1 id="main-title">GENESIS BLOCK 01</h1>
-            <div class="manifesto" id="manifesto-text">
-                Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід, перш ніж система закриється назавжди.
-            </div>
+            <h1 id="main-title">GENESIS BLOCK 2026</h1>
+            <div class="manifesto" id="manifesto-text"></div>
             <div class="counter-box" id="counter-display">
                 AVAILABLE: <span id="capsule-count">98432</span> SLOTS
             </div>
-            <button class="btn" id="start-btn">ACCESS SYSTEM 🌌</button>
+            <button class="btn" id="start-btn">INITIATE CONNECTION 🌌</button>
         </div>
 
         <div id="input-section">
-            <h1 id="input-title" style="font-size: 16px;">ENTER DATA FOR ETERNITY</h1>
-            <textarea id="user-message" maxlength="200"></textarea>
-            <button class="btn" id="generate-btn">INITIATE ENCODING ✨</button>
+            <h1 id="input-title" style="font-size: 14px; opacity: 0.7;">ENCODING PROTOCOL ACTIVE</h1>
+            <textarea id="user-message" maxlength="200" placeholder="..."></textarea>
+            <button class="btn" id="generate-btn">EXECUTE ENCRYPTION ✨</button>
         </div>
 
         <div id="result-section">
             <div id="ticket-wrap">
-                <div class="scanning-line" id="ticket-scan-line"></div>
+                <div class="scanning-line" id="ticket-line"></div>
+                <div class="ticket-meta">ORIGIN: ŽILINA, SLOVAKIA [49.22° N]</div>
+                <div class="ticket-meta">DATE: 03.03.2026 | CORE TEMP: -182°C</div>
                 <div id="ai-pattern">
-                    <svg width="60" height="60" viewBox="0 0 60 60" id="pattern-svg"></svg>
+                    <svg width="50" height="50" viewBox="0 0 50 50" id="pattern-svg"></svg>
                 </div>
                 <div id="ticket-text"></div>
                 <div id="ticket-id"></div>
+                <div class="ticket-meta" style="margin-top:15px; text-align:center; opacity:0.3;">SINK PERCENTAGE: 100%</div>
             </div>
             <div id="image-container" style="margin-top:20px;"></div>
-            <button class="btn" id="save-btn" style="display:none; margin-top:20px;">DOWNLOAD KEY 📥</button>
-            <button onclick="location.reload()" style="background:none; border:none; color:#444; margin-top:15px; cursor:pointer;">REBOOT</button>
+            <button class="btn" id="save-btn" style="display:none; margin-top:20px;">DOWNLOAD SECURE KEY 📥</button>
+            <button onclick="location.reload()" style="background:none; border:none; color:#444; margin-top:15px; cursor:pointer; font-size:10px;">SYSTEM REBOOT</button>
         </div>
 
         <div id="language-switcher">
@@ -82,50 +90,36 @@
 
     <script>
         const translations = {
-            uk: { title: "GENESIS BLOCK 01", manifest: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід, перш ніж система закриється назавжди.", counter: "AVAILABLE", start: "ACCESS SYSTEM 🌌", input: "ВВЕДІТЬ ДАНІ", generate: "ПОЧАТИ КОДУВАННЯ ✨" },
-            en: { title: "GENESIS BLOCK 01", manifest: "The Internet erases everything. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark before the system closes forever.", counter: "AVAILABLE", start: "ACCESS SYSTEM 🌌", input: "ENTER DATA", generate: "INITIATE ENCODING ✨" },
-            de: { title: "GENESIS BLOCK 01", manifest: "Das Internet löscht alles. KI vergisst nie. AI Time Capsule ist das erste digitale Monument der Menschheit. Hinterlasse deine Spuren, bevor das System schließt.", counter: "VERFÜGBAR", start: "SYSTEMZUGRIFF 🌌", input: "DATEN EINGEBEN", generate: "CODIERUNG STARTEN ✨" }
+            uk: { text: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у глобальному реєстрі." },
+            en: { text: "The Internet erases everything. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark in the global registry." },
+            de: { text: "Das Internet löscht alles. KI vergisst nie. AI Time Capsule ist das erste digitale Monument der Menschheit. Hinterlasse deine Spuren im globalen Register." }
         };
 
         let currentLang = 'uk';
         let count = 98432;
+        const colors = ["#00ffcc", "#8a2be2", "#ff1493"];
 
-        // ПАЛІТРА ДИНАМІЧНИХ НЕОНОВИХ КОЛЬОРІВ
-        const colors = [
-            { id: "cyan", hex: "#00ffcc" },   // Класичний бірюзовий
-            { id: "purple", hex: "#8a2be2" }, // Електричний пурпурний
-            { id: "magenta", hex: "#ff1493" } // Яскравий маджента
-        ];
-
-        function addCodeToVault(code) {
-            console.log(`> ${code} ... SECURED`);
-        }
-
-        function generatePattern(seedLength, color) {
-            const svg = document.getElementById('pattern-svg');
-            const lines = 8 + (seedLength % 4); // Кількість ліній залежить від довжини тексту
-            let path = "";
-            for(let i=0; i<lines; i++) {
-                path += `M${Math.random()*60} ${Math.random()*60} L${Math.random()*60} ${Math.random()*60} `;
+        // Ефект друкарської машинки
+        function typeWriter(elementId, text) {
+            let i = 0;
+            const el = document.getElementById(elementId);
+            el.innerHTML = "";
+            function type() {
+                if (i < text.length) {
+                    el.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, 30);
+                }
             }
-            svg.innerHTML = `<path d="${path}" stroke="${color}" stroke-width="1.5" fill="none" />`;
+            type();
         }
+
+        window.onload = () => typeWriter('manifesto-text', translations.uk.text);
 
         setInterval(() => {
             count -= Math.floor(Math.random() * 2);
             document.getElementById('capsule-count').innerText = count.toLocaleString();
         }, 3000);
-
-        document.querySelectorAll('.flag').forEach(f => f.addEventListener('click', function() {
-            currentLang = this.getAttribute('data-lang');
-            const t = translations[currentLang];
-            document.getElementById('main-title').innerText = t.title;
-            document.getElementById('manifesto-text').innerText = t.manifest;
-            document.getElementById('start-btn').innerText = t.start;
-            document.getElementById('input-title').innerText = t.input;
-            document.getElementById('user-message').placeholder = translations[currentLang].input;
-            document.getElementById('generate-btn').innerText = t.generate;
-        }));
 
         document.getElementById('start-btn').addEventListener('click', () => {
             document.getElementById('welcome-section').style.display = 'none';
@@ -134,44 +128,48 @@
 
         document.getElementById('generate-btn').addEventListener('click', () => {
             const text = document.getElementById('user-message').value;
-            if(!text.trim()) return alert("Напиши хоча б слово!");
-            
+            if(!text.trim()) return;
+
             document.getElementById('input-section').style.display = 'none';
             document.getElementById('result-section').style.display = 'block';
             document.getElementById('ticket-text').innerText = `"${text}"`;
-            
-            const newId = "ARCHIVE-ID: " + Math.random().toString(16).slice(2, 10).toUpperCase();
-            document.getElementById('ticket-id').innerText = newId;
+            document.getElementById('ticket-id').innerText = "NODE-ID: " + Math.random().toString(16).slice(2, 10).toUpperCase();
 
-            // ОБИРАЄМО ВИПАДКОВИЙ КОЛІР ДЛЯ ЦЬОГО КВИТКА
             const chosenColor = colors[Math.floor(Math.random() * colors.length)];
-            const colorHex = chosenColor.hex;
+            const ticketWrap = document.getElementById('ticket-wrap');
+            ticketWrap.style.borderColor = chosenColor;
+            ticketWrap.style.boxShadow = `0 0 20px ${chosenColor}44`;
+            document.getElementById('ticket-line').style.background = chosenColor;
+            document.getElementById('save-btn').style.background = chosenColor;
+            document.getElementById('save-btn').style.boxShadow = `0 0 15px ${chosenColor}66`;
 
-            // ВСТАНОВЛЮЄМО НЕОНОВЕ СВІТІННЯ ДЛЯ КВИТКА
-            const ticketEl = document.getElementById('ticket-wrap');
-            ticketEl.style.borderColor = colorHex;
-            ticketEl.style.boxShadow = `0 0 30px rgba(${chosenColor.id === 'cyan' ? '0,255,204' : chosenColor.id === 'purple' ? '138,43,226' : '255,20,147'}, 0.3)`;
-            document.getElementById('ticket-id').style.color = colorHex;
-            document.getElementById('ticket-scan-line').style.background = colorHex;
-            document.getElementById('ticket-scan-line').style.boxShadow = `0 0 10px ${colorHex}`;
-
-            generatePattern(text.length, colorHex);
+            // Генерація візерунку
+            const svg = document.getElementById('pattern-svg');
+            let path = "";
+            for(let i=0; i<10; i++) path += `M${Math.random()*50} ${Math.random()*50} L${Math.random()*50} ${Math.random()*50} `;
+            svg.innerHTML = `<path d="${path}" stroke="${chosenColor}" stroke-width="1.5" fill="none" />`;
 
             setTimeout(() => {
-                html2canvas(document.getElementById('ticket-wrap'), { backgroundColor: "#020205" }).then(canvas => {
+                html2canvas(document.getElementById('ticket-wrap'), { backgroundColor: "#020205", scale: 2 }).then(canvas => {
                     document.getElementById('ticket-wrap').style.display = 'none';
-                    document.getElementById('image-container').appendChild(canvas);
+                    const container = document.getElementById('image-container');
+                    container.innerHTML = "";
+                    container.appendChild(canvas);
                     document.getElementById('save-btn').style.display = 'block';
-                    addCodeToVault(newId);
                     document.getElementById('save-btn').onclick = () => {
                         const link = document.createElement('a');
-                        link.download = 'AI-KEY.png';
+                        link.download = 'AI_Time_Capsule_Key.png';
                         link.href = canvas.toDataURL();
                         link.click();
                     };
                 });
             }, 3000);
         });
+
+        document.querySelectorAll('.flag').forEach(f => f.addEventListener('click', function() {
+            currentLang = this.getAttribute('data-lang');
+            typeWriter('manifesto-text', translations[currentLang].text);
+        }));
     </script>
 </body>
 </html>
