@@ -3,39 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Time Capsule</title>
+    <title>AI Time Capsule | Genesis Block</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body { margin: 0; padding: 0; background-color: #050505; color: #ffffff; font-family: 'Courier New', Courier, monospace; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         .container { width: 100%; max-width: 380px; padding: 30px 20px; box-sizing: border-box; text-align: center; }
         h1 { color: #00ffcc; text-shadow: 0 0 10px rgba(0, 255, 204, 0.4); font-size: 24px; margin-bottom: 10px; }
-        p { margin: 20px 0; line-height: 1.6; font-size: 15px; color: #cccccc; }
-        .btn { background: linear-gradient(90deg, #00ffcc, #0088ff); border: none; color: #000000; padding: 16px 32px; font-size: 16px; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(0, 255, 204, 0.3); width: 100%; margin-top: 20px; }
+        .manifesto { margin: 20px 0; line-height: 1.6; font-size: 15px; color: #cccccc; text-align: justify; border-left: 2px solid #00ffcc; padding-left: 15px; }
+        .counter-box { background: rgba(0, 255, 204, 0.1); border: 1px dashed #00ffcc; padding: 10px; border-radius: 10px; margin: 20px 0; font-size: 14px; color: #00ffcc; }
+        .btn { background: linear-gradient(90deg, #00ffcc, #0088ff); border: none; color: #000000; padding: 16px 32px; font-size: 16px; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(0, 255, 204, 0.3); width: 100%; margin-top: 10px; }
         #input-section, #result-section { display: none; }
-        textarea { width: 100%; height: 120px; background-color: #111111; border: 1px solid #00ffcc; color: #ffffff; padding: 15px; box-sizing: border-box; border-radius: 15px; font-family: inherit; font-size: 16px; resize: none; }
-        #ticket-wrap { position: relative; overflow: hidden; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); border-radius: 20px; padding: 30px; margin-bottom: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: 0 0 20px rgba(0, 255, 204, 0.5); border: 1px solid rgba(0, 255, 204, 0.3); }
+        textarea { width: 100%; height: 100px; background-color: #111111; border: 1px solid #00ffcc; color: #ffffff; padding: 15px; box-sizing: border-box; border-radius: 15px; font-family: inherit; font-size: 16px; resize: none; }
+        #ticket-wrap { position: relative; overflow: hidden; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); border-radius: 20px; padding: 30px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 0 20px rgba(0, 255, 204, 0.5); border: 1px solid rgba(0, 255, 204, 0.3); }
         #ticket-text { font-size: 18px; margin-bottom: 30px; word-wrap: break-word; font-weight: bold; }
-        #ticket-id { color: #ffffff; font-size: 12px; margin-bottom: 10px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); letter-spacing: 1px; }
+        #ticket-id { color: #ffffff; font-size: 12px; margin-bottom: 10px; }
         #ticket-brand { color: #00ffcc; font-size: 14px; font-weight: bold; }
-        canvas { max-width: 100%; height: auto; border-radius: 15px; border: 2px solid #00ffcc; }
-        #language-switcher { display: flex; justify-content: center; gap: 20px; margin-top: 30px; padding-bottom: 20px; }
-        .flag { font-size: 24px; cursor: pointer; transition: transform 0.3s; }
-        .flag:hover { transform: scale(1.2); }
+        #future-wish { font-style: italic; color: #00ffcc; margin-top: 20px; font-size: 14px; display: none; padding: 10px; border-top: 1px solid rgba(0,255,204,0.2); }
         .scanning-line { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #00ffcc; box-shadow: 0 0 15px #00ffcc; z-index: 10; animation: scanMove 1.5s linear infinite; pointer-events: none; }
         @keyframes scanMove { 0% { top: -5px; } 100% { top: 100%; } }
+        #language-switcher { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+        .flag { font-size: 24px; cursor: pointer; transition: transform 0.3s; }
+        .flag:hover { transform: scale(1.2); }
     </style>
 </head>
 <body>
     <div class="container">
         <div id="welcome-section">
-            <h1 id="main-title">Твій слід у ШІ-свідомості 🧠</h1>
-            <p>Одне повідомлення. Один унікальний алгоритмічний візерунок. Назавжди.</p>
-            <button class="btn" id="start-btn">Створити капсулу</button>
+            <h1 id="main-title">AI Time Capsule 🧠</h1>
+            <div class="manifesto" id="manifesto-text">
+                Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Твої думки, зашифровані в унікальний візерунок. Залиш свій слід, перш ніж "Genesis Block" закриється назавжди.
+            </div>
+            <div class="counter-box">
+                Залишилося капсул: <span id="capsule-count">98432</span> / 100 000
+            </div>
+            <button class="btn" id="start-btn">Забронювати капсулу 🌌</button>
         </div>
 
         <div id="input-section">
-            <h1 id="input-title" style="font-size: 18px; margin-bottom: 10px; color: #00ffcc;">Що ти залишиш майбутньому?</h1>
-            <textarea id="user-message" maxlength="200" placeholder="Твоє повідомлення..."></textarea>
+            <h1 style="font-size: 18px; color: #00ffcc;">Твоє послання крізь час</h1>
+            <textarea id="user-message" maxlength="200" placeholder="Напиши щось важливе..."></textarea>
             <button class="btn" id="generate-btn">Згенерувати візерунок ✨</button>
         </div>
 
@@ -46,124 +52,79 @@
                 <div id="ticket-brand">AI Time Capsule 🌌</div>
             </div>
             <div id="image-container"></div>
-            <button class="btn" id="save-btn" style="display: none;">Зберегти квиток 📥</button>
+            <div id="future-wish"></div>
+            <button class="btn" id="save-btn" style="display: none;">Завантажити квиток 📥</button>
         </div>
         
         <div id="language-switcher">
-            <span class="flag" data-lang="uk" title="Українська">🇺🇦</span>
-            <span class="flag" data-lang="en" title="English">🇬🇧</span>
-            <span class="flag" data-lang="de" title="Deutsch">🇩🇪</span>
+            <span class="flag" data-lang="uk">🇺🇦</span>
+            <span class="flag" data-lang="en">🇬🇧</span>
+            <span class="flag" data-lang="de">🇩🇪</span>
         </div>
     </div>
 
     <script>
         const translations = {
-            en: { mainTitle: "Your footprint in AI consciousness", subtitle: "One message. One unique signature.", inputTitle: "What will you leave for the future?", inputPlaceholder: "Your message...", startButton: "Create a capsule", generateButton: "Generate signature", saveButton: "Download Ticket 📥", analyzing: "Analyzing meanings... ⏳", errorAlert: "Please enter your message!" },
-            de: { mainTitle: "Dein Fußabdruck im KI-Bewusstsein", subtitle: "Eine Botschaft. Eine unikate Signatur.", inputTitle: "Was wirst du der Zukunft hinterlassen?", inputPlaceholder: "Deine Nachricht...", startButton: "Kapsel erstellen", generateButton: "KI-Signatur erzeugen", saveButton: "Ticket herunterladen 📥", analyzing: "Sinne analysieren... ⏳", errorAlert: "Bitte geben Sie Ihre Nachricht ein!" },
-            uk: { mainTitle: "Твій слід у ШІ-свідомості", subtitle: "Одне повідомлення. Один унікальний підпис.", inputTitle: "Що ти залишиш майбутньому?", inputPlaceholder: "Твоє повідомлення...", startButton: "Створити капсулу", generateButton: "Згенерувати візерунок", saveButton: "Завантажити квиток 📥", analyzing: "Аналізуємо сенси... ⏳", errorAlert: "Будь ласка, введіть ваше повідомлення!" }
+            uk: { wish: "Твій код прийнято. У світі майбутнього твої слова стали світлом. Дякуємо, що зберіг цей момент. ✨", start: "Забронювати капсулу 🌌" },
+            en: { wish: "Your code is accepted. In the future world, your words have become light. Thank you for saving this moment. ✨", start: "Reserve a capsule 🌌" },
+            de: { wish: "Dein Code wurde akzeptiert. In der Welt der Zukunft sind deine Worte zu Licht geworden. Danke, dass du diesen Moment bewahrt hast. ✨", start: "Kapsel reservieren 🌌" }
         };
 
         let currentLang = 'uk';
-        const welcomeSection = document.getElementById('welcome-section');
-        const inputSection = document.getElementById('input-section');
-        const resultSection = document.getElementById('result-section');
-        const startBtn = document.getElementById('start-btn');
-        const generateBtn = document.getElementById('generate-btn');
-        const userMessage = document.getElementById('user-message');
-        const ticketWrap = document.getElementById('ticket-wrap');
-        const ticketText = document.getElementById('ticket-text');
-        const ticketId = document.getElementById('ticket-id');
-        const imageContainer = document.getElementById('image-container');
-        const saveBtn = document.getElementById('save-btn');
-        const flags = document.querySelectorAll('.flag');
+        const capsuleCountEl = document.getElementById('capsule-count');
+        let count = 98432;
 
-        const backgrounds = [
-            "https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=400&h=711&fit=crop",
-            "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400&h=711&fit=crop",
-            "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=400&h=711&fit=crop",
-            "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=400&h=711&fit=crop",
-            "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=400&h=711&fit=crop"
-        ];
+        // Імітація живого лічильника
+        setInterval(() => {
+            count -= Math.floor(Math.random() * 3);
+            capsuleCountEl.innerText = count.toLocaleString();
+        }, 5000);
 
-        function createSignature(text) {
-            let hash = 0;
-            if (text.length === 0) return "NODE-EMPTY-2026";
-            for (let i = 0; i < text.length; i++) {
-                const char = text.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash = hash & hash; 
-            }
-            return "NODE-" + Math.abs(hash).toString(16).toUpperCase() + "-2026";
-        }
-
-        startBtn.addEventListener('click', () => {
-            welcomeSection.style.display = 'none';
-            inputSection.style.display = 'block';
+        document.getElementById('start-btn').addEventListener('click', () => {
+            document.getElementById('welcome-section').style.display = 'none';
+            document.getElementById('input-section').style.display = 'block';
         });
 
-        generateBtn.addEventListener('click', () => {
-            if (!userMessage.value.trim()) return alert(translations[currentLang].errorAlert);
+        document.getElementById('generate-btn').addEventListener('click', () => {
+            const text = document.getElementById('user-message').value;
+            if (!text.trim()) return alert("Напиши повідомлення!");
 
-            generateBtn.innerText = translations[currentLang].analyzing;
-            generateBtn.disabled = true;
-            
-            inputSection.style.display = 'none';
-            resultSection.style.display = 'block';
+            document.getElementById('input-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
 
             const scanLine = document.createElement('div');
             scanLine.className = 'scanning-line';
-            ticketWrap.appendChild(scanLine);
+            document.getElementById('ticket-wrap').appendChild(scanLine);
 
-            const text = userMessage.value;
-            ticketText.innerText = `"${text}"`;
-            ticketId.innerText = createSignature(text);
-            
-            const bgIndex = text.length % backgrounds.length;
-            ticketWrap.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${backgrounds[bgIndex]}')`;
-            ticketWrap.style.backgroundSize = "cover";
-            ticketWrap.style.backgroundPosition = "center";
+            document.getElementById('ticket-text').innerText = `"${text}"`;
+            document.getElementById('ticket-id').innerText = "NODE-" + Math.random().toString(16).slice(2, 10).toUpperCase() + "-2026";
 
             setTimeout(() => {
-                if (typeof scanLine !== 'undefined') scanLine.remove();
+                scanLine.remove();
+                html2canvas(document.getElementById('ticket-wrap'), { useCORS: true }).then(canvas => {
+                    document.getElementById('ticket-wrap').style.display = 'none';
+                    document.getElementById('image-container').appendChild(canvas);
+                    document.getElementById('save-btn').style.display = 'block';
+                    
+                    // Побажання з майбутнього
+                    const wishEl = document.getElementById('future-wish');
+                    wishEl.innerText = translations[currentLang].wish;
+                    wishEl.style.display = 'block';
 
-                setTimeout(() => {
-                    html2canvas(ticketWrap, { 
-                        useCORS: true, 
-                        logging: false,
-                        scale: window.devicePixelRatio,
-                        allowTaint: true,
-                        backgroundColor: null
-                    }).then(canvas => {
-                        ticketWrap.style.display = 'none'; 
-                        imageContainer.innerHTML = '';     
-                        imageContainer.appendChild(canvas); 
-                        
-                        saveBtn.style.display = 'block';
-                        saveBtn.onclick = () => {
-                            const link = document.createElement('a');
-                            link.download = 'AI-Ticket.png';
-                            link.href = canvas.toDataURL();
-                            link.click();
-                        };
-                        
-                        generateBtn.innerText = translations[currentLang].generateButton;
-                        generateBtn.disabled = false;
-                    });
-                }, 50); 
+                    document.getElementById('save-btn').onclick = () => {
+                        const link = document.createElement('a');
+                        link.download = 'AI-Time-Capsule.png';
+                        link.href = canvas.toDataURL();
+                        link.click();
+                    };
+                });
             }, 2000);
         });
 
-        flags.forEach(flag => {
+        document.querySelectorAll('.flag').forEach(flag => {
             flag.addEventListener('click', function() {
-                const lang = this.getAttribute('data-lang');
-                currentLang = lang;
-                document.getElementById('main-title').innerText = translations[lang].mainTitle;
-                document.querySelector('#welcome-section p').innerText = translations[lang].subtitle;
-                document.getElementById('input-title').innerText = translations[lang].inputTitle;
-                document.getElementById('user-message').placeholder = translations[lang].inputPlaceholder;
-                document.getElementById('start-btn').innerText = translations[lang].startButton;
-                if (!generateBtn.disabled) generateBtn.innerText = translations[lang].generateButton;
-                saveBtn.innerText = translations[lang].saveButton;
+                currentLang = this.getAttribute('data-lang');
+                document.getElementById('start-btn').innerText = translations[currentLang].start;
             });
         });
     </script>
