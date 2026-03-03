@@ -3,30 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Time Capsule | Global Archive</title>
+    <title>AI Time Capsule | Genesis Block</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body { margin: 0; padding: 0; background-color: #020205; color: #ffffff; font-family: 'Courier New', Courier, monospace; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
         .container { width: 100%; max-width: 400px; padding: 20px; box-sizing: border-box; text-align: center; }
-        
         h1 { color: #00ffcc; text-shadow: 0 0 15px #00ffcc; font-size: 28px; letter-spacing: 2px; }
         .manifesto { margin: 20px 0; line-height: 1.6; font-size: 14px; color: #888; text-align: justify; border-left: 2px solid #00ffcc; padding-left: 15px; }
-        
         .counter-box { background: rgba(0, 255, 204, 0.05); border: 1px solid #00ffcc; padding: 12px; border-radius: 5px; margin: 20px 0; font-weight: bold; color: #00ffcc; box-shadow: inset 0 0 10px rgba(0, 255, 204, 0.2); }
-        
         .btn { background: #00ffcc; border: none; color: #000; padding: 18px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .btn:hover { background: #fff; box-shadow: 0 0 20px #00ffcc; }
-
         #input-section, #result-section { display: none; }
         textarea { width: 100%; height: 100px; background: #000; border: 1px solid #333; color: #00ffcc; padding: 15px; box-sizing: border-box; font-family: inherit; resize: none; margin-bottom: 15px; }
 
-        /* ФУТУРИСТИЧНИЙ КВИТОК */
+        /* ФУТУРИСТИЧНИЙ ДИНАМІЧНИЙ КВИТОК */
         #ticket-wrap { 
             position: relative; width: 320px; padding: 40px 20px; margin: 0 auto;
             background: linear-gradient(145deg, #0a0a15, #1a1a30);
-            border: 2px solid #00ffcc; border-radius: 0;
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+            border-radius: 0;
             overflow: hidden; text-align: center;
+            transition: 0.3s border-color, 0.3s box-shadow; /* Додали для плавних змін */
         }
         #ticket-wrap::before {
             content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -34,18 +30,14 @@
             background-size: 10px 10px; opacity: 0.1;
         }
         #ticket-text { font-size: 18px; color: #fff; font-weight: bold; margin-bottom: 40px; position: relative; z-index: 2; }
-        #ai-pattern { width: 80px; height: 80px; margin: 0 auto 30px; border: 1px solid #00ffcc; position: relative; display: flex; align-items: center; justify-content: center; opacity: 0.8; }
+        #ai-pattern { width: 80px; height: 80px; margin: 0 auto 30px; position: relative; display: flex; align-items: center; justify-content: center; opacity: 0.8; }
         #ticket-id { font-size: 12px; color: #00ffcc; letter-spacing: 3px; border-top: 1px solid rgba(0,255,204,0.3); padding-top: 15px; }
-        
-        .vault-section { margin-top: 30px; opacity: 0.6; }
-        #memory-vault { height: 100px; overflow: hidden; font-size: 10px; color: #00ffcc; text-align: left; }
+        .scanning-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; z-index: 5; animation: scanMove 3s linear infinite; }
+        @keyframes scanMove { 0% { top: 0; } 100% { top: 100%; } }
         
         #language-switcher { margin-top: 20px; border-top: 1px solid #222; padding-top: 15px; display: flex; justify-content: center; gap: 20px; }
         .flag { font-size: 24px; cursor: pointer; filter: grayscale(1); transition: 0.3s; }
         .flag:hover { filter: grayscale(0); transform: scale(1.2); }
-
-        .scanning-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: #00ffcc; box-shadow: 0 0 10px #00ffcc; z-index: 5; animation: scanMove 3s linear infinite; }
-        @keyframes scanMove { 0% { top: 0; } 100% { top: 100%; } }
     </style>
 </head>
 <body>
@@ -59,9 +51,6 @@
                 AVAILABLE: <span id="capsule-count">98432</span> SLOTS
             </div>
             <button class="btn" id="start-btn">ACCESS SYSTEM 🌌</button>
-            <div class="vault-section">
-                <div id="memory-vault"></div>
-            </div>
         </div>
 
         <div id="input-section">
@@ -72,7 +61,7 @@
 
         <div id="result-section">
             <div id="ticket-wrap">
-                <div class="scanning-line"></div>
+                <div class="scanning-line" id="ticket-scan-line"></div>
                 <div id="ai-pattern">
                     <svg width="60" height="60" viewBox="0 0 60 60" id="pattern-svg"></svg>
                 </div>
@@ -101,14 +90,25 @@
         let currentLang = 'uk';
         let count = 98432;
 
-        function generatePattern() {
+        // ПАЛІТРА ДИНАМІЧНИХ НЕОНОВИХ КОЛЬОРІВ
+        const colors = [
+            { id: "cyan", hex: "#00ffcc" },   // Класичний бірюзовий
+            { id: "purple", hex: "#8a2be2" }, // Електричний пурпурний
+            { id: "magenta", hex: "#ff1493" } // Яскравий маджента
+        ];
+
+        function addCodeToVault(code) {
+            console.log(`> ${code} ... SECURED`);
+        }
+
+        function generatePattern(seedLength, color) {
             const svg = document.getElementById('pattern-svg');
-            const lines = 8;
+            const lines = 8 + (seedLength % 4); // Кількість ліній залежить від довжини тексту
             let path = "";
             for(let i=0; i<lines; i++) {
                 path += `M${Math.random()*60} ${Math.random()*60} L${Math.random()*60} ${Math.random()*60} `;
             }
-            svg.innerHTML = `<path d="${path}" stroke="#00ffcc" stroke-width="1" fill="none" />`;
+            svg.innerHTML = `<path d="${path}" stroke="${color}" stroke-width="1.5" fill="none" />`;
         }
 
         setInterval(() => {
@@ -123,6 +123,7 @@
             document.getElementById('manifesto-text').innerText = t.manifest;
             document.getElementById('start-btn').innerText = t.start;
             document.getElementById('input-title').innerText = t.input;
+            document.getElementById('user-message').placeholder = translations[currentLang].input;
             document.getElementById('generate-btn').innerText = t.generate;
         }));
 
@@ -133,18 +134,35 @@
 
         document.getElementById('generate-btn').addEventListener('click', () => {
             const text = document.getElementById('user-message').value;
-            if(!text.trim()) return;
+            if(!text.trim()) return alert("Напиши хоча б слово!");
+            
             document.getElementById('input-section').style.display = 'none';
             document.getElementById('result-section').style.display = 'block';
             document.getElementById('ticket-text').innerText = `"${text}"`;
-            document.getElementById('ticket-id').innerText = "ARCHIVE-ID: " + Math.random().toString(16).slice(2, 10).toUpperCase();
-            generatePattern();
+            
+            const newId = "ARCHIVE-ID: " + Math.random().toString(16).slice(2, 10).toUpperCase();
+            document.getElementById('ticket-id').innerText = newId;
+
+            // ОБИРАЄМО ВИПАДКОВИЙ КОЛІР ДЛЯ ЦЬОГО КВИТКА
+            const chosenColor = colors[Math.floor(Math.random() * colors.length)];
+            const colorHex = chosenColor.hex;
+
+            // ВСТАНОВЛЮЄМО НЕОНОВЕ СВІТІННЯ ДЛЯ КВИТКА
+            const ticketEl = document.getElementById('ticket-wrap');
+            ticketEl.style.borderColor = colorHex;
+            ticketEl.style.boxShadow = `0 0 30px rgba(${chosenColor.id === 'cyan' ? '0,255,204' : chosenColor.id === 'purple' ? '138,43,226' : '255,20,147'}, 0.3)`;
+            document.getElementById('ticket-id').style.color = colorHex;
+            document.getElementById('ticket-scan-line').style.background = colorHex;
+            document.getElementById('ticket-scan-line').style.boxShadow = `0 0 10px ${colorHex}`;
+
+            generatePattern(text.length, colorHex);
 
             setTimeout(() => {
                 html2canvas(document.getElementById('ticket-wrap'), { backgroundColor: "#020205" }).then(canvas => {
                     document.getElementById('ticket-wrap').style.display = 'none';
                     document.getElementById('image-container').appendChild(canvas);
                     document.getElementById('save-btn').style.display = 'block';
+                    addCodeToVault(newId);
                     document.getElementById('save-btn').onclick = () => {
                         const link = document.createElement('a');
                         link.download = 'AI-KEY.png';
