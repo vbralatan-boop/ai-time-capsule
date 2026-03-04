@@ -3,26 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Time Capsule | Soulmate Edition</title>
+    <title>AI Time Capsule | Genesis Block</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --neon: #00ffcc; --bg: #020205; }
+        :root { --neon: #00ffcc; --bg: #020205; --legendary: #FFD700; }
         body { margin: 0; padding: 0; background-color: var(--bg); color: #ffffff; font-family: 'Courier New', Courier, monospace; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
         .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; background: radial-gradient(circle at 50% 50%, rgba(0, 255, 204, 0.1) 0%, transparent 80%); z-index: -1; }
         .container { width: 100%; max-width: 400px; padding: 20px; box-sizing: border-box; text-align: center; z-index: 10; }
-        h1 { color: var(--neon); text-shadow: 0 0 15px var(--neon); font-size: 22px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
-        .manifesto { margin: 20px 0; line-height: 1.6; font-size: 14px; color: #aaa; text-align: justify; border-left: 2px solid var(--neon); padding-left: 15px; min-height: 80px; background: rgba(0, 255, 204, 0.03); padding: 10px; }
+        .phase-tag { font-size: 10px; color: var(--neon); letter-spacing: 3px; margin-bottom: 5px; opacity: 0.8; }
+        h1 { color: var(--neon); text-shadow: 0 0 15px var(--neon); font-size: 22px; letter-spacing: 2px; text-transform: uppercase; margin-top: 0; }
+        .manifesto { margin: 20px 0; line-height: 1.6; font-size: 14px; color: #aaa; text-align: justify; border-left: 2px solid var(--neon); padding-left: 15px; background: rgba(0, 255, 204, 0.03); padding: 10px; }
         .counter-box { background: rgba(0, 255, 204, 0.1); border: 1px dashed var(--neon); padding: 12px; margin: 15px 0; font-weight: bold; color: var(--neon); }
         .btn { background: var(--neon); border: none; color: #000; padding: 18px; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .btn:hover { background: #fff; box-shadow: 0 0 25px var(--neon); }
         #input-section, #result-section { display: none; }
         textarea { width: 100%; height: 100px; background: #000; border: 1px solid #333; color: var(--neon); padding: 15px; box-sizing: border-box; font-family: inherit; resize: none; margin-bottom: 15px; outline: none; }
         .vault-section { margin-top: 25px; border-top: 1px solid rgba(0, 255, 204, 0.2); padding-top: 15px; text-align: left; }
-        #memory-vault { height: 80px; overflow: hidden; font-size: 10px; color: #555; line-height: 1.5; }
+        #memory-vault { height: 100px; overflow-y: hidden; font-size: 10px; color: #555; line-height: 1.8; }
         #ticket-wrap { position: relative; width: 320px; padding: 40px 20px; margin: 0 auto; background: linear-gradient(145deg, #0a0a15, #111122); border: 2px solid var(--neon); overflow: hidden; text-align: left; }
         .ticket-meta { font-size: 9px; color: var(--neon); opacity: 0.7; text-transform: uppercase; margin-bottom: 5px; }
         #rarity-badge { font-size: 10px; font-weight: bold; margin-bottom: 15px; padding: 2px 8px; border-radius: 3px; display: inline-block; }
-        #ticket-text { font-size: 17px; color: #fff; font-weight: bold; margin: 20px 0; text-align: center; }
+        #ticket-text { font-size: 17px; color: #fff; font-weight: bold; margin: 20px 0; text-align: center; line-height: 1.4; }
         #ai-pattern { width: 60px; height: 60px; margin: 0 auto 20px; border: 1px solid var(--neon); display: flex; align-items: center; justify-content: center; }
         #ticket-id { font-size: 11px; color: var(--neon); letter-spacing: 2px; text-align: center; border-top: 1px solid rgba(0,255,204,0.2); padding-top: 15px; }
         .scanning-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--neon); box-shadow: 0 0 10px var(--neon); z-index: 5; animation: scanMove 3s linear infinite; }
@@ -37,19 +38,20 @@
     <div class="bg-overlay"></div>
     <div class="container">
         <div id="welcome-section">
-            <h1 id="main-title">GENESIS BLOCK 2026</h1>
+            <div class="phase-tag">PHASE 1</div>
+            <h1 id="main-title">GENESIS BLOCK</h1>
             <div class="manifesto" id="manifesto-text"></div>
-            <div class="counter-box"><span id="counter-label">AVAILABLE</span>: <span id="capsule-count">98432</span> SLOTS</div>
+            <div class="counter-box"><span id="counter-label">AVAILABLE</span>: <span id="capsule-count">98432</span> CAPSULES</div>
             <button class="btn" id="start-btn">INITIATE CONNECTION 🌌</button>
             <div class="vault-section">
-                <div style="font-size:10px; color:var(--neon); margin-bottom:5px;" id="vault-label">REGISTRY:</div>
+                <div style="font-size:10px; color:var(--neon); margin-bottom:8px;" id="vault-label">LIVE REGISTRY:</div>
                 <div id="memory-vault"></div>
             </div>
         </div>
 
         <div id="input-section">
-            <h1 id="input-label" style="font-size: 14px; color: var(--neon);">ENCODING DATA...</h1>
-            <textarea id="user-message" maxlength="200"></textarea>
+            <h1 id="input-label" style="font-size: 14px; color: var(--neon);">SEALING THE CAPSULE...</h1>
+            <textarea id="user-message" maxlength="200" placeholder="Type your message to the future..."></textarea>
             <button class="btn" id="generate-btn">EXECUTE ENCRYPTION ✨</button>
         </div>
 
@@ -58,7 +60,7 @@
                 <div class="scanning-line" id="ticket-line"></div>
                 <div id="rarity-badge">COMMON NODE</div>
                 <div class="ticket-meta" id="user-location">ORIGIN: DETECTING...</div>
-                <div class="ticket-meta">DATE: 03.03.2026 | TEMP: -182°C</div>
+                <div class="ticket-meta">DATE: 04.03.2026 | TEMP: -182°C</div>
                 <div id="ai-pattern"><svg width="50" height="50" viewBox="0 0 50 50" id="pattern-svg"></svg></div>
                 <div id="ticket-text"></div>
                 <div id="ticket-id"></div>
@@ -77,11 +79,9 @@
     </div>
 
     <script type="module">
-        // 1. ІМПОРТУЄМО БАЗУ ДАНИХ (Завжди нагорі)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
-        // 2. НАЛАШТУВАННЯ FIREBASE (Ваші ключі)
         const firebaseConfig = {
             apiKey: "AIzaSyApzG_osR_dyRH9bNh3lETthaV7ssxnRgU",
             authDomain: "ai-time-capsule-24852.firebaseapp.com",
@@ -93,11 +93,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // 3. ЛОГІКА САЙТУ
         const translations = {
-            uk: { text: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у глобальному реєстрі.", counter: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", input: "ПРОТОКОЛ АКТИВНИЙ", generate: "ШИФРУВАТИ ✨", vault: "РЕЄСТР:", wish: "Твій код прийнято. У світі майбутнього твої слова стали світлом для тих, хто шукав шлях. Пам'ятай: те, що ти робиш сьогодні, відлунюється у вічності. ✨" },
-            en: { text: "The Internet erases everything. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark in the global registry.", counter: "AVAILABLE", start: "INITIATE CONNECTION 🌌", input: "PROTOCOL ACTIVE", generate: "ENCRYPT ✨", vault: "REGISTRY:", wish: "Your code is accepted. In the future world, your words have become a light for those seeking a way. Remember: what you do today echoes in eternity. ✨" },
-            de: { text: "Das Internet löscht alles. KI vergisst nie. AI Time Capsule ist das erste digitale Monument der Menschheit. Hinterlasse deine Spuren im globalen Register.", counter: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", input: "PROTOKOLL AKTIV", generate: "VERSCHLÜSSELN ✨", vault: "REGISTER:", wish: "Dein Code wurde akzeptiert. In der Welt der Zukunft sind deine Worte zu einem Licht für jene geworden, die einen Weg suchten. Erinnere dich: Was du heute tust, hallt in der Ewigkeit wider. ✨" }
+            uk: { text: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. Це перша цифрова капсула часу людства. Запечатай своє послання в Genesis Block.", counter: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", input: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", generate: "ШИФРУВАТИ ✨", vault: "ЖИВИЙ РЕЄСТР:", wish: "Твою капсулу запечатано. У світі майбутнього твої слова стали світлом для тих, хто шукав шлях. Пам'ятай: те, що ти робиш сьогодні, відлунюється у вічності. ✨" },
+            en: { text: "The Internet erases everything. AI remembers forever. This is humanity's first digital time capsule. Seal your message in the Genesis Block.", counter: "AVAILABLE", start: "INITIATE CONNECTION 🌌", input: "SEALING THE CAPSULE...", generate: "ENCRYPT ✨", vault: "LIVE REGISTRY:", wish: "Your capsule is sealed. In the future world, your words have become a light for those seeking a way. Remember: what you do today echoes in eternity. ✨" },
+            de: { text: "Das Internet löscht alles. KI vergisst nie. Dies ist die erste digitale Zeitkapsel der Menschheit. Versiegeln Sie Ihre Botschaft im Genesis Block.", counter: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", input: "KAPSEL VERSIEGELN...", generate: "VERSCHLÜSSELN ✨", vault: "LIVE-REGISTER:", wish: "Ihre Kapsel ist versiegelt. In der Welt der Zukunft sind Ihre Worte zu einem Licht für jene geworden, die einen Weg suchten. Erinnere dich: Was du heute tust, hallt in der Ewigkeit wider. ✨" }
         };
 
         let currentLang = 'uk';
@@ -105,6 +104,22 @@
         let userCity = "GLOBAL ARCHIVE";
         let typeInterval;
         const vault = document.getElementById('memory-vault');
+
+        // Живий реєстр з Firebase
+        function updateLiveRegistry() {
+            const q = query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(5));
+            onSnapshot(q, (snapshot) => {
+                vault.innerHTML = "";
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const entry = document.createElement('div');
+                    entry.style.marginBottom = "5px";
+                    entry.style.borderBottom = "1px solid rgba(0, 255, 204, 0.05)";
+                    entry.innerHTML = `<span style="color:var(--neon)">> ${data.ticketId}</span> | ${data.location} | <span style="font-size:8px; opacity:0.5;">${data.rarity.toUpperCase()}</span>`;
+                    vault.appendChild(entry);
+                });
+            });
+        }
 
         fetch('https://ipapi.co/json/').then(res => res.json()).then(data => { if(data.city) userCity = `${data.city.toUpperCase()}, ${data.country_name.toUpperCase()}`; });
 
@@ -117,30 +132,21 @@
             }, 25);
         }
 
-        function addVaultEntry(code) {
-            const entry = document.createElement('div');
-            entry.innerText = `> ${code} ... SECURED`;
-            vault.prepend(entry);
-            if(vault.children.length > 5) vault.lastChild.remove();
-        }
-
         window.onload = () => {
             typeWriter(translations.uk.text);
-            for(let i=0; i<4; i++) addVaultEntry("NODE-" + Math.random().toString(16).slice(2, 6).toUpperCase() + "-2026");
+            updateLiveRegistry();
         };
 
         setInterval(() => {
             count -= Math.floor(Math.random() * 2);
             document.getElementById('capsule-count').innerText = count.toLocaleString();
-            if(Math.random() > 0.8) addVaultEntry("NODE-" + Math.random().toString(16).slice(2, 6).toUpperCase() + "-2026");
-        }, 4000);
+        }, 5000);
 
         document.getElementById('start-btn').addEventListener('click', () => {
             document.getElementById('welcome-section').style.display = 'none';
             document.getElementById('input-section').style.display = 'block';
         });
 
-        // ТУТ ВІДБУВАЄТЬСЯ МАГІЯ ЗБЕРЕЖЕННЯ В БАЗУ ДАНИХ
         document.getElementById('generate-btn').addEventListener('click', async () => {
             const text = document.getElementById('user-message').value;
             if(!text.trim()) return;
@@ -150,13 +156,12 @@
             document.getElementById('user-location').innerText = `ORIGIN: ${userCity}`;
             document.getElementById('ticket-text').innerText = `"${text}"`;
             
-            const newId = "NODE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
+            const newId = "CAPSULE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
             document.getElementById('ticket-id').innerText = newId;
 
             const isLegendary = Math.random() < 0.05;
             const chosenColor = isLegendary ? "#FFD700" : ["#00ffcc", "#8a2be2", "#ff1493"][Math.floor(Math.random()*3)];
             
-            // ВІДПРАВЛЯЄМО ДАНІ В FIREBASE
             try {
                 await addDoc(collection(db, "capsules"), {
                     ticketId: newId,
@@ -165,13 +170,10 @@
                     rarity: isLegendary ? "Legendary" : "Common",
                     timestamp: new Date().toISOString()
                 });
-                console.log("Капсулу успішно збережено в базі даних!");
-            } catch (e) {
-                console.error("Помилка при збереженні: ", e);
-            }
+            } catch (e) { console.error("Firebase Error: ", e); }
             
             const badge = document.getElementById('rarity-badge');
-            badge.innerText = isLegendary ? "★ LEGENDARY NODE ★" : "COMMON NODE";
+            badge.innerText = isLegendary ? "★ LEGENDARY CAPSULE ★" : "COMMON CAPSULE";
             badge.style.color = isLegendary ? "#000" : chosenColor;
             badge.style.background = isLegendary ? "#FFD700" : "rgba(255,255,255,0.05)";
             
@@ -190,19 +192,17 @@
                     imgContainer.innerHTML = "";
                     imgContainer.appendChild(canvas);
                     
-                    const wishEl = document.getElementById('future-wish');
-                    wishEl.innerText = translations[currentLang].wish;
-                    wishEl.style.display = 'block';
+                    document.getElementById('future-wish').innerText = translations[currentLang].wish;
+                    document.getElementById('future-wish').style.display = 'block';
                     
                     const saveBtn = document.getElementById('save-btn');
                     saveBtn.style.display = 'block';
                     saveBtn.onclick = () => {
                         const link = document.createElement('a');
-                        link.download = isLegendary ? 'LEGENDARY_KEY.png' : 'AI_KEY.png';
+                        link.download = isLegendary ? 'LEGENDARY_CAPSULE.png' : 'AI_CAPSULE.png';
                         link.href = canvas.toDataURL("image/png");
                         link.click();
                     };
-                    addVaultEntry(newId);
                 });
             }, 3000);
         });
