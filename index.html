@@ -184,5 +184,26 @@
             document.getElementById('vault-label').innerText = t.vault;
         }));
     </script>
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyApzG_osR_dyRH9bNh3lETthaV7ssxnRgU",
+    authDomain: "ai-time-capsule-24852.firebaseapp.com",
+    projectId: "ai-time-capsule-24852",
+    storageBucket: "ai-time-capsule-24852.firebasestorage.app",
+    messagingSenderId: "372588449057",
+    appId: "1:372588449057:web:17451d5a528c968c9ec260"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+</script>
 </body>
 </html>
