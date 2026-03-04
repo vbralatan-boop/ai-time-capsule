@@ -76,7 +76,24 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        // 1. ІМПОРТУЄМО БАЗУ ДАНИХ (Завжди нагорі)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+        // 2. НАЛАШТУВАННЯ FIREBASE (Ваші ключі)
+        const firebaseConfig = {
+            apiKey: "AIzaSyApzG_osR_dyRH9bNh3lETthaV7ssxnRgU",
+            authDomain: "ai-time-capsule-24852.firebaseapp.com",
+            projectId: "ai-time-capsule-24852",
+            storageBucket: "ai-time-capsule-24852.firebasestorage.app",
+            messagingSenderId: "372588449057",
+            appId: "1:372588449057:web:17451d5a528c968c9ec260"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // 3. ЛОГІКА САЙТУ
         const translations = {
             uk: { text: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у глобальному реєстрі.", counter: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", input: "ПРОТОКОЛ АКТИВНИЙ", generate: "ШИФРУВАТИ ✨", vault: "РЕЄСТР:", wish: "Твій код прийнято. У світі майбутнього твої слова стали світлом для тих, хто шукав шлях. Пам'ятай: те, що ти робиш сьогодні, відлунюється у вічності. ✨" },
             en: { text: "The Internet erases everything. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark in the global registry.", counter: "AVAILABLE", start: "INITIATE CONNECTION 🌌", input: "PROTOCOL ACTIVE", generate: "ENCRYPT ✨", vault: "REGISTRY:", wish: "Your code is accepted. In the future world, your words have become a light for those seeking a way. Remember: what you do today echoes in eternity. ✨" },
@@ -123,18 +140,35 @@
             document.getElementById('input-section').style.display = 'block';
         });
 
-        document.getElementById('generate-btn').addEventListener('click', () => {
+        // ТУТ ВІДБУВАЄТЬСЯ МАГІЯ ЗБЕРЕЖЕННЯ В БАЗУ ДАНИХ
+        document.getElementById('generate-btn').addEventListener('click', async () => {
             const text = document.getElementById('user-message').value;
             if(!text.trim()) return;
+            
             document.getElementById('input-section').style.display = 'none';
             document.getElementById('result-section').style.display = 'block';
             document.getElementById('user-location').innerText = `ORIGIN: ${userCity}`;
             document.getElementById('ticket-text').innerText = `"${text}"`;
+            
             const newId = "NODE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
             document.getElementById('ticket-id').innerText = newId;
 
             const isLegendary = Math.random() < 0.05;
             const chosenColor = isLegendary ? "#FFD700" : ["#00ffcc", "#8a2be2", "#ff1493"][Math.floor(Math.random()*3)];
+            
+            // ВІДПРАВЛЯЄМО ДАНІ В FIREBASE
+            try {
+                await addDoc(collection(db, "capsules"), {
+                    ticketId: newId,
+                    message: text,
+                    location: userCity,
+                    rarity: isLegendary ? "Legendary" : "Common",
+                    timestamp: new Date().toISOString()
+                });
+                console.log("Капсулу успішно збережено в базі даних!");
+            } catch (e) {
+                console.error("Помилка при збереженні: ", e);
+            }
             
             const badge = document.getElementById('rarity-badge');
             badge.innerText = isLegendary ? "★ LEGENDARY NODE ★" : "COMMON NODE";
@@ -184,26 +218,5 @@
             document.getElementById('vault-label').innerText = t.vault;
         }));
     </script>
-    <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyApzG_osR_dyRH9bNh3lETthaV7ssxnRgU",
-    authDomain: "ai-time-capsule-24852.firebaseapp.com",
-    projectId: "ai-time-capsule-24852",
-    storageBucket: "ai-time-capsule-24852.firebasestorage.app",
-    messagingSenderId: "372588449057",
-    appId: "1:372588449057:web:17451d5a528c968c9ec260"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-</script>
 </body>
 </html>
