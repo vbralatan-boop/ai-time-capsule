@@ -60,7 +60,7 @@
                 <div class="scanning-line" id="ticket-line"></div>
                 <div id="rarity-badge">COMMON NODE</div>
                 <div class="ticket-meta" id="user-location">ORIGIN: DETECTING...</div>
-                <div class="ticket-meta">DATE: 04.03.2026 | TEMP: -182°C</div>
+                <div class="ticket-meta">DATE: 05.03.2026 | TEMP: -182°C</div>
                 <div id="ai-pattern"><svg width="50" height="50" viewBox="0 0 50 50" id="pattern-svg"></svg></div>
                 <div id="ticket-text"></div>
                 <div id="ticket-id"></div>
@@ -105,7 +105,34 @@
         let typeInterval;
         const vault = document.getElementById('memory-vault');
 
-        // Живий реєстр з Firebase
+        // КІБЕР-ЗВУКОВИЙ РУШІЙ
+        let audioCtx;
+        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+
+        function playCyberSound(type) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+
+            if (type === 'start') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(220, audioCtx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+            } else if (type === 'scan') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(60, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + 3);
+                gain.gain.setValueAtTime(0.03, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 3);
+                osc.start(); osc.stop(audioCtx.currentTime + 3);
+            } else if (type === 'success') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.5);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+            }
+        }
+
         function updateLiveRegistry() {
             const q = query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(5));
             onSnapshot(q, (snapshot) => {
@@ -132,10 +159,7 @@
             }, 25);
         }
 
-        window.onload = () => {
-            typeWriter(translations.uk.text);
-            updateLiveRegistry();
-        };
+        window.onload = () => { typeWriter(translations.uk.text); updateLiveRegistry(); };
 
         setInterval(() => {
             count -= Math.floor(Math.random() * 2);
@@ -143,6 +167,7 @@
         }, 5000);
 
         document.getElementById('start-btn').addEventListener('click', () => {
+            initAudio(); playCyberSound('start');
             document.getElementById('welcome-section').style.display = 'none';
             document.getElementById('input-section').style.display = 'block';
         });
@@ -151,6 +176,7 @@
             const text = document.getElementById('user-message').value;
             if(!text.trim()) return;
             
+            playCyberSound('scan');
             document.getElementById('input-section').style.display = 'none';
             document.getElementById('result-section').style.display = 'block';
             document.getElementById('user-location').innerText = `ORIGIN: ${userCity}`;
@@ -164,11 +190,8 @@
             
             try {
                 await addDoc(collection(db, "capsules"), {
-                    ticketId: newId,
-                    message: text,
-                    location: userCity,
-                    rarity: isLegendary ? "Legendary" : "Common",
-                    timestamp: new Date().toISOString()
+                    ticketId: newId, message: text, location: userCity,
+                    rarity: isLegendary ? "Legendary" : "Common", timestamp: new Date().toISOString()
                 });
             } catch (e) { console.error("Firebase Error: ", e); }
             
@@ -187,21 +210,18 @@
 
             setTimeout(() => {
                 html2canvas(document.getElementById('ticket-wrap'), { backgroundColor: "#020205", scale: 2 }).then(canvas => {
+                    playCyberSound('success');
                     document.getElementById('ticket-wrap').style.display = 'none';
                     const imgContainer = document.getElementById('image-container');
-                    imgContainer.innerHTML = "";
-                    imgContainer.appendChild(canvas);
-                    
+                    imgContainer.innerHTML = ""; imgContainer.appendChild(canvas);
                     document.getElementById('future-wish').innerText = translations[currentLang].wish;
                     document.getElementById('future-wish').style.display = 'block';
-                    
                     const saveBtn = document.getElementById('save-btn');
                     saveBtn.style.display = 'block';
                     saveBtn.onclick = () => {
                         const link = document.createElement('a');
                         link.download = isLegendary ? 'LEGENDARY_CAPSULE.png' : 'AI_CAPSULE.png';
-                        link.href = canvas.toDataURL("image/png");
-                        link.click();
+                        link.href = canvas.toDataURL("image/png"); link.click();
                     };
                 });
             }, 3000);
