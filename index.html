@@ -40,7 +40,7 @@
         <div id="welcome-section">
             <div class="phase-tag">PHASE 1</div>
             <h1 id="main-title">GENESIS BLOCK</h1>
-            <div class="manifesto" id="manifesto-text"></div>
+            <div class="manifest manifesto" id="manifesto-text"></div>
             <div class="counter-box"><span id="counter-label">AVAILABLE</span>: <span id="capsule-count">98432</span> CAPSULES</div>
             <button class="btn" id="start-btn">INITIATE CONNECTION 🌌</button>
             <div class="vault-section">
@@ -60,7 +60,7 @@
                 <div class="scanning-line" id="ticket-line"></div>
                 <div id="rarity-badge">COMMON NODE</div>
                 <div class="ticket-meta" id="user-location">ORIGIN: DETECTING...</div>
-                <div class="ticket-meta">DATE: 05.03.2026 | TEMP: -182°C</div>
+                <div class="ticket-meta" id="current-date">DATE: 05.03.2026 | TEMP: -182°C</div>
                 <div id="ai-pattern"><svg width="50" height="50" viewBox="0 0 50 50" id="pattern-svg"></svg></div>
                 <div id="ticket-text"></div>
                 <div id="ticket-id"></div>
@@ -176,7 +176,7 @@
             const text = document.getElementById('user-message').value;
             if(!text.trim()) return;
             
-            playCyberSound('scan');
+            initAudio(); playCyberSound('scan');
             document.getElementById('input-section').style.display = 'none';
             document.getElementById('result-section').style.display = 'block';
             document.getElementById('user-location').innerText = `ORIGIN: ${userCity}`;
