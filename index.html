@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Time Capsule | QR Secure</title>
+    <title>AI Time Capsule | QR Genesis</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -11,35 +11,41 @@
     <style>
         :root { --neon: #00ffcc; --bg: #020205; --legendary: #FFD700; }
         body { margin: 0; padding: 0; background-color: var(--bg); color: #ffffff; font-family: 'Courier New', Courier, monospace; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
-        .container { width: 100%; max-width: 420px; padding: 20px; box-sizing: border-box; text-align: center; }
-        h1 { color: var(--neon); text-shadow: 0 0 10px var(--neon); font-size: 20px; text-transform: uppercase; margin-bottom: 10px; }
+        .container { width: 100%; max-width: 420px; padding: 15px; box-sizing: border-box; text-align: center; }
+        h1 { color: var(--neon); text-shadow: 0 0 10px var(--neon); font-size: 20px; text-transform: uppercase; margin: 0 0 10px; }
         #global-map { width: 100%; height: 160px; background: #000; margin: 10px 0; border: 1px solid rgba(0, 255, 204, 0.3); border-radius: 5px; }
-        .btn { background: var(--neon); border: none; color: #000; padding: 18px; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; text-transform: uppercase; }
+        .counter-box { background: rgba(0, 255, 204, 0.1); border: 1px dashed var(--neon); padding: 10px; margin: 10px 0; color: var(--neon); font-size: 13px; font-weight: bold; }
+        .btn { background: var(--neon); border: none; color: #000; padding: 16px; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; text-transform: uppercase; }
         #input-section, #result-section { display: none; }
-        textarea { width: 100%; height: 80px; background: #000; border: 1px solid #333; color: var(--neon); padding: 10px; box-sizing: border-box; margin-bottom: 10px; outline: none; }
+        textarea { width: 100%; height: 80px; background: #000; border: 1px solid #333; color: var(--neon); padding: 10px; box-sizing: border-box; resize: none; margin-bottom: 10px; outline: none; }
         
-        /* КОНТЕЙНЕР ДЛЯ QR */
-        #ticket-wrap { position: relative; width: 310px; padding: 30px 20px; margin: 0 auto; background: #0a0a15; border: 2px solid var(--neon); text-align: left; }
-        #qr-container { width: 100px; height: 100px; margin: 0 auto 20px; background: #fff; padding: 5px; border-radius: 3px; display: flex; align-items: center; justify-content: center; }
-        
-        #ticket-text { font-size: 15px; color: #fff; font-weight: bold; margin: 15px 0; text-align: center; line-height: 1.3; }
-        #ticket-id { font-size: 10px; color: var(--neon); text-align: center; opacity: 0.7; padding-top: 10px; border-top: 1px solid rgba(0,255,204,0.1); }
+        /* КАПСУЛА З QR */
+        #ticket-wrap { position: relative; width: 310px; padding: 30px 15px; margin: 0 auto; background: #0a0a15; border: 2px solid var(--neon); text-align: left; }
+        #qr-container { width: 100px; height: 100px; margin: 0 auto 15px; background: #fff; padding: 5px; border-radius: 3px; display: flex; align-items: center; justify-content: center; }
+        #ticket-text { font-size: 15px; color: #fff; font-weight: bold; margin: 15px 0; text-align: center; line-height: 1.4; }
+        #ticket-id { font-size: 9px; color: var(--neon); text-align: center; opacity: 0.6; padding-top: 10px; border-top: 1px solid rgba(0,255,204,0.1); }
         .scanning-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--neon); animation: scanMove 3s linear infinite; }
         @keyframes scanMove { 0% { top: 0; } 100% { top: 100%; } }
-        #memory-vault { height: 60px; overflow: hidden; font-size: 9px; color: #555; text-align: left; margin-top: 10px; }
+        #memory-vault { height: 60px; overflow: hidden; font-size: 9px; color: #555; text-align: left; margin-top: 10px; line-height: 1.5; }
+        
+        /* МОВИ */
+        #language-switcher { margin-top: 20px; display: flex; justify-content: center; gap: 20px; border-top: 1px solid #222; padding-top: 15px; }
+        .flag { font-size: 24px; cursor: pointer; opacity: 0.6; transition: 0.3s; }
+        .flag:hover { opacity: 1; transform: scale(1.1); }
     </style>
 </head>
 <body>
     <div class="container">
         <div id="welcome-section">
-            <h1>GENESIS BLOCK</h1>
+            <h1 id="main-title">GENESIS BLOCK</h1>
             <div id="global-map"></div>
+            <div class="counter-box"><span id="counter-label">AVAILABLE</span>: 98,432 CAPSULES</div>
             <button class="btn" id="start-btn">INITIATE CONNECTION 🌌</button>
             <div id="memory-vault"></div>
         </div>
 
         <div id="input-section">
-            <h1 style="font-size: 14px;">ENCODING QR DATA...</h1>
+            <h1 id="input-label" style="font-size: 14px;">SEALING CAPSULE...</h1>
             <textarea id="user-message" maxlength="200" placeholder="Type your message..."></textarea>
             <button class="btn" id="generate-btn">GENERATE SECURE QR ✨</button>
         </div>
@@ -47,17 +53,20 @@
         <div id="result-section">
             <div id="ticket-wrap">
                 <div class="scanning-line"></div>
-                <div style="font-size: 8px; color: var(--neon); margin-bottom: 5px;" id="res-loc">ORIGIN: DETECTING...</div>
-                <div id="rarity-badge" style="font-size: 9px; font-weight: bold; margin-bottom: 10px; padding: 2px 6px; border: 1px solid;">COMMON CAPSULE</div>
-                
+                <div id="rarity-badge" style="font-size: 9px; font-weight: bold; margin-bottom: 10px; border: 1px solid; display: inline-block; padding: 2px 5px;">COMMON CAPSULE</div>
                 <div id="qr-container"></div>
-                
                 <div id="ticket-text"></div>
                 <div id="ticket-id"></div>
             </div>
             <div id="image-container" style="margin-top:20px;"></div>
-            <button class="btn" id="save-btn" style="display:none; margin-top:15px;">DOWNLOAD CAPSULE KEY 📥</button>
+            <button class="btn" id="save-btn" style="display:none; margin-top:15px;">DOWNLOAD SECURE KEY 📥</button>
             <button onclick="location.reload()" style="background:none; border:none; color:#444; margin-top:15px; cursor:pointer; font-size:9px;">REBOOT SYSTEM</button>
+        </div>
+
+        <div id="language-switcher">
+            <span class="flag" data-lang="uk">🇺🇦</span>
+            <span class="flag" data-lang="en">🇬🇧</span>
+            <span class="flag" data-lang="de">🇩🇪</span>
         </div>
     </div>
 
@@ -76,6 +85,13 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        const translations = {
+            uk: { title: "GENESIS BLOCK", counter: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", input: "ЗАПЕЧАТУВАННЯ...", generate: "ГЕНЕРУВАТИ QR ✨" },
+            en: { title: "GENESIS BLOCK", counter: "AVAILABLE", start: "INITIATE CONNECTION 🌌", input: "SEALING...", generate: "GENERATE QR ✨" },
+            de: { title: "GENESIS BLOCK", counter: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", input: "VERSIEGELN...", generate: "QR GENERIEREN ✨" }
+        };
+
+        let currentLang = 'uk';
         let userPos = { lat: 48.1486, lng: 17.1077, city: "BRATISLAVA, SK" };
         const map = L.map('global-map', { zoomControl: false, attributionControl: false }).setView([20, 0], 1);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
@@ -84,6 +100,7 @@
         function playSound(f, d) {
             try {
                 if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if(audioCtx.state === 'suspended') audioCtx.resume();
                 const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
                 o.connect(g); g.connect(audioCtx.destination);
                 o.frequency.setValueAtTime(f, audioCtx.currentTime); g.gain.setValueAtTime(0.05, audioCtx.currentTime);
@@ -94,19 +111,19 @@
         fetch('https://ipapi.co/json/').then(res => res.json()).then(data => {
             userPos = { lat: data.latitude, lng: data.longitude, city: `${data.city.toUpperCase()}, ${data.country_name.toUpperCase()}` };
             map.flyTo([userPos.lat, userPos.lng], 4);
-        });
+        }).catch(() => {});
 
         onSnapshot(query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(8)), (snap) => {
             const v = document.getElementById('memory-vault'); v.innerHTML = "";
             snap.forEach(doc => {
                 const d = doc.data();
                 v.innerHTML += `<div>> ${d.ticketId} | ${d.location}</div>`;
-                if(d.lat && d.lng) L.circleMarker([d.lat, d.lng], { radius: 2, color: d.rarity==='Legendary'?'#FFD700':'#00ffcc' }).addTo(map);
+                if(d.lat && d.lng) L.circleMarker([d.lat, d.lng], { radius: 2, color: d.rarity === 'Legendary' ? '#FFD700' : '#00ffcc' }).addTo(map);
             });
         });
 
         document.getElementById('start-btn').addEventListener('click', () => {
-            if(audioCtx) audioCtx.resume(); playSound(440, 0.1);
+            playSound(440, 0.1);
             document.getElementById('welcome-section').style.display = 'none';
             document.getElementById('input-section').style.display = 'block';
         });
@@ -114,34 +131,24 @@
         document.getElementById('generate-btn').addEventListener('click', async () => {
             const text = document.getElementById('user-message').value;
             if(!text.trim()) return;
-            
             playSound(150, 0.5);
             document.getElementById('input-section').style.display = 'none';
             document.getElementById('result-section').style.display = 'block';
-            
-            const newId = "CAPSULE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
             document.getElementById('ticket-text').innerText = `"${text}"`;
+            const newId = "CAPSULE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
             document.getElementById('ticket-id').innerText = newId;
-            document.getElementById('res-loc').innerText = `ORIGIN: ${userPos.city}`;
-            
-            const isLeg = Math.random() < 0.05;
-            const badge = document.getElementById('rarity-badge');
-            badge.innerText = isLeg ? "★ LEGENDARY CAPSULE ★" : "COMMON CAPSULE";
-            badge.style.color = isLeg ? "#FFD700" : "#00ffcc";
-            document.getElementById('ticket-wrap').style.borderColor = isLeg ? "#FFD700" : "#00ffcc";
+            const isLeg = Math.random() < 0.05; const col = isLeg ? "#FFD700" : "#00ffcc";
 
-            // ГЕНЕРАЦІЯ QR КОДУ
+            // ГЕНЕРУЄМО QR
             const qrBox = document.getElementById('qr-container');
             qrBox.innerHTML = "";
-            new QRCode(qrBox, {
-                text: `ID: ${newId}\nMessage: ${text}`,
-                width: 100,
-                height: 100,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
+            new QRCode(qrBox, { text: `ID: ${newId}\nMessage: ${text}`, width: 100, height: 100 });
 
+            const badge = document.getElementById('rarity-badge');
+            badge.innerText = isLeg ? "★ LEGENDARY CAPSULE ★" : "COMMON CAPSULE";
+            badge.style.color = col;
+            document.getElementById('ticket-wrap').style.borderColor = col;
+            
             try {
                 await addDoc(collection(db, "capsules"), {
                     ticketId: newId, message: text, location: userPos.city,
@@ -157,12 +164,22 @@
                     document.getElementById('image-container').appendChild(canvas);
                     document.getElementById('save-btn').style.display = 'block';
                     document.getElementById('save-btn').onclick = () => {
-                        const link = document.createElement('a'); link.download = 'AI_CAPSULE_KEY.png';
+                        const link = document.createElement('a'); link.download = 'AI_CAPSULE.png';
                         link.href = canvas.toDataURL(); link.click();
                     };
                 });
             }, 2500);
         });
+
+        document.querySelectorAll('.flag').forEach(f => f.addEventListener('click', function() {
+            const lang = this.getAttribute('data-lang');
+            const t = translations[lang];
+            document.getElementById('main-title').innerText = t.title;
+            document.getElementById('counter-label').innerText = t.counter;
+            document.getElementById('start-btn').innerText = t.start;
+            document.getElementById('input-label').innerText = t.input;
+            document.getElementById('generate-btn').innerText = t.generate;
+        }));
     </script>
 </body>
 </html>
