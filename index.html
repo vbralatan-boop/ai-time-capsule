@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Time Capsule | Global Master Block</title>
+    <title>AI Time Capsule | Global Premium Master</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -14,16 +14,15 @@
         :root {
             --neon: #00ffcc;
             --bg: #020205;
-            --gold: #FFD700;
             --glass: rgba(0, 255, 204, 0.05);
-            --card-gradient: linear-gradient(135deg, #0f172a 0%, #020205 100%);
+            --card: linear-gradient(145deg, #0f172a 0%, #020205 100%);
         }
 
         body {
             margin: 0;
             background-color: var(--bg);
             color: #ffffff;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Courier New', monospace;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -35,65 +34,53 @@
             width: 100%;
             max-width: 420px;
             padding: 20px;
-            box-sizing: border-box;
             text-align: center;
             z-index: 10;
         }
 
-        /* Заголовки */
         h1 {
             color: var(--neon);
             text-shadow: 0 0 15px var(--neon);
             font-size: 22px;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 5px;
+            margin: 0 0 10px;
         }
 
-        .phase-tag {
-            font-size: 10px;
-            color: var(--neon);
-            letter-spacing: 4px;
-            margin-bottom: 20px;
-            opacity: 0.6;
+        /* МАПА */
+        #global-map {
+            width: 100%;
+            height: 200px; /* Чітка висота для Leaflet */
+            background: #000;
+            margin: 15px 0;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.1);
         }
 
-        /* ТЕКСТ НАШОЇ ІДЕЇ (МАНІФЕСТ) */
+        /* МАНІФЕСТ */
         .manifesto {
             margin: 20px 0;
             line-height: 1.6;
-            font-size: 14px;
+            font-size: 13px;
             color: #aaa;
             text-align: justify;
-            border-left: 2px solid var(--neon);
-            padding: 12px 15px;
+            border-left: 3px solid var(--neon);
+            padding: 10px 15px;
             background: rgba(0, 255, 204, 0.03);
-            border-radius: 0 8px 8px 0;
-        }
-
-        /* Мапа та Лічильник */
-        #global-map {
-            width: 100%;
-            height: 180px;
-            background: #000;
-            margin: 15px 0;
-            border: 1px solid rgba(0, 255, 204, 0.2);
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.1);
+            border-radius: 0 10px 10px 0;
         }
 
         .counter-box {
             background: var(--glass);
             border: 1px dashed var(--neon);
             padding: 12px;
-            margin-bottom: 20px;
+            margin: 15px 0;
             font-weight: bold;
             color: var(--neon);
-            font-size: 13px;
-            border-radius: 8px;
+            font-size: 14px;
         }
 
-        /* Кнопки */
         .btn {
             background: var(--neon);
             border: none;
@@ -106,59 +93,37 @@
             width: 100%;
             text-transform: uppercase;
             letter-spacing: 2px;
-            transition: 0.4s;
-            box-shadow: 0 4px 15px rgba(0, 255, 204, 0.2);
+            transition: 0.3s;
         }
 
         .btn:hover {
             background: #fff;
             box-shadow: 0 0 30px var(--neon);
-            transform: translateY(-2px);
         }
 
-        /* Секції */
-        #input-section, #result-section {
-            display: none;
-        }
+        #input-section, #result-section { display: none; }
 
         textarea {
             width: 100%;
-            height: 110px;
+            height: 100px;
             background: #000;
             border: 1px solid #333;
             color: var(--neon);
             padding: 15px;
             box-sizing: border-box;
-            font-family: inherit;
             resize: none;
             margin-bottom: 20px;
             outline: none;
             border-radius: 8px;
         }
 
-        /* ЖИВИЙ РЕЄСТР */
-        .vault-section {
-            margin-top: 25px;
-            border-top: 1px solid rgba(0, 255, 204, 0.1);
-            padding-top: 15px;
-            text-align: left;
-        }
-
-        #memory-vault {
-            height: 80px;
-            overflow-y: hidden;
-            font-size: 9px;
-            color: #555;
-            line-height: 1.8;
-        }
-
-        /* ПРЕМІАЛЬНИЙ ДИЗАЙН КАПСУЛИ */
+        /* PREMIUM CAPSULE DESIGN */
         #ticket-wrap {
             position: relative;
             width: 310px;
-            padding: 45px 25px;
+            padding: 40px 20px;
             margin: 0 auto;
-            background: var(--card-gradient);
+            background: var(--card);
             border: 2px solid var(--neon);
             border-radius: 20px;
             overflow: hidden;
@@ -167,36 +132,35 @@
         }
 
         #qr-box {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 25px;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 20px;
             background: #fff;
-            padding: 10px;
-            border-radius: 10px;
+            padding: 8px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 25px rgba(255,255,255,0.2);
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
 
         #ticket-text {
             font-size: 17px;
             color: #fff;
             font-weight: 800;
-            margin: 25px 0;
+            margin: 20px 0;
             text-align: center;
-            line-height: 1.6;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            line-height: 1.5;
         }
 
         #ticket-id {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--neon);
-            letter-spacing: 3px;
             text-align: center;
-            border-top: 1px solid rgba(0, 255, 204, 0.1);
-            padding-top: 20px;
-            opacity: 0.8;
+            letter-spacing: 3px;
+            border-top: 1px solid rgba(0,255,204,0.1);
+            padding-top: 15px;
+            opacity: 0.7;
         }
 
         .scan-line {
@@ -211,40 +175,46 @@
         }
 
         @keyframes scanMove {
-            0% { top: 0%; opacity: 0.2; }
+            0% { top: 0%; opacity: 0.1; }
             50% { opacity: 0.8; }
-            100% { top: 100%; opacity: 0.2; }
+            100% { top: 100%; opacity: 0.1; }
         }
 
-        /* Перемикач мов */
+        /* LANGUAGES */
         #lang-box {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin-top: 35px;
+            gap: 25px;
+            margin-top: 30px;
             border-top: 1px solid #111;
             padding-top: 20px;
         }
 
         .flag {
-            font-size: 26px;
+            font-size: 24px;
             cursor: pointer;
             transition: 0.3s;
-            opacity: 0.4;
-            filter: grayscale(100%);
+            opacity: 0.5;
         }
 
         .flag.active, .flag:hover {
             opacity: 1;
-            filter: grayscale(0%);
             transform: scale(1.2);
+        }
+
+        #memory-vault {
+            height: 60px;
+            overflow: hidden;
+            font-size: 9px;
+            color: #444;
+            text-align: left;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div id="welcome-section">
-            <div class="phase-tag">PHASE 1 | GENESIS</div>
             <h1 id="t-title">GENESIS BLOCK</h1>
             <div id="global-map"></div>
             
@@ -255,15 +225,13 @@
             <div class="counter-box">
                 <span id="t-avail">AVAILABLE</span>: 98,432 CAPSULES
             </div>
-            <button class="btn" id="start-btn">INITIATE CONNECTION 🌌</button>
             
-            <div class="vault-section">
-                <div id="memory-vault"></div>
-            </div>
+            <button class="btn" id="start-btn">INITIATE CONNECTION 🌌</button>
+            <div id="memory-vault"></div>
         </div>
 
         <div id="input-section">
-            <h1 id="t-seal" style="font-size: 16px;">SEALING THE CAPSULE...</h1>
+            <h1 id="t-seal" style="font-size: 14px;">SEALING THE CAPSULE...</h1>
             <textarea id="user-message" maxlength="200" placeholder="Type your legacy..."></textarea>
             <button class="btn" id="generate-btn">GENERATE SECURE QR ✨</button>
         </div>
@@ -271,14 +239,14 @@
         <div id="result-section">
             <div id="ticket-wrap">
                 <div class="scan-line"></div>
-                <div style="font-size: 10px; font-weight: bold; margin-bottom: 15px; color: var(--neon); border: 1px solid; display: inline-block; padding: 3px 10px; border-radius: 5px; letter-spacing: 2px;">GLOBAL NODE</div>
+                <div style="font-size: 9px; font-weight: bold; margin-bottom: 10px; color: var(--neon); border: 1px solid; display: inline-block; padding: 2px 6px; border-radius: 4px;">GLOBAL NODE</div>
                 <div id="qr-box"></div>
                 <div id="ticket-text"></div>
                 <div id="ticket-id"></div>
             </div>
-            <div id="image-container" style="margin-top:25px;"></div>
-            <button class="btn" id="save-btn" style="display:none; margin-top:20px;">DOWNLOAD SECURITY KEY 📥</button>
-            <button onclick="location.reload()" style="background:none; border:none; color:#444; margin-top:20px; cursor:pointer; font-size:10px; letter-spacing: 2px;">REBOOT SYSTEM</button>
+            <div id="image-container" style="margin-top:20px;"></div>
+            <button class="btn" id="save-btn" style="display:none; margin-top:15px;">DOWNLOAD SECURITY KEY 📥</button>
+            <button onclick="location.reload()" style="background:none; border:none; color:#444; margin-top:15px; cursor:pointer; font-size:9px;">REBOOT SYSTEM</button>
         </div>
 
         <div id="lang-box">
@@ -310,6 +278,8 @@
         };
 
         let userPos = { lat: 0, lng: 0, city: "GLOBAL NODE" };
+
+        // INITIALIZE MAP
         const map = L.map('global-map', { zoomControl: false, attributionControl: false }).setView([20, 0], 1);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
@@ -335,7 +305,7 @@
             snap.forEach(doc => {
                 const d = doc.data();
                 v.innerHTML += `<div>> ${d.ticketId} | ${d.location}</div>`;
-                if(d.lat && d.lng) L.circleMarker([d.lat, d.lng], { radius: 3, color: '#00ffcc' }).addTo(map);
+                if(d.lat && d.lng) L.circleMarker([d.lat, d.lng], { radius: 2, color: '#00ffcc' }).addTo(map);
             });
         });
 
@@ -358,7 +328,7 @@
             document.getElementById('ticket-id').innerText = newId;
 
             const qrBox = document.getElementById('qr-box'); qrBox.innerHTML = "";
-            new QRCode(qrBox, { text: `ID: ${newId}\nLegacy: ${text}`, width: 120, height: 120 });
+            new QRCode(qrBox, { text: `ID: ${newId}\nMsg: ${text}`, width: 110, height: 110 });
 
             try {
                 await addDoc(collection(db, "capsules"), { ticketId: newId, message: text, location: userPos.city, lat: userPos.lat, lng: userPos.lng, timestamp: new Date().toISOString() });
@@ -369,3 +339,28 @@
                     playS(880, 0.2);
                     document.getElementById('ticket-wrap').style.display = 'none';
                     document.getElementById('image-container').appendChild(canvas);
+                    const sBtn = document.getElementById('save-btn');
+                    sBtn.style.display = 'block';
+                    sBtn.onclick = () => {
+                        const link = document.createElement('a'); link.download = 'AI_CAPSULE.png';
+                        link.href = canvas.toDataURL(); link.click();
+                    };
+                });
+            }, 3000);
+        });
+
+        document.querySelectorAll('.flag').forEach(f => f.addEventListener('click', function() {
+            const lang = this.getAttribute('data-lang');
+            const t = langData[lang];
+            document.getElementById('t-title').innerText = t.title;
+            document.getElementById('t-manifesto').innerText = t.manifest;
+            document.getElementById('t-avail').innerText = t.avail;
+            document.getElementById('start-btn').innerText = t.start;
+            document.getElementById('t-seal').innerText = t.seal;
+            document.getElementById('generate-btn').innerText = t.generate;
+            document.querySelectorAll('.flag').forEach(fl => fl.classList.remove('active'));
+            this.classList.add('active');
+        }));
+    </script>
+</body>
+</html>
