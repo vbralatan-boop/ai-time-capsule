@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Time Capsule | Global Genesis Block</title>
+    <title>AI Time Capsule | Global Masterpiece</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -14,9 +14,8 @@
         :root {
             --neon: #00ffcc;
             --bg: #020205;
-            --gold: #FFD700;
-            --glass: rgba(0, 255, 204, 0.07);
-            --card-gradient: linear-gradient(160deg, #111827 0%, #020205 100%);
+            --glass: rgba(0, 255, 204, 0.05);
+            --capsule-metal: linear-gradient(145deg, #1e293b 0%, #080b12 40%, #000000 100%);
         }
 
         body {
@@ -40,7 +39,18 @@
             z-index: 10;
         }
 
-        /* Заголовки */
+        /* Плавна поява екранів */
+        .screen {
+            display: none;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        .screen.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         h1 {
             color: var(--neon);
             text-shadow: 0 0 20px var(--neon);
@@ -58,7 +68,6 @@
             opacity: 0.7;
         }
 
-        /* МАПА (FIXED) */
         #global-map {
             width: 100%;
             height: 220px;
@@ -69,7 +78,6 @@
             box-shadow: 0 0 25px rgba(0, 255, 204, 0.15);
         }
 
-        /* МАНІФЕСТ ІДЕЇ */
         .manifesto-box {
             background: var(--glass);
             border-left: 4px solid var(--neon);
@@ -80,7 +88,6 @@
             line-height: 1.6;
             color: #ccc;
             border-radius: 0 10px 10px 0;
-            backdrop-filter: blur(5px);
         }
 
         .counter-panel {
@@ -94,7 +101,6 @@
             letter-spacing: 1px;
         }
 
-        /* КНОПКИ */
         .action-btn {
             background: var(--neon);
             border: none;
@@ -107,7 +113,7 @@
             width: 100%;
             text-transform: uppercase;
             letter-spacing: 2px;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.4s;
             box-shadow: 0 5px 20px rgba(0, 255, 204, 0.3);
         }
 
@@ -117,8 +123,13 @@
             transform: scale(1.02);
         }
 
-        /* Секції вводу */
-        #input-section, #result-section { display: none; }
+        /* Анімація помилки */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .error-shake { animation: shake 0.3s ease-in-out; border: 1px solid red !important; }
 
         textarea {
             width: 100%;
@@ -128,60 +139,77 @@
             color: var(--neon);
             padding: 15px;
             box-sizing: border-box;
-            font-family: inherit;
             resize: none;
             margin-bottom: 20px;
             outline: none;
             border-radius: 10px;
             font-size: 16px;
+            transition: 0.3s;
         }
 
-        /* PREMUM CAPSULE RENDERING */
+        textarea:focus { border-color: var(--neon); box-shadow: inset 0 0 10px rgba(0,255,204,0.1); }
+
+        /* 3D КАПСУЛА - МАКСИМАЛЬНИЙ ПРЕМІУМ */
         #capsule-visual {
             position: relative;
             width: 320px;
-            padding: 50px 30px;
+            padding: 45px 20px 30px 20px;
             margin: 0 auto;
-            background: var(--card-gradient);
-            border: 3px solid var(--neon);
-            border-radius: 25px;
+            background: var(--capsule-metal);
+            border-radius: 35px; 
+            border-left: 1px solid #333;
+            border-right: 1px solid #333;
+            border-top: 6px solid var(--neon);
+            border-bottom: 6px solid var(--neon);
             overflow: hidden;
             text-align: left;
-            box-shadow: 0 0 60px rgba(0, 255, 204, 0.25);
+            box-shadow: inset 0 0 40px rgba(0, 255, 204, 0.1), 0 15px 40px rgba(0, 0, 0, 0.8);
         }
 
         #qr-wrap {
-            width: 130px;
-            height: 130px;
-            margin: 0 auto 30px;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
             background: #fff;
-            padding: 12px;
+            padding: 10px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
         }
 
         #capsule-message {
-            font-size: 18px;
+            font-size: 16px;
             color: #fff;
             font-weight: 800;
-            margin: 25px 0;
+            margin: 20px 0;
             text-align: center;
-            line-height: 1.6;
-            min-height: 60px;
+            line-height: 1.5;
+            min-height: 50px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+        }
+
+        /* МЕТАДАНІ АРТЕФАКТУ */
+        .meta-data {
+            font-size: 9px;
+            color: rgba(255,255,255,0.5);
+            text-align: center;
+            letter-spacing: 2px;
+            margin-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
         }
 
         #capsule-footer {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--neon);
             text-align: center;
             letter-spacing: 4px;
-            border-top: 1px solid rgba(0, 255, 204, 0.2);
-            padding-top: 20px;
+            margin-top: 15px;
             font-weight: bold;
-            opacity: 0.8;
         }
 
         .laser-line {
@@ -189,32 +217,32 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 4px;
-            background: var(--neon);
-            box-shadow: 0 0 20px var(--neon);
-            animation: laserScan 5s ease-in-out infinite;
+            height: 3px;
+            background: #fff;
+            box-shadow: 0 0 20px 4px var(--neon);
+            animation: laserScan 3s linear infinite;
             z-index: 5;
         }
 
         @keyframes laserScan {
             0% { top: 0%; opacity: 0; }
-            50% { opacity: 1; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
             100% { top: 100%; opacity: 0; }
         }
 
-        /* Реєстр */
         #live-vault {
             height: 70px;
             overflow: hidden;
             font-size: 10px;
-            color: #444;
+            color: #555;
             margin-top: 20px;
             text-align: left;
             border-top: 1px solid #111;
             padding-top: 10px;
+            line-height: 1.6;
         }
 
-        /* Мови */
         #lang-selector {
             display: flex;
             justify-content: center;
@@ -235,13 +263,13 @@
         .lang-flag.active, .lang-flag:hover {
             opacity: 1;
             filter: grayscale(0%);
-            transform: scale(1.2) translateY(-5px);
+            transform: scale(1.2);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="welcome-section">
+        <div id="welcome-section" class="screen active">
             <div class="phase-info">PHASE 1 | GENESIS BLOCK</div>
             <h1 id="ui-title">GENESIS BLOCK</h1>
             
@@ -259,27 +287,35 @@
             <div id="live-vault"></div>
         </div>
 
-        <div id="input-section">
+        <div id="input-section" class="screen">
             <h1 id="ui-sealing" style="font-size: 16px;">SEALING THE CAPSULE...</h1>
             <textarea id="user-msg" maxlength="200" placeholder="Type your legacy to the future..."></textarea>
             <button class="action-btn" id="btn-seal">GENERATE SECURE QR ✨</button>
         </div>
 
-        <div id="result-section">
+        <div id="result-section" class="screen">
             <div id="capsule-visual">
                 <div class="laser-line"></div>
-                <div id="node-tag" style="font-size: 10px; font-weight: bold; margin-bottom: 20px; color: var(--neon); border: 1px solid; display: inline-block; padding: 4px 12px; border-radius: 6px; letter-spacing: 2px;">GLOBAL NODE</div>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span style="font-size: 10px; font-weight: bold; color: var(--neon); border: 1px solid; padding: 4px 12px; border-radius: 6px; letter-spacing: 2px;">GLOBAL NODE</span>
+                </div>
                 
                 <div id="qr-wrap"></div>
                 
                 <div id="capsule-message"></div>
+                
+                <div class="meta-data">
+                    <span id="meta-time"></span>
+                    <span id="meta-geo"></span>
+                </div>
+                
                 <div id="capsule-footer"></div>
             </div>
             
             <div id="final-image-container" style="margin-top:30px;"></div>
             
             <button class="action-btn" id="btn-download" style="display:none; margin-top:20px;">DOWNLOAD SECURITY KEY 📥</button>
-            <button onclick="location.reload()" style="background:none; border:none; color:#333; margin-top:20px; cursor:pointer; font-size:10px; letter-spacing: 3px;">REBOOT SYSTEM</button>
+            <button onclick="location.reload()" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 3px; font-weight: bold;">REBOOT SYSTEM</button>
         </div>
 
         <div id="lang-selector">
@@ -293,7 +329,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
-        // Firebase Setup
         const firebaseConfig = {
             apiKey: "AIzaSyApzG_osR_dyRH9bNh3lETthaV7ssxnRgU",
             authDomain: "ai-time-capsule-24852.firebaseapp.com",
@@ -305,7 +340,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Переклади
         const dict = {
             uk: { title: "GENESIS BLOCK", manifest: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у вічності.", avail: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", seal: "ЗАПЕЧАТУВАННЯ...", gen: "ГЕНЕРУВАТИ QR ✨" },
             en: { title: "GENESIS BLOCK", manifest: "Internet erases all. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark in eternity.", avail: "AVAILABLE", start: "INITIATE CONNECTION 🌌", seal: "SEALING...", gen: "GENERATE QR ✨" },
@@ -313,31 +347,40 @@
         };
 
         let currentPos = { lat: 0, lng: 0, city: "GLOBAL NODE" };
-
-        // Ініціалізація Мапи
         const map = L.map('global-map', { zoomControl: false, attributionControl: false }).setView([20, 0], 1);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
-        // Звуки
         let audioCtx;
-        function playEffect(f, d) {
+        function playS(type) {
             try {
                 if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 if(audioCtx.state === 'suspended') audioCtx.resume();
                 const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
                 osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.frequency.setValueAtTime(f, audioCtx.currentTime); gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-                osc.start(); osc.stop(audioCtx.currentTime + d);
+                
+                if(type === 'click') {
+                    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+                } else if(type === 'scan') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(50, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 3);
+                    gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                    osc.start(); osc.stop(audioCtx.currentTime + 3);
+                } else if(type === 'success') {
+                    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+                }
             } catch(e) {}
         }
 
-        // Локація
         fetch('https://ipapi.co/json/').then(res => res.json()).then(data => {
             currentPos = { lat: data.latitude, lng: data.longitude, city: `${data.city.toUpperCase()}, ${data.country_name.toUpperCase()}` };
             map.flyTo([currentPos.lat, currentPos.lng], 4);
         });
 
-        // Живий Реєстр
         onSnapshot(query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(6)), (snap) => {
             const vault = document.getElementById('live-vault'); vault.innerHTML = "";
             snap.forEach(doc => {
@@ -347,40 +390,56 @@
             });
         });
 
-        // Події
+        function switchScreen(fromId, toId) {
+            document.getElementById(fromId).classList.remove('active');
+            setTimeout(() => { document.getElementById(toId).classList.add('active'); }, 50);
+        }
+
         document.getElementById('btn-init').addEventListener('click', () => {
-            playEffect(440, 0.1);
-            document.getElementById('welcome-section').style.display = 'none';
-            document.getElementById('input-section').style.display = 'block';
+            playS('click');
+            switchScreen('welcome-section', 'input-section');
         });
 
         document.getElementById('btn-seal').addEventListener('click', async () => {
-            const text = document.getElementById('user-msg').value;
-            if(!text.trim()) return;
+            const msgInput = document.getElementById('user-msg');
+            const text = msgInput.value;
             
-            playEffect(150, 0.6);
-            document.getElementById('input-section').style.display = 'none';
-            document.getElementById('result-section').style.display = 'block';
+            if(!text.trim()) {
+                msgInput.classList.add('error-shake');
+                setTimeout(() => msgInput.classList.remove('error-shake'), 300);
+                return;
+            }
+            
+            playS('scan');
+            switchScreen('input-section', 'result-section');
             
             const capsuleId = "CAPSULE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
             document.getElementById('capsule-message').innerText = `"${text}"`;
             document.getElementById('capsule-footer').innerText = capsuleId;
+            
+            // Встановлення точних метаданих
+            const now = new Date();
+            document.getElementById('meta-time').innerText = `T: ${now.toISOString().slice(0, 19).replace('T', ' ')}`;
+            document.getElementById('meta-geo').innerText = `GEO: ${currentPos.lat.toFixed(4)}, ${currentPos.lng.toFixed(4)}`;
 
-            // QR ГЕНЕРАЦІЯ
             const qrBox = document.getElementById('qr-wrap'); qrBox.innerHTML = "";
-            new QRCode(qrBox, { text: `ID: ${capsuleId}\nMSG: ${text}`, width: 130, height: 130 });
+            new QRCode(qrBox, { text: `ID: ${capsuleId}\nMSG: ${text}`, width: 120, height: 120 });
 
             try {
                 await addDoc(collection(db, "capsules"), { 
                     ticketId: capsuleId, message: text, location: currentPos.city, 
-                    lat: currentPos.lat, lng: currentPos.lng, timestamp: new Date().toISOString() 
+                    lat: currentPos.lat, lng: currentPos.lng, timestamp: now.toISOString() 
                 });
             } catch (e) {}
 
-            // РЕНДЕРИНГ КАРТИНКИ
             setTimeout(() => {
-                html2canvas(document.getElementById('capsule-visual'), { backgroundColor: "#020205", scale: 2 }).then(canvas => {
-                    playEffect(880, 0.2);
+                html2canvas(document.getElementById('capsule-visual'), { 
+                    backgroundColor: "#020205", 
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                }).then(canvas => {
+                    playS('success');
                     document.getElementById('capsule-visual').style.display = 'none';
                     document.getElementById('final-image-container').appendChild(canvas);
                     const dlBtn = document.getElementById('btn-download');
@@ -393,7 +452,6 @@
             }, 3500);
         });
 
-        // Зміна мови
         document.querySelectorAll('.lang-flag').forEach(f => f.addEventListener('click', function() {
             const l = this.getAttribute('data-lang'); const d = dict[l];
             document.getElementById('ui-title').innerText = d.title;
