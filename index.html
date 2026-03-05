@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Time Capsule | Global Grid</title>
+    <title>AI Time Capsule | Neural Sigils</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -14,33 +14,24 @@
         .container { width: 100%; max-width: 420px; padding: 20px; box-sizing: border-box; text-align: center; z-index: 10; }
         .phase-tag { font-size: 10px; color: var(--neon); letter-spacing: 3px; margin-bottom: 5px; opacity: 0.8; }
         h1 { color: var(--neon); text-shadow: 0 0 15px var(--neon); font-size: 22px; letter-spacing: 2px; text-transform: uppercase; margin-top: 0; }
-        
-        /* СТИЛЬ МАПИ */
-        #global-map { width: 100%; height: 180px; background: #000; margin: 15px 0; border: 1px solid rgba(0, 255, 204, 0.3); border-radius: 5px; box-shadow: inset 0 0 20px #000; }
-        .leaflet-container { background: #020205 !important; }
-        
+        #global-map { width: 100%; height: 160px; background: #000; margin: 15px 0; border: 1px solid rgba(0, 255, 204, 0.3); border-radius: 5px; }
         .manifesto { margin: 15px 0; line-height: 1.5; font-size: 13px; color: #aaa; text-align: justify; border-left: 2px solid var(--neon); padding: 10px; background: rgba(0, 255, 204, 0.03); }
         .counter-box { background: rgba(0, 255, 204, 0.1); border: 1px dashed var(--neon); padding: 12px; margin: 15px 0; font-weight: bold; color: var(--neon); font-size: 14px; }
         .btn { background: var(--neon); border: none; color: #000; padding: 18px; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .btn:hover { background: #fff; box-shadow: 0 0 25px var(--neon); }
         #input-section, #result-section { display: none; }
         textarea { width: 100%; height: 100px; background: #000; border: 1px solid #333; color: var(--neon); padding: 15px; box-sizing: border-box; font-family: inherit; resize: none; margin-bottom: 15px; outline: none; }
-        
         .vault-section { margin-top: 20px; border-top: 1px solid rgba(0, 255, 204, 0.2); padding-top: 15px; text-align: left; }
-        #memory-vault { height: 80px; overflow-y: hidden; font-size: 9px; color: #555; line-height: 1.6; }
-
+        #memory-vault { height: 80px; overflow: hidden; font-size: 9px; color: #555; }
         #ticket-wrap { position: relative; width: 320px; padding: 40px 20px; margin: 0 auto; background: linear-gradient(145deg, #0a0a15, #111122); border: 2px solid var(--neon); overflow: hidden; text-align: left; }
-        .ticket-meta { font-size: 9px; color: var(--neon); opacity: 0.7; text-transform: uppercase; margin-bottom: 5px; }
         #rarity-badge { font-size: 10px; font-weight: bold; margin-bottom: 15px; padding: 2px 8px; border-radius: 3px; display: inline-block; }
         #ticket-text { font-size: 17px; color: #fff; font-weight: bold; margin: 20px 0; text-align: center; line-height: 1.4; }
-        #ai-pattern { width: 60px; height: 60px; margin: 0 auto 20px; border: 1px solid var(--neon); display: flex; align-items: center; justify-content: center; }
+        #ai-pattern { width: 80px; height: 80px; margin: 0 auto 20px; border: 1px solid rgba(0, 255, 204, 0.2); display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); }
         #ticket-id { font-size: 11px; color: var(--neon); letter-spacing: 2px; text-align: center; border-top: 1px solid rgba(0,255,204,0.2); padding-top: 15px; }
         .scanning-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--neon); box-shadow: 0 0 10px var(--neon); z-index: 5; animation: scanMove 3s linear infinite; }
         @keyframes scanMove { 0% { top: 0; } 100% { top: 100%; } }
-        #future-wish { font-style: italic; color: var(--neon); margin-top: 20px; font-size: 13px; display: none; padding: 15px; background: rgba(0, 255, 204, 0.05); border-radius: 10px; border: 1px solid rgba(0,255,204,0.2); line-height: 1.5; }
-        #language-switcher { margin-top: 20px; display: flex; justify-content: center; gap: 25px; border-top: 1px solid #222; padding-top: 15px; }
-        .flag { font-size: 24px; cursor: pointer; transition: 0.3s; opacity: 0.6; }
-        .flag:hover { opacity: 1; transform: scale(1.2); }
+        #language-switcher { margin-top: 20px; display: flex; justify-content: center; gap: 20px; border-top: 1px solid #222; padding-top: 15px; }
+        .flag { font-size: 24px; cursor: pointer; opacity: 0.6; }
     </style>
 </head>
 <body>
@@ -54,29 +45,27 @@
             <div class="counter-box"><span id="counter-label">AVAILABLE</span>: <span id="capsule-count">98432</span> CAPSULES</div>
             <button class="btn" id="start-btn">INITIATE CONNECTION 🌌</button>
             <div class="vault-section">
-                <div style="font-size:9px; color:var(--neon); margin-bottom:5px;" id="vault-label">LIVE REGISTRY:</div>
                 <div id="memory-vault"></div>
             </div>
         </div>
 
         <div id="input-section">
-            <h1 id="input-label" style="font-size: 14px; color: var(--neon);">SEALING THE CAPSULE...</h1>
-            <textarea id="user-message" maxlength="200" placeholder="Type your message to the future..."></textarea>
-            <button class="btn" id="generate-btn">EXECUTE ENCRYPTION ✨</button>
+            <h1 style="font-size: 14px; color: var(--neon);">ENCODING NEURAL SIGIL...</h1>
+            <textarea id="user-message" maxlength="200" placeholder="Your legacy starts here..."></textarea>
+            <button class="btn" id="generate-btn">SEAL CAPSULE ✨</button>
         </div>
 
         <div id="result-section">
             <div id="ticket-wrap">
-                <div class="scanning-line" id="ticket-line"></div>
+                <div class="scanning-line"></div>
                 <div id="rarity-badge">COMMON NODE</div>
-                <div class="ticket-meta" id="user-location">ORIGIN: DETECTING...</div>
-                <div class="ticket-meta" id="current-date">DATE: 05.03.2026 | TEMP: -182°C</div>
-                <div id="ai-pattern"><svg width="50" height="50" viewBox="0 0 50 50" id="pattern-svg"></svg></div>
+                <div style="font-size:9px; color:var(--neon); opacity:0.7;" id="user-location">ORIGIN: DETECTING...</div>
+                <div style="font-size:9px; color:var(--neon); opacity:0.7;">DATE: 05.03.2026 | TEMP: -182°C</div>
+                <div id="ai-pattern"><svg width="70" height="70" viewBox="0 0 70 70" id="pattern-svg"></svg></div>
                 <div id="ticket-text"></div>
                 <div id="ticket-id"></div>
             </div>
             <div id="image-container" style="margin-top:20px;"></div>
-            <div id="future-wish"></div>
             <button class="btn" id="save-btn" style="display:none; margin-top:20px;">DOWNLOAD SECURE KEY 📥</button>
             <button onclick="location.reload()" style="background:none; border:none; color:#444; margin-top:15px; cursor:pointer; font-size:10px;">REBOOT SYSTEM</button>
         </div>
@@ -104,73 +93,75 @@
         const db = getFirestore(app);
 
         const translations = {
-            uk: { text: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід.", counter: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", input: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", generate: "ШИФРУВАТИ ✨", vault: "ЖИВИЙ РЕЄСТР:", wish: "Твою капсулу запечатано. Твої слова стали світлом для тих, хто шукав шлях у вічності. ✨" },
-            en: { text: "Internet erases all. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark.", counter: "AVAILABLE", start: "INITIATE CONNECTION 🌌", input: "SEALING THE CAPSULE...", generate: "ENCRYPT ✨", vault: "LIVE REGISTRY:", wish: "Your capsule is sealed. Your words became a light for those seeking a way in eternity. ✨" },
-            de: { text: "Internet löscht alles. KI erinnert sich ewig. AI Time Capsule ist das erste digitale Denkmal der Menschheit. Hinterlasse deine Spur.", counter: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", input: "KAPSEL VERSIEGELN...", generate: "VERSCHLÜSSELN ✨", vault: "LIVE-REGISTER:", wish: "Deine Kapsel ist versiegelt. Deine Worte wurden zum Licht für diejenigen, die einen Weg suchten. ✨" }
+            uk: { text: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. Твої слова формують твій сігіл — унікальний візуальний код у Genesis Block.", counter: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌" },
+            en: { text: "Internet erases all. AI remembers forever. Your words form your sigil — a unique visual code in the Genesis Block.", counter: "AVAILABLE", start: "INITIATE CONNECTION 🌌" }
         };
 
-        let currentLang = 'uk';
-        let count = 98432;
-        let userPos = { lat: 48.1486, lng: 17.1077, city: "BRATISLAVA, SK" }; // Дефолтна позиція
-        let typeInterval;
-        const vault = document.getElementById('memory-vault');
-
-        // КАРТА
+        let userPos = { lat: 48.1486, lng: 17.1077, city: "BRATISLAVA, SK" };
         const map = L.map('global-map', { zoomControl: false, attributionControl: false }).setView([20, 0], 1);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
-        function addMarker(lat, lng, isLegendary) {
-            const color = isLegendary ? "#FFD700" : "#00ffcc";
-            const icon = L.divIcon({
-                className: 'custom-div-icon',
-                html: `<div style="background-color:${color}; width:6px; height:6px; border-radius:50%; box-shadow: 0 0 10px ${color}"></div>`,
-                iconSize: [6, 6]
+        // ФУНКЦІЯ ГЕНЕРАЦІЇ ШІ-СІГІЛА НА ОСНОВІ ТЕКСТУ
+        function generateSigil(text, color) {
+            const svg = document.getElementById('pattern-svg');
+            svg.innerHTML = "";
+            let points = [];
+            const seed = text.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            
+            // Створюємо 8 точок на основі коду літер
+            for(let i=0; i<8; i++) {
+                let x = 10 + (Math.sin(seed + i) * 25 + 25);
+                let y = 10 + (Math.cos(seed * i) * 25 + 25);
+                points.push(`${x},${y}`);
+            }
+
+            const pathData = `M ${points.join(' L ')} Z`;
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", pathData);
+            path.setAttribute("stroke", color);
+            path.setAttribute("stroke-width", "1.5");
+            path.setAttribute("fill", "none");
+            path.style.filter = `drop-shadow(0 0 5px ${color})`;
+            svg.appendChild(path);
+            
+            // Додаємо декоративні кола
+            points.forEach(p => {
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                const [cx, cy] = p.split(',');
+                circle.setAttribute("cx", cx); circle.setAttribute("cy", cy);
+                circle.setAttribute("r", "1.5"); circle.setAttribute("fill", color);
+                svg.appendChild(circle);
             });
-            L.marker([lat, lng], { icon: icon }).addTo(map);
         }
 
         // Звуковий рушій
         let audioCtx;
-        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-        function playSound(type) {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            if (type === 'start') { osc.frequency.setValueAtTime(880, audioCtx.currentTime); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.1); }
-            else if (type === 'scan') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(60, audioCtx.currentTime); gain.gain.setValueAtTime(0.02, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 3); }
-            else if (type === 'success') { osc.frequency.setValueAtTime(440, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.3); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.3); }
+        function playSound(f, d) {
+            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+            o.connect(g); g.connect(audioCtx.destination);
+            o.frequency.setValueAtTime(f, audioCtx.currentTime);
+            g.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            o.start(); o.stop(audioCtx.currentTime + d);
         }
 
-        // Завантаження даних з Firebase
-        function loadCapsules() {
-            const q = query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(20));
-            onSnapshot(q, (snapshot) => {
-                vault.innerHTML = "";
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    addMarker(data.lat || 0, data.lng || 0, data.rarity === "Legendary");
-                    const entry = document.createElement('div');
-                    entry.innerHTML = `<span style="color:var(--neon)">> ${data.ticketId}</span> | ${data.location}`;
-                    vault.appendChild(entry);
-                });
-            });
-        }
-
-        // Визначення локації користувача
         fetch('https://ipapi.co/json/').then(res => res.json()).then(data => {
             userPos = { lat: data.latitude, lng: data.longitude, city: `${data.city.toUpperCase()}, ${data.country_name.toUpperCase()}` };
             map.flyTo([userPos.lat, userPos.lng], 4);
         });
 
-        function typeWriter(text) {
-            clearInterval(typeInterval); let i = 0; const el = document.getElementById('manifesto-text'); el.innerHTML = "";
-            typeInterval = setInterval(() => { if (i < text.length) { el.innerHTML += text.charAt(i); i++; } else clearInterval(typeInterval); }, 20);
-        }
-
-        window.onload = () => { typeWriter(translations.uk.text); loadCapsules(); };
+        onSnapshot(query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(15)), (snap) => {
+            const v = document.getElementById('memory-vault'); v.innerHTML = "";
+            snap.forEach(doc => {
+                const d = doc.data();
+                const icon = L.divIcon({ className: 'm', html: `<div style="background:${d.rarity==='Legendary'?'#FFD700':'#00ffcc'};width:5px;height:5px;border-radius:50%;box-shadow:0 0 8px"></div>` });
+                L.marker([d.lat, d.lng], {icon}).addTo(map);
+                v.innerHTML += `<div>> ${d.ticketId} | ${d.location}</div>`;
+            });
+        });
 
         document.getElementById('start-btn').addEventListener('click', () => {
-            initAudio(); playSound('start');
+            playSound(440, 0.1);
             document.getElementById('welcome-section').style.display = 'none';
             document.getElementById('input-section').style.display = 'block';
         });
@@ -179,7 +170,7 @@
             const text = document.getElementById('user-message').value;
             if(!text.trim()) return;
             
-            playSound('scan');
+            playSound(110, 3);
             document.getElementById('input-section').style.display = 'none';
             document.getElementById('result-section').style.display = 'block';
             document.getElementById('user-location').innerText = `ORIGIN: ${userPos.city}`;
@@ -187,49 +178,39 @@
             
             const newId = "CAPSULE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
             document.getElementById('ticket-id').innerText = newId;
-            const isLegendary = Math.random() < 0.05;
-            const chosenColor = isLegendary ? "#FFD700" : "#00ffcc";
+            const isLeg = Math.random() < 0.05;
+            const col = isLeg ? "#FFD700" : "#00ffcc";
+
+            generateSigil(text, col); // ГЕНЕРУЄМО СІГІЛ
 
             try {
                 await addDoc(collection(db, "capsules"), {
                     ticketId: newId, message: text, location: userPos.city,
-                    lat: userPos.lat, lng: userPos.lng,
-                    rarity: isLegendary ? "Legendary" : "Common", timestamp: new Date().toISOString()
+                    lat: userPos.lat, lng: userPos.lng, rarity: isLeg ? "Legendary" : "Common",
+                    timestamp: new Date().toISOString()
                 });
             } catch (e) { console.error(e); }
 
             const badge = document.getElementById('rarity-badge');
-            badge.innerText = isLegendary ? "★ LEGENDARY CAPSULE ★" : "COMMON CAPSULE";
-            badge.style.color = isLegendary ? "#000" : chosenColor;
-            badge.style.background = isLegendary ? "#FFD700" : "rgba(255,255,255,0.05)";
-            document.getElementById('ticket-wrap').style.borderColor = chosenColor;
+            badge.innerText = isLeg ? "★ LEGENDARY CAPSULE ★" : "COMMON CAPSULE";
+            badge.style.color = isLeg ? "#000" : col;
+            badge.style.background = isLeg ? "#FFD700" : "rgba(255,255,255,0.05)";
+            document.getElementById('ticket-wrap').style.borderColor = col;
             
             setTimeout(() => {
                 html2canvas(document.getElementById('ticket-wrap'), { backgroundColor: "#020205", scale: 2 }).then(canvas => {
-                    playSound('success');
+                    playSound(880, 0.3);
                     document.getElementById('ticket-wrap').style.display = 'none';
                     document.getElementById('image-container').appendChild(canvas);
-                    document.getElementById('future-wish').innerText = translations[currentLang].wish;
-                    document.getElementById('future-wish').style.display = 'block';
                     document.getElementById('save-btn').style.display = 'block';
                     document.getElementById('save-btn').onclick = () => {
                         const link = document.createElement('a');
-                        link.download = isLegendary ? 'LEGENDARY.png' : 'CAPSULE.png';
+                        link.download = isLeg ? 'LEGENDARY.png' : 'CAPSULE.png';
                         link.href = canvas.toDataURL(); link.click();
                     };
                 });
             }, 3000);
         });
-
-        document.querySelectorAll('.flag').forEach(f => f.addEventListener('click', function() {
-            currentLang = this.getAttribute('data-lang');
-            const t = translations[currentLang];
-            typeWriter(t.text);
-            document.getElementById('counter-label').innerText = t.counter;
-            document.getElementById('start-btn').innerText = t.start;
-            document.getElementById('input-label').innerText = t.input;
-            document.getElementById('generate-btn').innerText = t.generate;
-        }));
     </script>
 </body>
 </html>
