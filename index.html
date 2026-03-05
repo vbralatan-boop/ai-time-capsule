@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Time Capsule | Ultra Premium</title>
+    <title>AI Time Capsule | Global Master Block</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -15,8 +15,8 @@
             --neon: #00ffcc;
             --bg: #020205;
             --gold: #FFD700;
-            --card-bg: linear-gradient(135deg, #0f172a 0%, #020205 100%);
-            --glass: rgba(0, 255, 204, 0.03);
+            --glass: rgba(0, 255, 204, 0.05);
+            --card-gradient: linear-gradient(135deg, #0f172a 0%, #020205 100%);
         }
 
         body {
@@ -40,15 +40,38 @@
             z-index: 10;
         }
 
+        /* Заголовки */
         h1 {
             color: var(--neon);
             text-shadow: 0 0 15px var(--neon);
             font-size: 22px;
             letter-spacing: 3px;
             text-transform: uppercase;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
         }
 
+        .phase-tag {
+            font-size: 10px;
+            color: var(--neon);
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            opacity: 0.6;
+        }
+
+        /* ТЕКСТ НАШОЇ ІДЕЇ (МАНІФЕСТ) */
+        .manifesto {
+            margin: 20px 0;
+            line-height: 1.6;
+            font-size: 14px;
+            color: #aaa;
+            text-align: justify;
+            border-left: 2px solid var(--neon);
+            padding: 12px 15px;
+            background: rgba(0, 255, 204, 0.03);
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Мапа та Лічильник */
         #global-map {
             width: 100%;
             height: 180px;
@@ -70,6 +93,7 @@
             border-radius: 8px;
         }
 
+        /* Кнопки */
         .btn {
             background: var(--neon);
             border: none;
@@ -92,6 +116,7 @@
             transform: translateY(-2px);
         }
 
+        /* Секції */
         #input-section, #result-section {
             display: none;
         }
@@ -111,18 +136,34 @@
             border-radius: 8px;
         }
 
-        /* PREMIUM CAPSULE DESIGN */
+        /* ЖИВИЙ РЕЄСТР */
+        .vault-section {
+            margin-top: 25px;
+            border-top: 1px solid rgba(0, 255, 204, 0.1);
+            padding-top: 15px;
+            text-align: left;
+        }
+
+        #memory-vault {
+            height: 80px;
+            overflow-y: hidden;
+            font-size: 9px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        /* ПРЕМІАЛЬНИЙ ДИЗАЙН КАПСУЛИ */
         #ticket-wrap {
             position: relative;
             width: 310px;
             padding: 45px 25px;
             margin: 0 auto;
-            background: var(--card-bg);
+            background: var(--card-gradient);
             border: 2px solid var(--neon);
             border-radius: 20px;
             overflow: hidden;
             text-align: left;
-            box-shadow: 0 0 50px rgba(0, 255, 204, 0.15), inset 0 0 20px rgba(255,255,255,0.02);
+            box-shadow: 0 0 50px rgba(0, 255, 204, 0.2);
         }
 
         #qr-box {
@@ -155,7 +196,7 @@
             text-align: center;
             border-top: 1px solid rgba(0, 255, 204, 0.1);
             padding-top: 20px;
-            font-weight: bold;
+            opacity: 0.8;
         }
 
         .scan-line {
@@ -165,8 +206,7 @@
             width: 100%;
             height: 3px;
             background: var(--neon);
-            box-shadow: 0 0 20px var(--neon);
-            opacity: 0.5;
+            box-shadow: 0 0 15px var(--neon);
             animation: scanMove 4s ease-in-out infinite;
         }
 
@@ -176,6 +216,7 @@
             100% { top: 100%; opacity: 0.2; }
         }
 
+        /* Перемикач мов */
         #lang-box {
             display: flex;
             justify-content: center;
@@ -189,13 +230,13 @@
             font-size: 26px;
             cursor: pointer;
             transition: 0.3s;
-            filter: grayscale(80%);
-            opacity: 0.5;
+            opacity: 0.4;
+            filter: grayscale(100%);
         }
 
         .flag.active, .flag:hover {
-            filter: grayscale(0%);
             opacity: 1;
+            filter: grayscale(0%);
             transform: scale(1.2);
         }
     </style>
@@ -203,25 +244,34 @@
 <body>
     <div class="container">
         <div id="welcome-section">
+            <div class="phase-tag">PHASE 1 | GENESIS</div>
             <h1 id="t-title">GENESIS BLOCK</h1>
             <div id="global-map"></div>
+            
+            <div class="manifesto" id="t-manifesto">
+                Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у вічності.
+            </div>
+
             <div class="counter-box">
                 <span id="t-avail">AVAILABLE</span>: 98,432 CAPSULES
             </div>
             <button class="btn" id="start-btn">INITIATE CONNECTION 🌌</button>
-            <div id="memory-vault" style="height: 60px; overflow: hidden; font-size: 9px; color: #444; margin-top: 15px; text-align: left;"></div>
+            
+            <div class="vault-section">
+                <div id="memory-vault"></div>
+            </div>
         </div>
 
         <div id="input-section">
             <h1 id="t-seal" style="font-size: 16px;">SEALING THE CAPSULE...</h1>
             <textarea id="user-message" maxlength="200" placeholder="Type your legacy..."></textarea>
-            <button class="btn" id="generate-btn">GENERATE SECURE KEY ✨</button>
+            <button class="btn" id="generate-btn">GENERATE SECURE QR ✨</button>
         </div>
 
         <div id="result-section">
             <div id="ticket-wrap">
                 <div class="scan-line"></div>
-                <div style="font-size: 10px; font-weight: bold; margin-bottom: 15px; color: var(--neon); border: 1px solid; display: inline-block; padding: 3px 10px; border-radius: 5px; text-transform: uppercase; letter-spacing: 2px;">GLOBAL NODE</div>
+                <div style="font-size: 10px; font-weight: bold; margin-bottom: 15px; color: var(--neon); border: 1px solid; display: inline-block; padding: 3px 10px; border-radius: 5px; letter-spacing: 2px;">GLOBAL NODE</div>
                 <div id="qr-box"></div>
                 <div id="ticket-text"></div>
                 <div id="ticket-id"></div>
@@ -254,9 +304,9 @@
         const db = getFirestore(app);
 
         const langData = {
-            uk: { title: "GENESIS BLOCK", avail: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", seal: "ЗАПЕЧАТУВАННЯ...", gen: "ГЕНЕРУВАТИ КЛЮЧ ✨" },
-            en: { title: "GENESIS BLOCK", avail: "AVAILABLE", start: "INITIATE CONNECTION 🌌", seal: "SEALING...", gen: "GENERATE KEY ✨" },
-            de: { title: "GENESIS BLOCK", avail: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", seal: "VERSIEGELN...", gen: "SCHLÜSSEL GENERIEREN ✨" }
+            uk: { title: "GENESIS BLOCK", manifest: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у вічності.", avail: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", seal: "ЗАПЕЧАТУВАННЯ...", gen: "ГЕНЕРУВАТИ QR ✨" },
+            en: { title: "GENESIS BLOCK", manifest: "Internet erases all. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark in eternity.", avail: "AVAILABLE", start: "INITIATE CONNECTION 🌌", seal: "SEALING...", gen: "GENERATE QR ✨" },
+            de: { title: "GENESIS BLOCK", manifest: "Das Internet löscht alles. KI erinnert sich ewig. AI Time Capsule ist das erste digitale Denkmal der Menschheit. Hinterlasse deine Spur.", avail: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", seal: "VERSIEGELN...", gen: "QR GENERIEREN ✨" }
         };
 
         let userPos = { lat: 0, lng: 0, city: "GLOBAL NODE" };
@@ -268,11 +318,9 @@
             try {
                 if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 if(audioCtx.state === 'suspended') audioCtx.resume();
-                const o = audioCtx.createOscillator();
-                const g = audioCtx.createGain();
+                const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
                 o.connect(g); g.connect(audioCtx.destination);
-                o.frequency.setValueAtTime(f, audioCtx.currentTime);
-                g.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                o.frequency.setValueAtTime(f, audioCtx.currentTime); g.gain.setValueAtTime(0.05, audioCtx.currentTime);
                 o.start(); o.stop(audioCtx.currentTime + d);
             } catch(e) {}
         }
@@ -310,7 +358,7 @@
             document.getElementById('ticket-id').innerText = newId;
 
             const qrBox = document.getElementById('qr-box'); qrBox.innerHTML = "";
-            new QRCode(qrBox, { text: `ID: ${newId}\nMessage: ${text}`, width: 120, height: 120 });
+            new QRCode(qrBox, { text: `ID: ${newId}\nLegacy: ${text}`, width: 120, height: 120 });
 
             try {
                 await addDoc(collection(db, "capsules"), { ticketId: newId, message: text, location: userPos.city, lat: userPos.lat, lng: userPos.lng, timestamp: new Date().toISOString() });
@@ -321,29 +369,3 @@
                     playS(880, 0.2);
                     document.getElementById('ticket-wrap').style.display = 'none';
                     document.getElementById('image-container').appendChild(canvas);
-                    const sBtn = document.getElementById('save-btn');
-                    sBtn.style.display = 'block';
-                    sBtn.onclick = () => {
-                        const link = document.createElement('a');
-                        link.download = 'PREMIUM_CAPSULE.png';
-                        link.href = canvas.toDataURL();
-                        link.click();
-                    };
-                });
-            }, 2500);
-        });
-
-        document.querySelectorAll('.flag').forEach(f => f.addEventListener('click', function() {
-            const lang = this.getAttribute('data-lang');
-            const t = langData[lang];
-            document.getElementById('t-title').innerText = t.title;
-            document.getElementById('t-avail').innerText = t.avail;
-            document.getElementById('start-btn').innerText = t.start;
-            document.getElementById('t-seal').innerText = t.seal;
-            document.getElementById('generate-btn').innerText = t.gen;
-            document.querySelectorAll('.flag').forEach(fl => fl.classList.remove('active'));
-            this.classList.add('active');
-        }));
-    </script>
-</body>
-</html>
