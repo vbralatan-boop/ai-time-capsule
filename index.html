@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Time Capsule | Global Master Edition</title>
+    <title>AI Time Capsule | Ultra Premium</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -15,8 +15,8 @@
             --neon: #00ffcc;
             --bg: #020205;
             --gold: #FFD700;
-            --glass: rgba(255, 255, 255, 0.05);
-            --border: rgba(0, 255, 204, 0.2);
+            --card-bg: linear-gradient(135deg, #0f172a 0%, #020205 100%);
+            --glass: rgba(0, 255, 204, 0.03);
         }
 
         body {
@@ -44,69 +44,61 @@
             color: var(--neon);
             text-shadow: 0 0 15px var(--neon);
             font-size: 22px;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            margin-top: 0;
-            margin-bottom: 5px;
-        }
-
-        .phase-tag {
-            font-size: 10px;
-            color: var(--neon);
-            letter-spacing: 4px;
             margin-bottom: 15px;
-            opacity: 0.6;
         }
 
-        /* Map Section */
         #global-map {
             width: 100%;
             height: 180px;
             background: #000;
             margin: 15px 0;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            box-shadow: inset 0 0 20px #000;
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.1);
         }
 
         .counter-box {
             background: var(--glass);
             border: 1px dashed var(--neon);
             padding: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-weight: bold;
             color: var(--neon);
             font-size: 13px;
+            border-radius: 8px;
         }
 
         .btn {
             background: var(--neon);
             border: none;
             color: #000;
-            padding: 18px;
+            padding: 20px;
             font-size: 14px;
             font-weight: bold;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             width: 100%;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
+            letter-spacing: 2px;
+            transition: 0.4s;
+            box-shadow: 0 4px 15px rgba(0, 255, 204, 0.2);
         }
 
         .btn:hover {
             background: #fff;
-            box-shadow: 0 0 25px var(--neon);
+            box-shadow: 0 0 30px var(--neon);
+            transform: translateY(-2px);
         }
 
-        /* Layout Sections */
         #input-section, #result-section {
             display: none;
         }
 
         textarea {
             width: 100%;
-            height: 100px;
+            height: 110px;
             background: #000;
             border: 1px solid #333;
             color: var(--neon);
@@ -114,71 +106,56 @@
             box-sizing: border-box;
             font-family: inherit;
             resize: none;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             outline: none;
-            border-radius: 5px;
-        }
-
-        /* Live Registry Styling */
-        .vault-section {
-            margin-top: 20px;
-            border-top: 1px solid var(--border);
-            padding-top: 15px;
-            text-align: left;
-        }
-
-        #memory-vault {
-            height: 80px;
-            overflow-y: hidden;
-            font-size: 9px;
-            color: #555;
-            line-height: 1.8;
+            border-radius: 8px;
         }
 
         /* PREMIUM CAPSULE DESIGN */
         #ticket-wrap {
             position: relative;
             width: 310px;
-            padding: 40px 20px;
+            padding: 45px 25px;
             margin: 0 auto;
-            background: linear-gradient(145deg, #0f172a 0%, #020205 100%);
+            background: var(--card-bg);
             border: 2px solid var(--neon);
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
             text-align: left;
-            box-shadow: 0 0 40px rgba(0, 255, 204, 0.15);
+            box-shadow: 0 0 50px rgba(0, 255, 204, 0.15), inset 0 0 20px rgba(255,255,255,0.02);
         }
 
         #qr-box {
-            width: 110px;
-            height: 110px;
-            margin: 0 auto 20px;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 25px;
             background: #fff;
-            padding: 8px;
-            border-radius: 5px;
+            padding: 10px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 15px rgba(255,255,255,0.1);
+            box-shadow: 0 0 25px rgba(255,255,255,0.2);
         }
 
         #ticket-text {
-            font-size: 16px;
+            font-size: 17px;
             color: #fff;
-            font-weight: bold;
-            margin: 20px 0;
+            font-weight: 800;
+            margin: 25px 0;
             text-align: center;
-            line-height: 1.5;
+            line-height: 1.6;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         #ticket-id {
-            font-size: 10px;
+            font-size: 11px;
             color: var(--neon);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-align: center;
-            border-top: 1px solid var(--border);
-            padding-top: 15px;
-            opacity: 0.7;
+            border-top: 1px solid rgba(0, 255, 204, 0.1);
+            padding-top: 20px;
+            font-weight: bold;
         }
 
         .scan-line {
@@ -186,36 +163,38 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 2px;
+            height: 3px;
             background: var(--neon);
-            box-shadow: 0 0 15px var(--neon);
-            z-index: 5;
-            animation: scanMove 4s linear infinite;
+            box-shadow: 0 0 20px var(--neon);
+            opacity: 0.5;
+            animation: scanMove 4s ease-in-out infinite;
         }
 
         @keyframes scanMove {
-            0% { top: 0; }
-            100% { top: 100%; }
+            0% { top: 0%; opacity: 0.2; }
+            50% { opacity: 0.8; }
+            100% { top: 100%; opacity: 0.2; }
         }
 
-        /* Language Switcher */
         #lang-box {
             display: flex;
             justify-content: center;
-            gap: 25px;
-            margin-top: 30px;
+            gap: 30px;
+            margin-top: 35px;
             border-top: 1px solid #111;
             padding-top: 20px;
         }
 
         .flag {
-            font-size: 24px;
+            font-size: 26px;
             cursor: pointer;
             transition: 0.3s;
+            filter: grayscale(80%);
             opacity: 0.5;
         }
 
         .flag.active, .flag:hover {
+            filter: grayscale(0%);
             opacity: 1;
             transform: scale(1.2);
         }
@@ -224,37 +203,32 @@
 <body>
     <div class="container">
         <div id="welcome-section">
-            <div class="phase-tag">PHASE 1 | GENESIS</div>
             <h1 id="t-title">GENESIS BLOCK</h1>
             <div id="global-map"></div>
             <div class="counter-box">
                 <span id="t-avail">AVAILABLE</span>: 98,432 CAPSULES
             </div>
             <button class="btn" id="start-btn">INITIATE CONNECTION 🌌</button>
-            <div class="vault-section">
-                <div id="memory-vault"></div>
-            </div>
+            <div id="memory-vault" style="height: 60px; overflow: hidden; font-size: 9px; color: #444; margin-top: 15px; text-align: left;"></div>
         </div>
 
         <div id="input-section">
-            <h1 id="t-seal" style="font-size: 14px; color: var(--neon);">SEALING THE CAPSULE...</h1>
-            <textarea id="user-message" maxlength="200" placeholder="Type your message to the future..."></textarea>
+            <h1 id="t-seal" style="font-size: 16px;">SEALING THE CAPSULE...</h1>
+            <textarea id="user-message" maxlength="200" placeholder="Type your legacy..."></textarea>
             <button class="btn" id="generate-btn">GENERATE SECURE KEY ✨</button>
         </div>
 
         <div id="result-section">
             <div id="ticket-wrap">
                 <div class="scan-line"></div>
-                <div id="rarity-badge" style="font-size: 9px; font-weight: bold; margin-bottom: 12px; color: var(--neon); border: 1px solid; display: inline-block; padding: 2px 8px; border-radius: 4px;">GLOBAL NODE</div>
-                
+                <div style="font-size: 10px; font-weight: bold; margin-bottom: 15px; color: var(--neon); border: 1px solid; display: inline-block; padding: 3px 10px; border-radius: 5px; text-transform: uppercase; letter-spacing: 2px;">GLOBAL NODE</div>
                 <div id="qr-box"></div>
-                
                 <div id="ticket-text"></div>
                 <div id="ticket-id"></div>
             </div>
-            <div id="image-container" style="margin-top:20px;"></div>
+            <div id="image-container" style="margin-top:25px;"></div>
             <button class="btn" id="save-btn" style="display:none; margin-top:20px;">DOWNLOAD SECURITY KEY 📥</button>
-            <button onclick="location.reload()" style="background:none; border:none; color:#444; margin-top:15px; cursor:pointer; font-size:10px;">REBOOT SYSTEM</button>
+            <button onclick="location.reload()" style="background:none; border:none; color:#444; margin-top:20px; cursor:pointer; font-size:10px; letter-spacing: 2px;">REBOOT SYSTEM</button>
         </div>
 
         <div id="lang-box">
@@ -268,7 +242,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyApzG_osR_dyRH9bNh3lETthaV7ssxnRgU",
             authDomain: "ai-time-capsule-24852.firebaseapp.com",
@@ -280,20 +253,16 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Language Data
         const langData = {
-            uk: { title: "GENESIS BLOCK", avail: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", seal: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", gen: "ГЕНЕРУВАТИ КЛЮЧ ✨" },
-            en: { title: "GENESIS BLOCK", avail: "AVAILABLE", start: "INITIATE CONNECTION 🌌", seal: "SEALING THE CAPSULE...", gen: "GENERATE SECURE KEY ✨" },
-            de: { title: "GENESIS BLOCK", avail: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", seal: "KAPSEL VERSIEGELN...", gen: "SCHLÜSSEL GENERIEREN ✨" }
+            uk: { title: "GENESIS BLOCK", avail: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", seal: "ЗАПЕЧАТУВАННЯ...", gen: "ГЕНЕРУВАТИ КЛЮЧ ✨" },
+            en: { title: "GENESIS BLOCK", avail: "AVAILABLE", start: "INITIATE CONNECTION 🌌", seal: "SEALING...", gen: "GENERATE KEY ✨" },
+            de: { title: "GENESIS BLOCK", avail: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", seal: "VERSIEGELN...", gen: "SCHLÜSSEL GENERIEREN ✨" }
         };
 
         let userPos = { lat: 0, lng: 0, city: "GLOBAL NODE" };
-
-        // Initialize Map
         const map = L.map('global-map', { zoomControl: false, attributionControl: false }).setView([20, 0], 1);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
-        // Audio Engine
         let audioCtx;
         function playS(f, d) {
             try {
@@ -301,51 +270,33 @@
                 if(audioCtx.state === 'suspended') audioCtx.resume();
                 const o = audioCtx.createOscillator();
                 const g = audioCtx.createGain();
-                o.connect(g);
-                g.connect(audioCtx.destination);
+                o.connect(g); g.connect(audioCtx.destination);
                 o.frequency.setValueAtTime(f, audioCtx.currentTime);
                 g.gain.setValueAtTime(0.05, audioCtx.currentTime);
-                o.start();
-                o.stop(audioCtx.currentTime + d);
+                o.start(); o.stop(audioCtx.currentTime + d);
             } catch(e) {}
         }
 
-        // Fetch User Location
-        fetch('https://ipapi.co/json/')
-            .then(res => res.json())
-            .then(data => {
-                userPos = { 
-                    lat: data.latitude, 
-                    lng: data.longitude, 
-                    city: `${data.city.toUpperCase()}, ${data.country_name.toUpperCase()}` 
-                };
-                map.flyTo([userPos.lat, userPos.lng], 4);
-            });
+        fetch('https://ipapi.co/json/').then(res => res.json()).then(data => {
+            userPos = { lat: data.latitude, lng: data.longitude, city: `${data.city.toUpperCase()}, ${data.country_name.toUpperCase()}` };
+            map.flyTo([userPos.lat, userPos.lng], 4);
+        });
 
-        // Live Database Sync
         onSnapshot(query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(6)), (snap) => {
-            const v = document.getElementById('memory-vault');
-            v.innerHTML = "";
+            const v = document.getElementById('memory-vault'); v.innerHTML = "";
             snap.forEach(doc => {
                 const d = doc.data();
                 v.innerHTML += `<div>> ${d.ticketId} | ${d.location}</div>`;
-                if(d.lat && d.lng) {
-                    L.circleMarker([d.lat, d.lng], { 
-                        radius: 3, 
-                        color: d.rarity === 'Legendary' ? '#FFD700' : '#00ffcc' 
-                    }).addTo(map);
-                }
+                if(d.lat && d.lng) L.circleMarker([d.lat, d.lng], { radius: 3, color: '#00ffcc' }).addTo(map);
             });
         });
 
-        // Navigation
         document.getElementById('start-btn').addEventListener('click', () => {
             playS(440, 0.1);
             document.getElementById('welcome-section').style.display = 'none';
             document.getElementById('input-section').style.display = 'block';
         });
 
-        // Generation Logic
         document.getElementById('generate-btn').addEventListener('click', async () => {
             const text = document.getElementById('user-message').value;
             if(!text.trim()) return;
@@ -358,36 +309,15 @@
             document.getElementById('ticket-text').innerText = `"${text}"`;
             document.getElementById('ticket-id').innerText = newId;
 
-            // Generate QR Code
-            const qrBox = document.getElementById('qr-box');
-            qrBox.innerHTML = "";
-            new QRCode(qrBox, {
-                text: `ID: ${newId}\nMessage: ${text}`,
-                width: 110,
-                height: 110,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
+            const qrBox = document.getElementById('qr-box'); qrBox.innerHTML = "";
+            new QRCode(qrBox, { text: `ID: ${newId}\nMessage: ${text}`, width: 120, height: 120 });
 
-            // Save to Database
             try {
-                await addDoc(collection(db, "capsules"), {
-                    ticketId: newId,
-                    message: text,
-                    location: userPos.city,
-                    lat: userPos.lat,
-                    lng: userPos.lng,
-                    timestamp: new Date().toISOString()
-                });
-            } catch (e) { console.error(e); }
+                await addDoc(collection(db, "capsules"), { ticketId: newId, message: text, location: userPos.city, lat: userPos.lat, lng: userPos.lng, timestamp: new Date().toISOString() });
+            } catch (e) {}
 
-            // Final Rendering
             setTimeout(() => {
-                html2canvas(document.getElementById('ticket-wrap'), { 
-                    backgroundColor: "#020205", 
-                    scale: 2 
-                }).then(canvas => {
+                html2canvas(document.getElementById('ticket-wrap'), { backgroundColor: "#020205", scale: 2 }).then(canvas => {
                     playS(880, 0.2);
                     document.getElementById('ticket-wrap').style.display = 'none';
                     document.getElementById('image-container').appendChild(canvas);
@@ -395,7 +325,7 @@
                     sBtn.style.display = 'block';
                     sBtn.onclick = () => {
                         const link = document.createElement('a');
-                        link.download = 'AI_TIME_CAPSULE.png';
+                        link.download = 'PREMIUM_CAPSULE.png';
                         link.href = canvas.toDataURL();
                         link.click();
                     };
@@ -403,17 +333,14 @@
             }, 2500);
         });
 
-        // Language Switcher Logic
         document.querySelectorAll('.flag').forEach(f => f.addEventListener('click', function() {
             const lang = this.getAttribute('data-lang');
             const t = langData[lang];
-            
             document.getElementById('t-title').innerText = t.title;
             document.getElementById('t-avail').innerText = t.avail;
             document.getElementById('start-btn').innerText = t.start;
             document.getElementById('t-seal').innerText = t.seal;
             document.getElementById('generate-btn').innerText = t.gen;
-
             document.querySelectorAll('.flag').forEach(fl => fl.classList.remove('active'));
             this.classList.add('active');
         }));
