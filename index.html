@@ -14,7 +14,7 @@
         .container { width: 100%; max-width: 420px; padding: 20px; box-sizing: border-box; text-align: center; z-index: 10; }
         .phase-tag { font-size: 10px; color: var(--neon); letter-spacing: 3px; margin-bottom: 5px; opacity: 0.8; }
         h1 { color: var(--neon); text-shadow: 0 0 15px var(--neon); font-size: 22px; letter-spacing: 2px; text-transform: uppercase; margin-top: 0; }
-        #global-map { width: 100%; height: 160px; background: #000; margin: 15px 0; border: 1px solid rgba(0, 255, 204, 0.3); border-radius: 5px; }
+        #global-map { width: 100%; height: 160px; background: #000; margin: 15px 0; border: 1px solid rgba(0, 255, 204, 0.3); border-radius: 5px; box-shadow: inset 0 0 10px #000; }
         .manifesto { margin: 15px 0; line-height: 1.5; font-size: 13px; color: #aaa; text-align: justify; border-left: 2px solid var(--neon); padding: 10px; background: rgba(0, 255, 204, 0.03); }
         .counter-box { background: rgba(0, 255, 204, 0.1); border: 1px dashed var(--neon); padding: 12px; margin: 15px 0; font-weight: bold; color: var(--neon); font-size: 14px; }
         .btn { background: var(--neon); border: none; color: #000; padding: 18px; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
@@ -26,10 +26,11 @@
         #ticket-wrap { position: relative; width: 320px; padding: 40px 20px; margin: 0 auto; background: linear-gradient(145deg, #0a0a15, #111122); border: 2px solid var(--neon); overflow: hidden; text-align: left; }
         #rarity-badge { font-size: 10px; font-weight: bold; margin-bottom: 15px; padding: 2px 8px; border-radius: 3px; display: inline-block; }
         #ticket-text { font-size: 17px; color: #fff; font-weight: bold; margin: 20px 0; text-align: center; line-height: 1.4; }
-        #ai-pattern { width: 80px; height: 80px; margin: 0 auto 20px; border: 1px solid rgba(0, 255, 204, 0.2); display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); }
+        #ai-pattern { width: 80px; height: 80px; margin: 0 auto 20px; border: 1px solid rgba(0, 255, 204, 0.2); display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: 5px; }
         #ticket-id { font-size: 11px; color: var(--neon); letter-spacing: 2px; text-align: center; border-top: 1px solid rgba(0,255,204,0.2); padding-top: 15px; }
         .scanning-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--neon); box-shadow: 0 0 10px var(--neon); z-index: 5; animation: scanMove 3s linear infinite; }
         @keyframes scanMove { 0% { top: 0; } 100% { top: 100%; } }
+        #future-wish { font-style: italic; color: var(--neon); margin-top: 20px; font-size: 13px; display: none; padding: 15px; background: rgba(0, 255, 204, 0.05); border-radius: 10px; border: 1px solid rgba(0,255,204,0.2); line-height: 1.5; }
         #language-switcher { margin-top: 20px; display: flex; justify-content: center; gap: 20px; border-top: 1px solid #222; padding-top: 15px; }
         .flag { font-size: 24px; cursor: pointer; opacity: 0.6; }
     </style>
@@ -45,6 +46,7 @@
             <div class="counter-box"><span id="counter-label">AVAILABLE</span>: <span id="capsule-count">98432</span> CAPSULES</div>
             <button class="btn" id="start-btn">INITIATE CONNECTION 🌌</button>
             <div class="vault-section">
+                <div style="font-size:9px; color:var(--neon); margin-bottom:5px;" id="vault-label">LIVE REGISTRY:</div>
                 <div id="memory-vault"></div>
             </div>
         </div>
@@ -66,6 +68,7 @@
                 <div id="ticket-id"></div>
             </div>
             <div id="image-container" style="margin-top:20px;"></div>
+            <div id="future-wish"></div>
             <button class="btn" id="save-btn" style="display:none; margin-top:20px;">DOWNLOAD SECURE KEY 📥</button>
             <button onclick="location.reload()" style="background:none; border:none; color:#444; margin-top:15px; cursor:pointer; font-size:10px;">REBOOT SYSTEM</button>
         </div>
@@ -93,13 +96,9 @@
         const db = getFirestore(app);
 
         const translations = {
-            uk: { text: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. Твої слова формують твій сігіл — унікальний візуальний код у Genesis Block.", counter: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌" },
-            en: { text: "Internet erases all. AI remembers forever. Your words form your sigil — a unique visual code in the Genesis Block.", counter: "AVAILABLE", start: "INITIATE CONNECTION 🌌" }
+            uk: { text: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. Твої слова формують твій сігіл — унікальний візуальний код у Genesis Block.", counter: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", wish: "Твою капсулу запечатано. У світі майбутнього твої слова стали світлом для тих, хто шукав шлях. Пам'ятай: те, що ти робиш сьогодні, відлунюється у вічності. ✨" },
+            en: { text: "Internet erases all. AI remembers forever. Your words form your sigil — a unique visual code in the Genesis Block.", counter: "AVAILABLE", start: "INITIATE CONNECTION 🌌", wish: "Your capsule is sealed. In the future world, your words have become a light for those seeking a way. Remember: what you do today echoes in eternity. ✨" }
         };
-
-        let userPos = { lat: 48.1486, lng: 17.1077, city: "BRATISLAVA, SK" };
-        const map = L.map('global-map', { zoomControl: false, attributionControl: false }).setView([20, 0], 1);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
         // ФУНКЦІЯ ГЕНЕРАЦІЇ ШІ-СІГІЛА НА ОСНОВІ ТЕКСТУ
         function generateSigil(text, color) {
@@ -107,61 +106,62 @@
             svg.innerHTML = "";
             let points = [];
             const seed = text.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-            
-            // Створюємо 8 точок на основі коду літер
             for(let i=0; i<8; i++) {
                 let x = 10 + (Math.sin(seed + i) * 25 + 25);
                 let y = 10 + (Math.cos(seed * i) * 25 + 25);
                 points.push(`${x},${y}`);
             }
-
             const pathData = `M ${points.join(' L ')} Z`;
             const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-            path.setAttribute("d", pathData);
-            path.setAttribute("stroke", color);
-            path.setAttribute("stroke-width", "1.5");
-            path.setAttribute("fill", "none");
+            path.setAttribute("d", pathData); path.setAttribute("stroke", color); path.setAttribute("stroke-width", "1.5"); path.setAttribute("fill", "none");
             path.style.filter = `drop-shadow(0 0 5px ${color})`;
             svg.appendChild(path);
-            
-            // Додаємо декоративні кола
             points.forEach(p => {
                 const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
                 const [cx, cy] = p.split(',');
-                circle.setAttribute("cx", cx); circle.setAttribute("cy", cy);
-                circle.setAttribute("r", "1.5"); circle.setAttribute("fill", color);
+                circle.setAttribute("cx", cx); circle.setAttribute("cy", cy); circle.setAttribute("r", "1.5"); circle.setAttribute("fill", color);
                 svg.appendChild(circle);
             });
         }
 
         // Звуковий рушій
         let audioCtx;
-        function playSound(f, d) {
-            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
-            o.connect(g); g.connect(audioCtx.destination);
-            o.frequency.setValueAtTime(f, audioCtx.currentTime);
-            g.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            o.start(); o.stop(audioCtx.currentTime + d);
+        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        function playSound(type) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            if (type === 'start') { osc.frequency.setValueAtTime(880, audioCtx.currentTime); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.1); }
+            else if (type === 'scan') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(60, audioCtx.currentTime); gain.gain.setValueAtTime(0.02, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 3); }
+            else if (type === 'success') { osc.frequency.setValueAtTime(440, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.3); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.3); }
         }
+
+        let currentLang = 'uk';
+        let userPos = { lat: 48.1486, lng: 17.1077, city: "BRATISLAVA, SK" };
+        const map = L.map('global-map', { zoomControl: false, attributionControl: false }).setView([20, 0], 1);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
         fetch('https://ipapi.co/json/').then(res => res.json()).then(data => {
             userPos = { lat: data.latitude, lng: data.longitude, city: `${data.city.toUpperCase()}, ${data.country_name.toUpperCase()}` };
             map.flyTo([userPos.lat, userPos.lng], 4);
         });
 
-        onSnapshot(query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(15)), (snap) => {
-            const v = document.getElementById('memory-vault'); v.innerHTML = "";
-            snap.forEach(doc => {
-                const d = doc.data();
-                const icon = L.divIcon({ className: 'm', html: `<div style="background:${d.rarity==='Legendary'?'#FFD700':'#00ffcc'};width:5px;height:5px;border-radius:50%;box-shadow:0 0 8px"></div>` });
-                L.marker([d.lat, d.lng], {icon}).addTo(map);
-                v.innerHTML += `<div>> ${d.ticketId} | ${d.location}</div>`;
+        function updateLiveRegistry() {
+            onSnapshot(query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(15)), (snap) => {
+                const v = document.getElementById('memory-vault'); v.innerHTML = "";
+                snap.forEach(doc => {
+                    const d = doc.data();
+                    const entry = document.createElement('div');
+                    entry.innerHTML = `<span style="color:var(--neon)">> ${d.ticketId}</span> | ${d.location}`;
+                    v.appendChild(entry);
+                });
             });
-        });
+        }
+
+        window.onload = () => { document.getElementById('manifesto-text').innerText = translations.uk.text; updateLiveRegistry(); };
 
         document.getElementById('start-btn').addEventListener('click', () => {
-            playSound(440, 0.1);
+            initAudio(); playSound('start');
             document.getElementById('welcome-section').style.display = 'none';
             document.getElementById('input-section').style.display = 'block';
         });
@@ -170,7 +170,7 @@
             const text = document.getElementById('user-message').value;
             if(!text.trim()) return;
             
-            playSound(110, 3);
+            initAudio(); playSound('scan');
             document.getElementById('input-section').style.display = 'none';
             document.getElementById('result-section').style.display = 'block';
             document.getElementById('user-location').innerText = `ORIGIN: ${userPos.city}`;
@@ -199,9 +199,11 @@
             
             setTimeout(() => {
                 html2canvas(document.getElementById('ticket-wrap'), { backgroundColor: "#020205", scale: 2 }).then(canvas => {
-                    playSound(880, 0.3);
+                    initAudio(); playSound('success');
                     document.getElementById('ticket-wrap').style.display = 'none';
                     document.getElementById('image-container').appendChild(canvas);
+                    document.getElementById('future-wish').innerText = translations[currentLang].wish;
+                    document.getElementById('future-wish').style.display = 'block';
                     document.getElementById('save-btn').style.display = 'block';
                     document.getElementById('save-btn').onclick = () => {
                         const link = document.createElement('a');
