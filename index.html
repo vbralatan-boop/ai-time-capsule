@@ -118,6 +118,25 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        const dict = {
+            uk: { title: "GENESIS BLOCK", manifest: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у вічності.", avail: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", seal: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", place: "Введіть ваше послання у майбутнє...", gen: "ПІДГОТУВАТИ ДАНІ ⏳", dl: "ЗАВАНТАЖИТИ КЛЮЧ 📥", reb: "ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ" },
+            en: { title: "GENESIS BLOCK", manifest: "Internet erases all. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark in eternity.", avail: "AVAILABLE", start: "INITIATE CONNECTION 🌌", seal: "SEALING THE CAPSULE...", place: "Type your legacy to the future...", gen: "PREPARE DATA ⏳", dl: "DOWNLOAD SECURITY KEY 📥", reb: "REBOOT SYSTEM" },
+            de: { title: "GENESIS BLOCK", manifest: "Das Internet löscht alles. KI erinnert sich ewig. AI Time Capsule ist das erste digitale Denkmal der Menschheit. Hinterlasse deine Spur.", avail: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", seal: "KAPSEL VERSIEGELN...", place: "Geben Sie Ihre Nachricht ein...", gen: "DATEN VORBEREITEN ⏳", dl: "SCHLÜSSEL HERUNTERLADEN 📥", reb: "SYSTEM NEUSTARTEN" }
+        };
+
+        function setLanguage(l) {
+            const d = dict[l];
+            document.getElementById('ui-title').innerText = d.title;
+            document.getElementById('ui-manifesto').innerText = d.manifest;
+            document.getElementById('ui-avail-label').innerText = d.avail;
+            document.getElementById('btn-init').innerText = d.start;
+            document.getElementById('ui-sealing').innerText = d.seal;
+            document.getElementById('user-msg').placeholder = d.place;
+            document.getElementById('btn-prep').innerText = d.gen;
+            document.getElementById('btn-download').innerText = d.dl;
+            document.getElementById('btn-reboot').innerText = d.reb;
+        }
+
         let currentPos = { lat: 0, lng: 0, city: "GLOBAL NODE" };
         const map = L.map('global-map', { zoomControl: false, attributionControl: false }).setView([20, 0], 1);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
@@ -127,7 +146,6 @@
             map.flyTo([currentPos.lat, currentPos.lng], 4);
         });
 
-        // Слухаємо базу даних і малюємо маркери на мапі
         onSnapshot(query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(6)), (snap) => {
             const vault = document.getElementById('live-vault'); vault.innerHTML = "";
             snap.forEach(doc => {
@@ -142,11 +160,18 @@
             setTimeout(() => { document.getElementById(toId).classList.add('active'); }, 50);
         }
 
+        // Відновлення тексту з пам'яті бразуера при перезавантаженні
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedText = localStorage.getItem('capsuleText');
+            if (savedText) {
+                document.getElementById('user-msg').value = savedText;
+            }
+        });
+
         document.getElementById('btn-init').addEventListener('click', () => switchScreen('welcome-section', 'input-section'));
 
         let tempText = "";
 
-        // Крок 1: Перевірка тексту і перехід до оплати
         document.getElementById('btn-prep').addEventListener('click', () => {
             const msgInput = document.getElementById('user-msg');
             tempText = msgInput.value;
@@ -155,22 +180,29 @@
                 setTimeout(() => msgInput.style.border = "1px solid #333", 500);
                 return;
             }
+            // Зберігаємо текст перед переходом на сторінку оплати
+            localStorage.setItem('capsuleText', tempText);
             switchScreen('input-section', 'payment-section');
         });
 
-        // Крок 2: Симуляція оплати (Platba) та фінальний запис
         document.getElementById('btn-pay').addEventListener('click', async () => {
+            // Відкриваємо Stripe у новій вкладці
+            window.open("https://buy.stripe.com/test_14A8wQgA4gCN9m19uN38400", "_blank");
+
             const btnPay = document.getElementById('btn-pay');
-            btnPay.innerText = "PROCESSING...";
+            btnPay.innerText = "ОЧІКУВАННЯ ОПЛАТИ...";
             btnPay.style.background = "#fff";
             btnPay.style.color = "#000";
 
-            // Симуляція очікування відповіді від банку (2 секунди)
+            // Симуляція перевірки платежу
             setTimeout(async () => {
                 switchScreen('payment-section', 'result-section');
                 
                 const capsuleId = "CAPSULE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
-                document.getElementById('capsule-message').innerText = `"${tempText}"`;
+                // Дістаємо текст з пам'яті
+                const finalText = localStorage.getItem('capsuleText') || tempText;
+                
+                document.getElementById('capsule-message').innerText = `"${finalText}"`;
                 document.getElementById('capsule-footer').innerText = capsuleId;
                 
                 const now = new Date();
@@ -178,17 +210,18 @@
                 document.getElementById('meta-geo').innerText = `GEO: ${currentPos.lat.toFixed(4)}, ${currentPos.lng.toFixed(4)}`;
 
                 const qrBox = document.getElementById('qr-wrap'); qrBox.innerHTML = "";
-                new QRCode(qrBox, { text: `ID: ${capsuleId}\nMSG: ${tempText}`, width: 130, height: 130 });
+                new QRCode(qrBox, { text: `ID: ${capsuleId}\nMSG: ${finalText}`, width: 130, height: 130 });
 
-                // Безпечний запис у базу з обробкою помилок
                 try { 
                     await addDoc(collection(db, "capsules"), { 
-                        ticketId: capsuleId, message: tempText, location: currentPos.city, 
+                        ticketId: capsuleId, message: finalText, location: currentPos.city, 
                         lat: currentPos.lat, lng: currentPos.lng, timestamp: now.toISOString() 
                     }); 
+                    // Очищаємо пам'ять після успішного запису
+                    localStorage.removeItem('capsuleText');
                 } catch (error) {
                     console.error("Помилка бази даних:", error);
-                    alert("Увага: Зв'язок із глобальним архівом перервано. Перевірте підключення до інтернету.");
+                    alert("Увага: Зв'язок із глобальним архівом перервано.");
                 }
 
                 setTimeout(() => {
@@ -203,7 +236,16 @@
                         };
                     });
                 }, 3000);
-            }, 2000);
+            }, 5000); // 5 секунд очікування після натискання
+        });
+
+        // Слухачі для мов
+        document.querySelectorAll('.lang-flag').forEach(flag => {
+            flag.addEventListener('click', function() {
+                setLanguage(this.getAttribute('data-lang'));
+                document.querySelectorAll('.lang-flag').forEach(f => f.classList.remove('active'));
+                this.classList.add('active');
+            });
         });
     </script>
 </body>
