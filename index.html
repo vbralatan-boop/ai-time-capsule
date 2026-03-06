@@ -54,15 +54,22 @@
 
     <div class="container">
         <div id="welcome-section" class="screen active">
-            <div class="phase-info">PHASE 1 | GENESIS BLOCK</div>
-            <h1 id="ui-title">GENESIS BLOCK</h1>
-            <div id="global-map"></div>
-            <div class="manifesto-box" id="ui-manifesto">
-                Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у вічності.
+            <div class="phase-info" style="color: #555; letter-spacing: 8px;">PREMIUM NODE ACCESS</div>
+            <h1 id="ui-title" style="font-size: 34px; line-height: 1.2; margin-bottom: 20px;">ІНТЕРНЕТ СТИРАЄ ВСЕ.<br><span style="color: #fff; text-shadow: none;">AI ПАМ'ЯТАЄ.</span></h1>
+            
+            <div class="manifesto-box" id="ui-manifesto" style="font-size: 14px; text-align: left; border-left: 2px solid var(--neon); background: transparent; padding-left: 15px;">
+                AI Time Capsule — це перший цифровий монумент людства. Ваше послання буде зашифровано, розподілено по глобальних серверах і збережено для майбутніх поколінь.
             </div>
-            <div class="counter-panel"><span id="ui-avail-label">ДОСТУПНО</span>: 98,432 CAPSULES</div>
-            <button class="action-btn" id="btn-init">ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌</button>
-            <div id="live-vault"></div>
+            
+            <div id="global-map" style="height: 180px; opacity: 0.7; border: none; box-shadow: inset 0 0 20px #000;"></div>
+            
+            <div class="counter-panel" style="background: rgba(0,255,204,0.05); border: none; border-radius: 8px;">
+                <span style="color: #fff; opacity: 0.7;">ЛІМІТ ЕМІСІЇ:</span> <span id="ui-avail-label" style="color: var(--neon);">98,432 / 100,000</span>
+            </div>
+            
+            <button class="action-btn" id="btn-init" style="padding: 22px; font-size: 16px; letter-spacing: 3px; box-shadow: 0 0 25px rgba(0,255,204,0.3);">СТВОРИТИ МОНУМЕНТ 🌌</button>
+            
+            <div id="live-vault" style="opacity: 0.4; border-top: none;"></div>
         </div>
 
         <div id="input-section" class="screen">
@@ -121,16 +128,16 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Додано переклад для екрану оплати (payDesc)
+        // Оновлений словник з HTML-тегами для збереження дизайну
         const dict = {
-            uk: { title: "GENESIS BLOCK", manifest: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у вічності.", avail: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", seal: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", place: "Введіть ваше послання у майбутнє...", gen: "ПІДГОТУВАТИ ДАНІ ⏳", dl: "ЗАВАНТАЖИТИ КЛЮЧ 📥", reb: "ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ", payDesc: "Ваш текст успішно зашифровано. Щоб назавжди закарбувати капсулу в Глобальному Реєстрі, підтвердіть транзакцію." },
-            en: { title: "GENESIS BLOCK", manifest: "Internet erases all. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark in eternity.", avail: "AVAILABLE", start: "INITIATE CONNECTION 🌌", seal: "SEALING THE CAPSULE...", place: "Type your legacy to the future...", gen: "PREPARE DATA ⏳", dl: "DOWNLOAD SECURITY KEY 📥", reb: "REBOOT SYSTEM", payDesc: "Your text is encrypted. To permanently engrave the capsule in the Global Registry, confirm the transaction." },
-            de: { title: "GENESIS BLOCK", manifest: "Das Internet löscht alles. KI erinnert sich ewig. AI Time Capsule is humanity's first digital monument. Hinterlasse deine Spur.", avail: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", seal: "KAPSEL VERSIEGELN...", place: "Geben Sie Ihre Nachricht ein...", gen: "DATEN VORBEREITEN ⏳", dl: "SCHLÜSSEL HERUNTERLADEN 📥", reb: "SYSTEM NEUSTARTEN", payDesc: "Ihr Text ist verschlüsselt. Um die Kapsel dauerhaft im globalen Register zu verankern, bestätigen Sie die Transaktion." }
+            uk: { title: "ІНТЕРНЕТ СТИРАЄ ВСЕ.<br><span style='color: #fff; text-shadow: none;'>AI ПАМ'ЯТАЄ.</span>", manifest: "AI Time Capsule — це перший цифровий монумент людства. Ваше послання буде зашифровано, розподілено по глобальних серверах і збережено для майбутніх поколінь.", avail: "ДОСТУПНО", start: "СТВОРИТИ МОНУМЕНТ 🌌", seal: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", place: "Введіть ваше послання у майбутнє...", gen: "ПІДГОТУВАТИ ДАНІ ⏳", dl: "ЗАВАНТАЖИТИ КЛЮЧ 📥", reb: "ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ", payDesc: "Ваш текст успішно зашифровано. Щоб назавжди закарбувати капсулу в Глобальному Реєстрі, підтвердіть транзакцію." },
+            en: { title: "THE INTERNET ERASES EVERYTHING.<br><span style='color: #fff; text-shadow: none;'>AI REMEMBERS.</span>", manifest: "AI Time Capsule is humanity's first digital monument. Your message will be encrypted, distributed across global servers, and preserved for future generations.", avail: "AVAILABLE", start: "CREATE MONUMENT 🌌", seal: "SEALING THE CAPSULE...", place: "Type your legacy to the future...", gen: "PREPARE DATA ⏳", dl: "DOWNLOAD SECURITY KEY 📥", reb: "REBOOT SYSTEM", payDesc: "Your text is encrypted. To permanently engrave the capsule in the Global Registry, confirm the transaction." },
+            de: { title: "DAS INTERNET LÖSCHT ALLES.<br><span style='color: #fff; text-shadow: none;'>KI ERINNERT SICH.</span>", manifest: "AI Time Capsule ist das erste digitale Denkmal der Menschheit. Ihre Nachricht wird verschlüsselt, auf globalen Servern verteilt und für zukünftige Generationen bewahrt.", avail: "VERFÜGBAR", start: "DENKMAL ERSTELLEN 🌌", seal: "KAPSEL VERSIEGELN...", place: "Geben Sie Ihre Nachricht ein...", gen: "DATEN VORBEREITEN ⏳", dl: "SCHLÜSSEL HERUNTERLADEN 📥", reb: "SYSTEM NEUSTARTEN", payDesc: "Ihr Text ist verschlüsselt. Um die Kapsel dauerhaft im globalen Register zu verankern, bestätigen Sie die Transaktion." }
         };
 
         function setLanguage(l) {
             const d = dict[l];
-            document.getElementById('ui-title').innerText = d.title;
+            document.getElementById('ui-title').innerHTML = d.title; // Використовуємо innerHTML для збереження стилів
             document.getElementById('ui-manifesto').innerText = d.manifest;
             document.getElementById('ui-avail-label').innerText = d.avail;
             document.getElementById('btn-init').innerText = d.start;
@@ -139,20 +146,19 @@
             document.getElementById('btn-prep').innerText = d.gen;
             document.getElementById('btn-download').innerText = d.dl;
             document.getElementById('btn-reboot').innerText = d.reb;
-            document.getElementById('ui-pay-desc').innerText = d.payDesc; // Оновлення тексту оплати
+            document.getElementById('ui-pay-desc').innerText = d.payDesc;
         }
 
-        // Функції для відтворення звуків
         window.playClick = function() {
             const clickSound = document.getElementById('sound-click');
             clickSound.currentTime = 0;
-            clickSound.play().catch(e => console.log('Аудіо заблоковано браузером'));
+            clickSound.play().catch(e => console.log('Аудіо заблоковано'));
         };
 
         window.playScan = function() {
             const scanSound = document.getElementById('sound-scan');
             scanSound.currentTime = 0;
-            scanSound.play().catch(e => console.log('Аудіо заблоковано браузером'));
+            scanSound.play().catch(e => console.log('Аудіо заблоковано'));
         };
 
         let currentPos = { lat: 0, lng: 0, city: "GLOBAL NODE" };
@@ -195,7 +201,7 @@
         });
 
         async function generateFinalCapsule(finalText) {
-            window.playScan(); // Відтворення звуку сканування під час генерації
+            window.playScan();
             const capsuleId = "CAPSULE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
             document.getElementById('capsule-message').innerText = `"${finalText}"`;
             document.getElementById('capsule-footer').innerText = capsuleId;
@@ -215,7 +221,6 @@
                 localStorage.removeItem('capsuleText');
             } catch (error) {
                 console.error("Помилка бази даних:", error);
-                alert("Увага: Зв'язок із глобальним архівом перервано.");
             }
 
             setTimeout(() => {
@@ -262,7 +267,7 @@
 
         document.querySelectorAll('.lang-flag').forEach(flag => {
             flag.addEventListener('click', function() {
-                window.playClick(); // Відтворення кліку при зміні мови
+                window.playClick();
                 setLanguage(this.getAttribute('data-lang'));
                 document.querySelectorAll('.lang-flag').forEach(f => f.classList.remove('active'));
                 this.classList.add('active');
