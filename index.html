@@ -93,7 +93,7 @@
             </div>
             <div id="final-image-container" style="margin-top:30px;"></div>
             <button class="action-btn" id="btn-download" style="display:none; margin-top:20px;">ЗАВАНТАЖИТИ КЛЮЧ 📥</button>
-            <button id="btn-reboot" onclick="location.reload()" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px; font-weight: bold;">ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ</button>
+            <button id="btn-reboot" onclick="window.location.href=window.location.pathname" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px; font-weight: bold;">ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ</button>
         </div>
 
         <div id="lang-selector">
@@ -121,7 +121,7 @@
         const dict = {
             uk: { title: "GENESIS BLOCK", manifest: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у вічності.", avail: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", seal: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", place: "Введіть ваше послання у майбутнє...", gen: "ПІДГОТУВАТИ ДАНІ ⏳", dl: "ЗАВАНТАЖИТИ КЛЮЧ 📥", reb: "ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ" },
             en: { title: "GENESIS BLOCK", manifest: "Internet erases all. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark in eternity.", avail: "AVAILABLE", start: "INITIATE CONNECTION 🌌", seal: "SEALING THE CAPSULE...", place: "Type your legacy to the future...", gen: "PREPARE DATA ⏳", dl: "DOWNLOAD SECURITY KEY 📥", reb: "REBOOT SYSTEM" },
-            de: { title: "GENESIS BLOCK", manifest: "Das Internet löscht alles. KI erinnert sich ewig. AI Time Capsule is humanity's first digital monument. Hinterlasse deine Spur.", avail: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", seal: "KAPSEL VERSIEGELN...", place: "Geben Sie Ihre Nachricht ein...", gen: "DATEN VORBEREITEN ⏳", dl: "SCHLÜSSEL HERUNTERLADEN 📥", reb: "SYSTEM NEUSTARTEN" }
+            de: { title: "GENESIS BLOCK", manifest: "Das Internet löscht alles. KI erinnert sich ewig. AI Time Capsule ist das erste digitale Denkmal der Menschheit. Hinterlasse deine Spur.", avail: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", seal: "KAPSEL VERSIEGELN...", place: "Geben Sie Ihre Nachricht ein...", gen: "DATEN VORBEREITEN ⏳", dl: "SCHLÜSSEL HERUNTERLADEN 📥", reb: "SYSTEM NEUSTARTEN" }
         };
 
         function setLanguage(l) {
@@ -160,20 +160,72 @@
             setTimeout(() => { document.getElementById(toId).classList.add('active'); }, 50);
         }
 
+        // ==========================================
+        // ЦИФРОВИЙ КАСИР ТА ПЕРЕВІРКА ОПЛАТИ
+        // ==========================================
         window.addEventListener('DOMContentLoaded', () => {
             const savedText = localStorage.getItem('capsuleText');
             if (savedText) {
                 document.getElementById('user-msg').value = savedText;
             }
+
+            // Якщо в посиланні є підтвердження успішної транзакції
+            if (window.location.search.includes('status=success')) {
+                // Стирання "хвоста", щоб уникнути повторної безкоштовної генерації
+                window.history.replaceState({}, document.title, window.location.pathname);
+                
+                // Перехід одразу на фінальний екран
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById('result-section').classList.add('active');
+                
+                // Генерація капсули
+                const finalText = localStorage.getItem('capsuleText') || "GLOBAL NODE MESSAGE";
+                generateFinalCapsule(finalText);
+            }
         });
+
+        async function generateFinalCapsule(finalText) {
+            const capsuleId = "CAPSULE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
+            document.getElementById('capsule-message').innerText = `"${finalText}"`;
+            document.getElementById('capsule-footer').innerText = capsuleId;
+            
+            const now = new Date();
+            document.getElementById('meta-time').innerText = `T: ${now.toISOString().slice(0, 19).replace('T', ' ')}`;
+            document.getElementById('meta-geo').innerText = `GEO: ${currentPos.lat.toFixed(4)}, ${currentPos.lng.toFixed(4)}`;
+
+            const qrBox = document.getElementById('qr-wrap'); qrBox.innerHTML = "";
+            new QRCode(qrBox, { text: `ID: ${capsuleId}\nMSG: ${finalText}`, width: 130, height: 130 });
+
+            try { 
+                await addDoc(collection(db, "capsules"), { 
+                    ticketId: capsuleId, message: finalText, location: currentPos.city, 
+                    lat: currentPos.lat, lng: currentPos.lng, timestamp: now.toISOString() 
+                }); 
+                localStorage.removeItem('capsuleText'); // Очищаємо пам'ять
+            } catch (error) {
+                console.error("Помилка бази даних:", error);
+                alert("Увага: Зв'язок із глобальним архівом перервано.");
+            }
+
+            setTimeout(() => {
+                html2canvas(document.getElementById('capsule-visual'), { backgroundColor: "#020205", scale: 2, useCORS: true }).then(canvas => {
+                    document.getElementById('capsule-visual').style.display = 'none';
+                    document.getElementById('final-image-container').appendChild(canvas);
+                    const dlBtn = document.getElementById('btn-download'); 
+                    dlBtn.style.display = 'block';
+                    dlBtn.onclick = () => { 
+                        const link = document.createElement('a'); link.download = 'PREMIUM_AI_CAPSULE.png'; 
+                        link.href = canvas.toDataURL(); link.click(); 
+                    };
+                });
+            }, 3000);
+        }
 
         document.getElementById('btn-init').addEventListener('click', () => switchScreen('welcome-section', 'input-section'));
 
-        let tempText = "";
-
         document.getElementById('btn-prep').addEventListener('click', () => {
             const msgInput = document.getElementById('user-msg');
-            tempText = msgInput.value;
+            const tempText = msgInput.value;
             if(!tempText.trim()) {
                 msgInput.style.border = "1px solid red";
                 setTimeout(() => msgInput.style.border = "1px solid #333", 500);
@@ -183,54 +235,14 @@
             switchScreen('input-section', 'payment-section');
         });
 
-        document.getElementById('btn-pay').addEventListener('click', async () => {
-            window.open("https://buy.stripe.com/test_14A8wQgA4gCN9m19uN38400", "_blank");
-
+        document.getElementById('btn-pay').addEventListener('click', () => {
             const btnPay = document.getElementById('btn-pay');
-            btnPay.innerText = "ОЧІКУВАННЯ ОПЛАТИ...";
+            btnPay.innerText = "ПЕРЕХІД ДО ОПЛАТИ...";
             btnPay.style.background = "#fff";
             btnPay.style.color = "#000";
 
-            setTimeout(async () => {
-                switchScreen('payment-section', 'result-section');
-                
-                const capsuleId = "CAPSULE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
-                const finalText = localStorage.getItem('capsuleText') || tempText;
-                
-                document.getElementById('capsule-message').innerText = `"${finalText}"`;
-                document.getElementById('capsule-footer').innerText = capsuleId;
-                
-                const now = new Date();
-                document.getElementById('meta-time').innerText = `T: ${now.toISOString().slice(0, 19).replace('T', ' ')}`;
-                document.getElementById('meta-geo').innerText = `GEO: ${currentPos.lat.toFixed(4)}, ${currentPos.lng.toFixed(4)}`;
-
-                const qrBox = document.getElementById('qr-wrap'); qrBox.innerHTML = "";
-                new QRCode(qrBox, { text: `ID: ${capsuleId}\nMSG: ${finalText}`, width: 130, height: 130 });
-
-                try { 
-                    await addDoc(collection(db, "capsules"), { 
-                        ticketId: capsuleId, message: finalText, location: currentPos.city, 
-                        lat: currentPos.lat, lng: currentPos.lng, timestamp: now.toISOString() 
-                    }); 
-                    localStorage.removeItem('capsuleText');
-                } catch (error) {
-                    console.error("Помилка бази даних:", error);
-                    alert("Увага: Зв'язок із глобальним архівом перервано.");
-                }
-
-                setTimeout(() => {
-                    html2canvas(document.getElementById('capsule-visual'), { backgroundColor: "#020205", scale: 2, useCORS: true }).then(canvas => {
-                        document.getElementById('capsule-visual').style.display = 'none';
-                        document.getElementById('final-image-container').appendChild(canvas);
-                        const dlBtn = document.getElementById('btn-download'); 
-                        dlBtn.style.display = 'block';
-                        dlBtn.onclick = () => { 
-                            const link = document.createElement('a'); link.download = 'PREMIUM_AI_CAPSULE.png'; 
-                            link.href = canvas.toDataURL(); link.click(); 
-                        };
-                    });
-                }, 3000);
-            }, 5000);
+            // Тепер ми переходимо прямо в поточній вкладці
+            window.location.href = "https://buy.stripe.com/test_14A8wQgA4gCN9m19uN38400";
         });
 
         document.querySelectorAll('.lang-flag').forEach(flag => {
