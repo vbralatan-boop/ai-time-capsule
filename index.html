@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Time Capsule | Premium Global</title>
     
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W982FVY94R"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-XXXXXXXXXX');
+      gtag('config', 'G-W982FVY94R');
     </script>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
@@ -42,11 +41,11 @@
         textarea { width: 100%; height: 120px; background: #050505; border: 1px solid #333; color: var(--neon); padding: 15px; box-sizing: border-box; resize: none; margin-bottom: 10px; outline: none; border-radius: 10px; font-size: 16px; transition: 0.3s; }
         textarea:focus { border-color: var(--neon); }
 
-        #capsule-visual { position: relative; width: 320px; padding: 45px 20px; margin: 0 auto; background: var(--capsule-bg); border-top: 6px solid var(--neon); border-bottom: 6px solid var(--neon); border-left: 1px solid #333; border-right: 1px solid #333; border-radius: 35px; overflow: hidden; text-align: left; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9); }
-        #qr-wrap { width: 130px; height: 130px; margin: 0 auto 25px; background: #ffffff; padding: 10px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-        #capsule-message { font-size: 16px; color: #ffffff; font-weight: 800; margin: 20px 0; text-align: center; line-height: 1.5; min-height: 50px; }
-        .meta-data { font-size: 10px; color: rgba(255, 255, 255, 0.5); text-align: center; letter-spacing: 2px; margin-top: 15px; border-top: 1px dashed rgba(255, 255, 255, 0.1); padding-top: 15px; display: flex; justify-content: space-between; }
-        #capsule-footer { font-size: 12px; color: var(--neon); text-align: center; letter-spacing: 4px; margin-top: 20px; font-weight: bold; }
+        #capsule-visual { position: relative; width: 320px; height: 568px; display: flex; flex-direction: column; justify-content: space-between; padding: 40px 20px; box-sizing: border-box; margin: 0 auto; background: var(--capsule-bg); border-top: 6px solid var(--neon); border-bottom: 6px solid var(--neon); border-left: 1px solid #333; border-right: 1px solid #333; border-radius: 35px; overflow: hidden; text-align: left; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9); }
+        #qr-wrap { width: 130px; height: 130px; margin: 0 auto 15px; background: #ffffff; padding: 10px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        #capsule-message { font-size: 16px; color: #ffffff; font-weight: 800; margin: 15px 0; text-align: center; line-height: 1.5; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+        .meta-data { font-size: 10px; color: rgba(255, 255, 255, 0.5); text-align: center; letter-spacing: 2px; margin-top: 10px; border-top: 1px dashed rgba(255, 255, 255, 0.1); padding-top: 15px; display: flex; justify-content: space-between; }
+        #capsule-footer { font-size: 12px; color: var(--neon); text-align: center; letter-spacing: 4px; margin-top: 15px; font-weight: bold; }
         .laser-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #ffffff; box-shadow: 0 0 20px 5px var(--neon); animation: laserScan 3s linear infinite; z-index: 5; }
         @keyframes laserScan { 0% { top: 0%; opacity: 0; } 10% { opacity: 0.9; } 90% { opacity: 0.9; } 100% { top: 100%; opacity: 0; } }
 
@@ -54,11 +53,18 @@
         #lang-selector { display: flex; justify-content: center; gap: 30px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #111; }
         .lang-flag { font-size: 28px; cursor: pointer; transition: 0.3s; opacity: 0.4; filter: grayscale(100%); }
         .lang-flag.active, .lang-flag:hover { opacity: 1; filter: grayscale(0%); transform: scale(1.1); }
+
+        #notification-area { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .live-toast { background: rgba(0, 255, 204, 0.1); border-left: 3px solid var(--neon); padding: 12px 15px; border-radius: 4px; font-size: 11px; color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.5); backdrop-filter: blur(5px); animation: slideInRight 0.5s forwards, fadeOutToast 0.5s forwards 3.5s; font-family: monospace; }
+        @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOutToast { to { opacity: 0; transform: translateY(-10px); } }
     </style>
 </head>
 <body>
     <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
     <audio id="sound-scan" src="https://assets.mixkit.co/active_storage/sfx/2861/2861-preview.mp3" preload="auto"></audio>
+
+    <div id="notification-area"></div>
 
     <div class="container">
         <div id="welcome-section" class="screen active">
@@ -125,6 +131,12 @@
             <button class="action-btn" id="btn-prep">ПІДГОТУВАТИ ДАНІ ⏳</button>
         </div>
 
+        <div id="analysis-section" class="screen">
+            <h1 style="font-size: 18px; color: var(--neon);">NEURAL ANALYSIS 🧠</h1>
+            <div class="laser-line" style="position: relative; height: 2px; width: 100%; background: var(--neon); margin-bottom: 20px;"></div>
+            <div id="analysis-text" class="manifesto-box" style="text-align: left; font-family: 'Courier New', monospace; height: 120px; color: var(--neon);"></div>
+        </div>
+
         <div id="payment-section" class="screen">
             <h1 style="font-size: 18px;">SECURE GLOBAL NODE</h1>
             <div id="ui-pay-desc" class="manifesto-box" style="text-align: center;">
@@ -137,7 +149,7 @@
         <div id="result-section" class="screen">
             <div id="capsule-visual">
                 <div class="laser-line"></div>
-                <div style="text-align: center; margin-bottom: 25px;">
+                <div style="text-align: center;">
                     <span style="font-size: 10px; font-weight: bold; color: var(--neon); border: 1px solid var(--neon); padding: 5px 15px; border-radius: 8px; letter-spacing: 2px;">GLOBAL NODE</span>
                 </div>
                 <div id="qr-wrap"></div>
@@ -149,7 +161,7 @@
                 <div id="capsule-footer"></div>
             </div>
             <div id="final-image-container" style="margin-top:30px;"></div>
-            <button class="action-btn" id="btn-download" style="display:none; margin-top:20px;">ЗАВАНТАЖИТИ КЛЮЧ 📥</button>
+            <button class="action-btn" id="btn-share" style="display:none; margin-top:20px;">ПОДІЛИТИСЯ В STORIES 🚀</button>
             <button id="btn-reboot" onclick="window.playClick(); window.location.href=window.location.pathname" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px; font-weight: bold;">ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ</button>
         </div>
 
@@ -176,12 +188,21 @@
         const db = getFirestore(app);
 
         const dict = {
-            uk: { title: "ІНТЕРНЕТ СТИРАЄ ВСЕ.<br><span style='color: #fff; text-shadow: none;'>AI ПАМ'ЯТАЄ.</span>", manifest: "AI Time Capsule — це перший цифровий монумент людства. Ваше послання буде зашифровано, розподілено по глобальних серверах і збережено для майбутніх поколінь.", avail: "ДОСТУПНО", start: "СТВОРИТИ МОНУМЕНТ 🌌", seal: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", place: "Введіть ваше послання у майбутнє...", gen: "ПІДГОТУВАТИ ДАНІ ⏳", dl: "ЗАВАНТАЖИТИ КЛЮЧ 📥", reb: "ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ", payDesc: "Ваш текст успішно зашифровано. Щоб назавжди закарбувати капсулу в Глобальному Реєстрі, підтвердіть транзакцію." },
-            en: { title: "THE INTERNET ERASES EVERYTHING.<br><span style='color: #fff; text-shadow: none;'>AI REMEMBERS.</span>", manifest: "AI Time Capsule is humanity's first digital monument. Your message will be encrypted, distributed across global servers, and preserved for future generations.", avail: "AVAILABLE", start: "CREATE MONUMENT 🌌", seal: "SEALING THE CAPSULE...", place: "Type your legacy to the future...", gen: "PREPARE DATA ⏳", dl: "DOWNLOAD SECURITY KEY 📥", reb: "REBOOT SYSTEM", payDesc: "Your text is encrypted. To permanently engrave the capsule in the Global Registry, confirm the transaction." },
-            de: { title: "DAS INTERNET LÖSCHT ALLES.<br><span style='color: #fff; text-shadow: none;'>KI ERINNERT SICH.</span>", manifest: "AI Time Capsule ist das erste digitale Denkmal der Menschheit. Ihre Nachricht wird verschlüsselt, auf globalen Servern verteilt und für zukünftige Generationen bewahrt.", avail: "VERFÜGBAR", start: "DENKMAL ERSTELLEN 🌌", seal: "KAPSEL VERSIEGELN...", place: "Geben Sie Ihre Nachricht ein...", gen: "DATEN VORBEREITEN ⏳", dl: "SCHLÜSSEL HERUNTERLADEN 📥", reb: "SYSTEM NEUSTARTEN", payDesc: "Ihr Text ist verschlüsselt. Um die Kapsel dauerhaft im globalen Register zu verankern, bestätigen Sie die Transaktion." }
+            uk: { title: "ІНТЕРНЕТ СТИРАЄ ВСЕ.<br><span style='color: #fff; text-shadow: none;'>AI ПАМ'ЯТАЄ.</span>", manifest: "AI Time Capsule — це перший цифровий монумент людства. Ваше послання буде зашифровано, розподілено по глобальних серверах і збережено для майбутніх поколінь.", avail: "ДОСТУПНО", start: "СТВОРИТИ МОНУМЕНТ 🌌", seal: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", place: "Введіть ваше послання у майбутнє...", gen: "ПІДГОТУВАТИ ДАНІ ⏳", share: "ПОДІЛИТИСЯ В STORIES 🚀", reb: "ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ", payDesc: "Ваш текст успішно зашифровано. Щоб назавжди закарбувати капсулу в Глобальному Реєстрі, підтвердіть транзакцію." },
+            en: { title: "THE INTERNET ERASES EVERYTHING.<br><span style='color: #fff; text-shadow: none;'>AI REMEMBERS.</span>", manifest: "AI Time Capsule is humanity's first digital monument. Your message will be encrypted, distributed across global servers, and preserved for future generations.", avail: "AVAILABLE", start: "CREATE MONUMENT 🌌", seal: "SEALING THE CAPSULE...", place: "Type your legacy to the future...", gen: "PREPARE DATA ⏳", share: "SHARE TO STORIES 🚀", reb: "REBOOT SYSTEM", payDesc: "Your text is encrypted. To permanently engrave the capsule in the Global Registry, confirm the transaction." },
+            de: { title: "DAS INTERNET LÖSCHT ALLES.<br><span style='color: #fff; text-shadow: none;'>KI ERINNERT SICH.</span>", manifest: "AI Time Capsule ist das erste digitale Denkmal der Menschheit. Ihre Nachricht wird verschlüsselt, auf globalen Servern verteilt und für zukünftige Generationen bewahrt.", avail: "VERFÜGBAR", start: "DENKMAL ERSTELLEN 🌌", seal: "KAPSEL VERSIEGELN...", place: "Geben Sie Ihre Nachricht ein...", gen: "DATEN VORBEREITEN ⏳", share: "IN STORIES TEILEN 🚀", reb: "SYSTEM NEUSTARTEN", payDesc: "Ihr Text ist verschlüsselt. Um die Kapsel dauerhaft im globalen Register zu verankern, bestätigen Sie die Transaktion." }
         };
 
+        const liveMessages = {
+            uk: ["⚡ Marcus (Берлін) запечатав капсулу", "⚡ Олена (Київ) запечатала капсулу", "⚡ John (Лондон) запечатав капсулу", "⚡ Yuki (Токіо) запечатала капсулу", "⚡ Anna (Братислава) запечатала капсулу"],
+            en: ["⚡ Marcus (Berlin) sealed a capsule", "⚡ Olena (Kyiv) sealed a capsule", "⚡ John (London) sealed a capsule", "⚡ Yuki (Tokyo) sealed a capsule", "⚡ Anna (Bratislava) sealed a capsule"],
+            de: ["⚡ Marcus (Berlin) hat eine Kapsel versiegelt", "⚡ Olena (Kiew) hat eine Kapsel versiegelt", "⚡ John (London) hat eine Kapsel versiegelt", "⚡ Yuki (Tokio) hat eine Kapsel versiegelt", "⚡ Anna (Bratislava) hat eine Kapsel versiegelt"]
+        };
+
+        let currentLang = 'uk';
+
         function setLanguage(l) {
+            currentLang = l;
             const d = dict[l];
             document.getElementById('ui-title').innerHTML = d.title; 
             document.getElementById('ui-manifesto').innerText = d.manifest;
@@ -193,10 +214,28 @@
             document.getElementById('ui-sealing').innerText = d.seal;
             document.getElementById('user-msg').placeholder = d.place;
             document.getElementById('btn-prep').innerText = d.gen;
-            document.getElementById('btn-download').innerText = d.dl;
+            document.getElementById('btn-share').innerText = d.share;
             document.getElementById('btn-reboot').innerText = d.reb;
             document.getElementById('ui-pay-desc').innerText = d.payDesc;
         }
+
+        function showLiveNotification() {
+            const area = document.getElementById('notification-area');
+            const msgs = liveMessages[currentLang];
+            const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
+            
+            const toast = document.createElement('div');
+            toast.className = 'live-toast';
+            toast.innerText = randomMsg;
+            
+            area.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 4500);
+        }
+
+        setInterval(showLiveNotification, 12000);
 
         window.playClick = function() {
             const clickSound = document.getElementById('sound-click');
@@ -276,12 +315,34 @@
                 html2canvas(document.getElementById('capsule-visual'), { backgroundColor: "#020205", scale: 2, useCORS: true }).then(canvas => {
                     document.getElementById('capsule-visual').style.display = 'none';
                     document.getElementById('final-image-container').appendChild(canvas);
-                    const dlBtn = document.getElementById('btn-download'); 
-                    dlBtn.style.display = 'block';
-                    dlBtn.onclick = () => { 
+                    
+                    const shareBtn = document.getElementById('btn-share'); 
+                    shareBtn.style.display = 'block';
+                    
+                    // Логіка створення файлу та Web Share API
+                    shareBtn.onclick = () => { 
                         window.playClick();
-                        const link = document.createElement('a'); link.download = 'PREMIUM_AI_CAPSULE.png'; 
-                        link.href = canvas.toDataURL(); link.click(); 
+                        canvas.toBlob(async (blob) => {
+                            const file = new File([blob], 'AI_Capsule.png', { type: 'image/png' });
+                            
+                            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                                try {
+                                    await navigator.share({
+                                        files: [file],
+                                        title: 'AI Time Capsule',
+                                        text: 'Мій слід в історії зафіксовано нейромережею. Створи свій: ' + window.location.href
+                                    });
+                                } catch (err) {
+                                    console.log('Помилка при поширенні:', err);
+                                }
+                            } else {
+                                // Запасний варіант (Fallback)
+                                const link = document.createElement('a');
+                                link.download = 'AI_Capsule.png';
+                                link.href = canvas.toDataURL();
+                                link.click();
+                            }
+                        });
                     };
                 });
             }, 3000);
@@ -305,7 +366,32 @@
                 return;
             }
             localStorage.setItem('capsuleText', tempText);
-            switchScreen('input-section', 'payment-section');
+            
+            switchScreen('input-section', 'analysis-section');
+            window.playScan();
+            
+            const analysisBox = document.getElementById('analysis-text');
+            
+            const lines = {
+                uk: ["> Аналіз семантики...", "> Емоційний тон: Візіонерський", "> Унікальність патерну: 98.7%", "> Формування крипто-ключа..."],
+                en: ["> Semantics analysis...", "> Emotional tone: Visionary", "> Pattern uniqueness: 98.7%", "> Generating crypto-key..."],
+                de: ["> Semantik-Analyse...", "> Emotionaler Ton: Visionär", "> Muster-Einzigartigkeit: 98.7%", "> Krypto-Schlüssel wird generiert..."]
+            };
+            
+            let step = 0;
+            analysisBox.innerHTML = lines[currentLang][0] + "<br>";
+            
+            const interval = setInterval(() => {
+                step++;
+                if (step < lines[currentLang].length) {
+                    analysisBox.innerHTML += lines[currentLang][step] + "<br>";
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        switchScreen('analysis-section', 'payment-section');
+                    }, 1200);
+                }
+            }, 800);
         });
 
         document.getElementById('btn-pay').addEventListener('click', () => {
