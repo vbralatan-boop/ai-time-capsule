@@ -49,6 +49,9 @@
     </style>
 </head>
 <body>
+    <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+    <audio id="sound-scan" src="https://assets.mixkit.co/active_storage/sfx/2861/2861-preview.mp3" preload="auto"></audio>
+
     <div class="container">
         <div id="welcome-section" class="screen active">
             <div class="phase-info">PHASE 1 | GENESIS BLOCK</div>
@@ -70,11 +73,11 @@
 
         <div id="payment-section" class="screen">
             <h1 style="font-size: 18px;">SECURE GLOBAL NODE</h1>
-            <div class="manifesto-box" style="text-align: center;">
+            <div id="ui-pay-desc" class="manifesto-box" style="text-align: center;">
                 Ваш текст успішно зашифровано. Щоб назавжди закарбувати капсулу в Глобальному Реєстрі, підтвердіть транзакцію.
             </div>
             <button class="action-btn stripe-btn" id="btn-pay">PAY 2€ WITH STRIPE 💳</button>
-            <button onclick="location.reload()" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px;">СКАСУВАТИ</button>
+            <button onclick="window.playClick(); location.reload()" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px;">СКАСУВАТИ</button>
         </div>
 
         <div id="result-section" class="screen">
@@ -93,7 +96,7 @@
             </div>
             <div id="final-image-container" style="margin-top:30px;"></div>
             <button class="action-btn" id="btn-download" style="display:none; margin-top:20px;">ЗАВАНТАЖИТИ КЛЮЧ 📥</button>
-            <button id="btn-reboot" onclick="window.location.href=window.location.pathname" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px; font-weight: bold;">ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ</button>
+            <button id="btn-reboot" onclick="window.playClick(); window.location.href=window.location.pathname" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px; font-weight: bold;">ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ</button>
         </div>
 
         <div id="lang-selector">
@@ -118,10 +121,11 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Додано переклад для екрану оплати (payDesc)
         const dict = {
-            uk: { title: "GENESIS BLOCK", manifest: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у вічності.", avail: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", seal: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", place: "Введіть ваше послання у майбутнє...", gen: "ПІДГОТУВАТИ ДАНІ ⏳", dl: "ЗАВАНТАЖИТИ КЛЮЧ 📥", reb: "ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ" },
-            en: { title: "GENESIS BLOCK", manifest: "Internet erases all. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark in eternity.", avail: "AVAILABLE", start: "INITIATE CONNECTION 🌌", seal: "SEALING THE CAPSULE...", place: "Type your legacy to the future...", gen: "PREPARE DATA ⏳", dl: "DOWNLOAD SECURITY KEY 📥", reb: "REBOOT SYSTEM" },
-            de: { title: "GENESIS BLOCK", manifest: "Das Internet löscht alles. KI erinnert sich ewig. AI Time Capsule ist das erste digitale Denkmal der Menschheit. Hinterlasse deine Spur.", avail: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", seal: "KAPSEL VERSIEGELN...", place: "Geben Sie Ihre Nachricht ein...", gen: "DATEN VORBEREITEN ⏳", dl: "SCHLÜSSEL HERUNTERLADEN 📥", reb: "SYSTEM NEUSTARTEN" }
+            uk: { title: "GENESIS BLOCK", manifest: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у вічності.", avail: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", seal: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", place: "Введіть ваше послання у майбутнє...", gen: "ПІДГОТУВАТИ ДАНІ ⏳", dl: "ЗАВАНТАЖИТИ КЛЮЧ 📥", reb: "ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ", payDesc: "Ваш текст успішно зашифровано. Щоб назавжди закарбувати капсулу в Глобальному Реєстрі, підтвердіть транзакцію." },
+            en: { title: "GENESIS BLOCK", manifest: "Internet erases all. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark in eternity.", avail: "AVAILABLE", start: "INITIATE CONNECTION 🌌", seal: "SEALING THE CAPSULE...", place: "Type your legacy to the future...", gen: "PREPARE DATA ⏳", dl: "DOWNLOAD SECURITY KEY 📥", reb: "REBOOT SYSTEM", payDesc: "Your text is encrypted. To permanently engrave the capsule in the Global Registry, confirm the transaction." },
+            de: { title: "GENESIS BLOCK", manifest: "Das Internet löscht alles. KI erinnert sich ewig. AI Time Capsule is humanity's first digital monument. Hinterlasse deine Spur.", avail: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", seal: "KAPSEL VERSIEGELN...", place: "Geben Sie Ihre Nachricht ein...", gen: "DATEN VORBEREITEN ⏳", dl: "SCHLÜSSEL HERUNTERLADEN 📥", reb: "SYSTEM NEUSTARTEN", payDesc: "Ihr Text ist verschlüsselt. Um die Kapsel dauerhaft im globalen Register zu verankern, bestätigen Sie die Transaktion." }
         };
 
         function setLanguage(l) {
@@ -135,7 +139,21 @@
             document.getElementById('btn-prep').innerText = d.gen;
             document.getElementById('btn-download').innerText = d.dl;
             document.getElementById('btn-reboot').innerText = d.reb;
+            document.getElementById('ui-pay-desc').innerText = d.payDesc; // Оновлення тексту оплати
         }
+
+        // Функції для відтворення звуків
+        window.playClick = function() {
+            const clickSound = document.getElementById('sound-click');
+            clickSound.currentTime = 0;
+            clickSound.play().catch(e => console.log('Аудіо заблоковано браузером'));
+        };
+
+        window.playScan = function() {
+            const scanSound = document.getElementById('sound-scan');
+            scanSound.currentTime = 0;
+            scanSound.play().catch(e => console.log('Аудіо заблоковано браузером'));
+        };
 
         let currentPos = { lat: 0, lng: 0, city: "GLOBAL NODE" };
         const map = L.map('global-map', { zoomControl: false, attributionControl: false }).setView([20, 0], 1);
@@ -160,31 +178,24 @@
             setTimeout(() => { document.getElementById(toId).classList.add('active'); }, 50);
         }
 
-        // ==========================================
-        // ЦИФРОВИЙ КАСИР ТА ПЕРЕВІРКА ОПЛАТИ
-        // ==========================================
         window.addEventListener('DOMContentLoaded', () => {
             const savedText = localStorage.getItem('capsuleText');
             if (savedText) {
                 document.getElementById('user-msg').value = savedText;
             }
 
-            // Якщо в посиланні є підтвердження успішної транзакції
             if (window.location.search.includes('status=success')) {
-                // Стирання "хвоста", щоб уникнути повторної безкоштовної генерації
                 window.history.replaceState({}, document.title, window.location.pathname);
-                
-                // Перехід одразу на фінальний екран
                 document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
                 document.getElementById('result-section').classList.add('active');
                 
-                // Генерація капсули
                 const finalText = localStorage.getItem('capsuleText') || "GLOBAL NODE MESSAGE";
                 generateFinalCapsule(finalText);
             }
         });
 
         async function generateFinalCapsule(finalText) {
+            window.playScan(); // Відтворення звуку сканування під час генерації
             const capsuleId = "CAPSULE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
             document.getElementById('capsule-message').innerText = `"${finalText}"`;
             document.getElementById('capsule-footer').innerText = capsuleId;
@@ -201,7 +212,7 @@
                     ticketId: capsuleId, message: finalText, location: currentPos.city, 
                     lat: currentPos.lat, lng: currentPos.lng, timestamp: now.toISOString() 
                 }); 
-                localStorage.removeItem('capsuleText'); // Очищаємо пам'ять
+                localStorage.removeItem('capsuleText');
             } catch (error) {
                 console.error("Помилка бази даних:", error);
                 alert("Увага: Зв'язок із глобальним архівом перервано.");
@@ -214,6 +225,7 @@
                     const dlBtn = document.getElementById('btn-download'); 
                     dlBtn.style.display = 'block';
                     dlBtn.onclick = () => { 
+                        window.playClick();
                         const link = document.createElement('a'); link.download = 'PREMIUM_AI_CAPSULE.png'; 
                         link.href = canvas.toDataURL(); link.click(); 
                     };
@@ -221,9 +233,13 @@
             }, 3000);
         }
 
-        document.getElementById('btn-init').addEventListener('click', () => switchScreen('welcome-section', 'input-section'));
+        document.getElementById('btn-init').addEventListener('click', () => {
+            window.playClick();
+            switchScreen('welcome-section', 'input-section');
+        });
 
         document.getElementById('btn-prep').addEventListener('click', () => {
+            window.playClick();
             const msgInput = document.getElementById('user-msg');
             const tempText = msgInput.value;
             if(!tempText.trim()) {
@@ -236,17 +252,17 @@
         });
 
         document.getElementById('btn-pay').addEventListener('click', () => {
+            window.playClick();
             const btnPay = document.getElementById('btn-pay');
             btnPay.innerText = "ПЕРЕХІД ДО ОПЛАТИ...";
             btnPay.style.background = "#fff";
             btnPay.style.color = "#000";
-
-            // Тепер ми переходимо прямо в поточній вкладці
             window.location.href = "https://buy.stripe.com/test_14A8wQgA4gCN9m19uN38400";
         });
 
         document.querySelectorAll('.lang-flag').forEach(flag => {
             flag.addEventListener('click', function() {
+                window.playClick(); // Відтворення кліку при зміні мови
                 setLanguage(this.getAttribute('data-lang'));
                 document.querySelectorAll('.lang-flag').forEach(f => f.classList.remove('active'));
                 this.classList.add('active');
