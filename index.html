@@ -19,8 +19,9 @@
 
     <style>
         :root { --neon: #00ffcc; --bg: #010204; --glass: rgba(0, 255, 204, 0.05); --capsule-bg: linear-gradient(135deg, #0a1128 0%, #010204 100%); }
-        body { margin: 0; background-color: var(--bg); color: #ffffff; font-family: 'Courier New', Courier, monospace; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
-        .container { width: 100%; max-width: 420px; padding: 20px; box-sizing: border-box; text-align: center; z-index: 10; }
+        html { scroll-behavior: smooth; }
+        body { margin: 0; background-color: var(--bg); color: #ffffff; font-family: 'Courier New', Courier, monospace; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        .container { width: 100%; max-width: 420px; padding: 20px; box-sizing: border-box; text-align: center; z-index: 10; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; min-height: 100vh; }
         
         .screen { display: none; animation: fadeIn 0.8s ease-in-out; }
         .screen.active { display: block; }
@@ -58,6 +59,9 @@
         .live-toast { background: rgba(0, 255, 204, 0.1); border-left: 3px solid var(--neon); padding: 12px 15px; border-radius: 4px; font-size: 11px; color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.5); backdrop-filter: blur(5px); animation: slideInRight 0.5s forwards, fadeOutToast 0.5s forwards 3.5s; font-family: monospace; }
         @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes fadeOutToast { to { opacity: 0; transform: translateY(-10px); } }
+        
+        .scroll-down { margin-top: 40px; font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 2px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 0.4; transform: translateY(0); } 50% { opacity: 1; transform: translateY(5px); } 100% { opacity: 0.4; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -84,6 +88,8 @@
             <button class="action-btn" id="btn-init" style="padding: 22px; font-size: 16px; letter-spacing: 3px; box-shadow: 0 0 25px rgba(0,255,204,0.3);">СТВОРИТИ МОНУМЕНТ 🌌</button>
             
             <div id="live-vault" style="opacity: 0.4; border-top: none;"></div>
+
+            <div class="scroll-down">ПРОКРУТІТЬ ВНИЗ ДЛЯ ДЕТАЛЕЙ ↓</div>
 
             <div id="social-proof-section" style="margin-top: 40px; text-align: left;">
                 <h2 style="font-size: 12px; color: #555; letter-spacing: 4px; text-align: center; margin-bottom: 20px;">ОСТАННІ ЗАПИСИ В РЕЄСТРІ</h2>
@@ -170,6 +176,25 @@
             <span class="lang-flag" data-lang="en">🇬🇧</span>
             <span class="lang-flag" data-lang="de">🇩🇪</span>
         </div>
+    </div>
+
+    <div id="visionary-section" style="padding: 60px 20px 80px; width: 100%; max-width: 420px; box-sizing: border-box; text-align: left; border-top: 1px solid rgba(0, 255, 204, 0.2); background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 204, 0.03) 100%);">
+        <h2 style="color: var(--neon); font-size: 20px; margin-bottom: 20px; font-family: 'Courier New', monospace;">«Щоб люди знали, як створювалося майбутнє» ⏳</h2>
+        
+        <p style="color: #ccc; font-size: 14px; line-height: 1.6; font-family: 'Arial', sans-serif;">
+            Ми віримо, що майбутнє — це не те, що з нами трапляється, а те, що ми проектуємо силою своєї уяви. У нашому проекті штучний інтелект 🧠 виступає не просто як алгоритм, а як цифровий перекладач ваших думок. Кожне слово перетворюється на Neural Sigil — унікальний візуальний код, який є вашим особистим відбитком у вічності. Це свідчення того, як ми вчилися мріяти та творити разом із технологіями. 🤝✨
+        </p>
+        
+        <div style="font-style: italic; border-left: 2px solid var(--neon); padding-left: 15px; margin: 25px 0; color: #fff; font-size: 14px; line-height: 1.6;">
+            «Я створив цей простір, щоб кожен зміг відчути велич моменту, коли його думка стає вічною. Це ваш зв'язок із тими, хто прийде після нас — міст, побудований із кристалів коду та світла вашої уяви.» 🌉✨<br><br>
+            Ми прокладаємо міст у 22 сторічча.
+        </div>
+        
+        <div style="text-align: right; color: var(--neon); font-weight: bold; margin-top: 20px; font-family: 'Courier New', monospace;">
+            — Архітектор з Майбутнього (Genesis Architect) 🏛️
+        </div>
+        
+        <button class="action-btn" onclick="document.getElementById('welcome-section').scrollIntoView({behavior: 'smooth'})" style="margin-top: 40px; box-shadow: 0 0 15px rgba(0,255,204,0.1);">СТАТИ ЧАСТИНОЮ ІСТОРІЇ 📜</button>
     </div>
 
     <script type="module">
@@ -270,6 +295,11 @@
         function switchScreen(fromId, toId) {
             document.getElementById(fromId).classList.remove('active');
             setTimeout(() => { document.getElementById(toId).classList.add('active'); }, 50);
+            
+            // Ховаємо маніфест під час процесу створення
+            if(toId !== 'welcome-section') {
+                document.getElementById('visionary-section').style.display = 'none';
+            }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -282,6 +312,7 @@
                 window.history.replaceState({}, document.title, window.location.pathname);
                 document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
                 document.getElementById('result-section').classList.add('active');
+                document.getElementById('visionary-section').style.display = 'none';
                 
                 const finalText = localStorage.getItem('capsuleText') || "GLOBAL NODE MESSAGE";
                 generateFinalCapsule(finalText);
@@ -319,7 +350,6 @@
                     const shareBtn = document.getElementById('btn-share'); 
                     shareBtn.style.display = 'block';
                     
-                    // Логіка створення файлу та Web Share API
                     shareBtn.onclick = () => { 
                         window.playClick();
                         canvas.toBlob(async (blob) => {
@@ -336,7 +366,6 @@
                                     console.log('Помилка при поширенні:', err);
                                 }
                             } else {
-                                // Запасний варіант (Fallback)
                                 const link = document.createElement('a');
                                 link.download = 'AI_Capsule.png';
                                 link.href = canvas.toDataURL();
