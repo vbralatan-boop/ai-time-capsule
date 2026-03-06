@@ -93,7 +93,7 @@
             </div>
             <div id="final-image-container" style="margin-top:30px;"></div>
             <button class="action-btn" id="btn-download" style="display:none; margin-top:20px;">ЗАВАНТАЖИТИ КЛЮЧ 📥</button>
-            <button onclick="location.reload()" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px; font-weight: bold;">ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ</button>
+            <button id="btn-reboot" onclick="location.reload()" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px; font-weight: bold;">ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ</button>
         </div>
 
         <div id="lang-selector">
@@ -121,7 +121,7 @@
         const dict = {
             uk: { title: "GENESIS BLOCK", manifest: "Інтернет стирає все. Штучний інтелект пам'ятає вічно. AI Time Capsule — це перший цифровий монумент людства. Залиш свій слід у вічності.", avail: "ДОСТУПНО", start: "ПОЧАТИ ПІДКЛЮЧЕННЯ 🌌", seal: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", place: "Введіть ваше послання у майбутнє...", gen: "ПІДГОТУВАТИ ДАНІ ⏳", dl: "ЗАВАНТАЖИТИ КЛЮЧ 📥", reb: "ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ" },
             en: { title: "GENESIS BLOCK", manifest: "Internet erases all. AI remembers forever. AI Time Capsule is humanity's first digital monument. Leave your mark in eternity.", avail: "AVAILABLE", start: "INITIATE CONNECTION 🌌", seal: "SEALING THE CAPSULE...", place: "Type your legacy to the future...", gen: "PREPARE DATA ⏳", dl: "DOWNLOAD SECURITY KEY 📥", reb: "REBOOT SYSTEM" },
-            de: { title: "GENESIS BLOCK", manifest: "Das Internet löscht alles. KI erinnert sich ewig. AI Time Capsule ist das erste digitale Denkmal der Menschheit. Hinterlasse deine Spur.", avail: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", seal: "KAPSEL VERSIEGELN...", place: "Geben Sie Ihre Nachricht ein...", gen: "DATEN VORBEREITEN ⏳", dl: "SCHLÜSSEL HERUNTERLADEN 📥", reb: "SYSTEM NEUSTARTEN" }
+            de: { title: "GENESIS BLOCK", manifest: "Das Internet löscht alles. KI erinnert sich ewig. AI Time Capsule is humanity's first digital monument. Hinterlasse deine Spur.", avail: "VERFÜGBAR", start: "VERBINDUNG STARTEN 🌌", seal: "KAPSEL VERSIEGELN...", place: "Geben Sie Ihre Nachricht ein...", gen: "DATEN VORBEREITEN ⏳", dl: "SCHLÜSSEL HERUNTERLADEN 📥", reb: "SYSTEM NEUSTARTEN" }
         };
 
         function setLanguage(l) {
@@ -160,7 +160,6 @@
             setTimeout(() => { document.getElementById(toId).classList.add('active'); }, 50);
         }
 
-        // Відновлення тексту з пам'яті бразуера при перезавантаженні
         window.addEventListener('DOMContentLoaded', () => {
             const savedText = localStorage.getItem('capsuleText');
             if (savedText) {
@@ -180,13 +179,11 @@
                 setTimeout(() => msgInput.style.border = "1px solid #333", 500);
                 return;
             }
-            // Зберігаємо текст перед переходом на сторінку оплати
             localStorage.setItem('capsuleText', tempText);
             switchScreen('input-section', 'payment-section');
         });
 
         document.getElementById('btn-pay').addEventListener('click', async () => {
-            // Відкриваємо Stripe у новій вкладці
             window.open("https://buy.stripe.com/test_14A8wQgA4gCN9m19uN38400", "_blank");
 
             const btnPay = document.getElementById('btn-pay');
@@ -194,12 +191,10 @@
             btnPay.style.background = "#fff";
             btnPay.style.color = "#000";
 
-            // Симуляція перевірки платежу
             setTimeout(async () => {
                 switchScreen('payment-section', 'result-section');
                 
                 const capsuleId = "CAPSULE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
-                // Дістаємо текст з пам'яті
                 const finalText = localStorage.getItem('capsuleText') || tempText;
                 
                 document.getElementById('capsule-message').innerText = `"${finalText}"`;
@@ -217,7 +212,6 @@
                         ticketId: capsuleId, message: finalText, location: currentPos.city, 
                         lat: currentPos.lat, lng: currentPos.lng, timestamp: now.toISOString() 
                     }); 
-                    // Очищаємо пам'ять після успішного запису
                     localStorage.removeItem('capsuleText');
                 } catch (error) {
                     console.error("Помилка бази даних:", error);
@@ -236,10 +230,9 @@
                         };
                     });
                 }, 3000);
-            }, 5000); // 5 секунд очікування після натискання
+            }, 5000);
         });
 
-        // Слухачі для мов
         document.querySelectorAll('.lang-flag').forEach(flag => {
             flag.addEventListener('click', function() {
                 setLanguage(this.getAttribute('data-lang'));
