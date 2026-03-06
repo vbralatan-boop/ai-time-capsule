@@ -3,443 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Time Capsule | Premium Global</title>
-    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W982FVY94R"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-W982FVY94R');
-    </script>
+    <title>AI Time Capsule | Genesis Architect</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
-        :root { --neon: #00ffcc; --bg: #010204; --glass: rgba(0, 255, 204, 0.05); --capsule-bg: linear-gradient(135deg, #0a1128 0%, #010204 100%); }
-        html { scroll-behavior: smooth; }
-        body { margin: 0; background-color: var(--bg); color: #ffffff; font-family: 'Courier New', Courier, monospace; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
-        .container { width: 100%; max-width: 420px; padding: 20px; box-sizing: border-box; text-align: center; z-index: 10; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; min-height: 100vh; }
+        :root { --neon: #00ffcc; --bg: #010204; --glass: rgba(0, 255, 204, 0.05); }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Courier New', monospace; overflow-x: hidden; }
+        .container { max-width: 420px; margin: 0 auto; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; }
         
-        .screen { display: none; animation: fadeIn 0.8s ease-in-out; }
+        /* HEADER STATS */
+        .stats-bar { display: flex; justify-content: space-between; padding: 10px; background: var(--glass); border: 1px solid rgba(0, 255, 204, 0.2); border-radius: 8px; margin-bottom: 20px; font-size: 10px; }
+        .stat-item span { display: block; color: var(--neon); font-size: 14px; font-weight: bold; }
+
+        .screen { display: none; animation: fadeIn 0.5s; }
         .screen.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        h1 { color: var(--neon); text-shadow: 0 0 15px var(--neon); font-size: 24px; letter-spacing: 4px; text-transform: uppercase; margin: 0 0 10px; }
-        .phase-info { font-size: 10px; color: var(--neon); letter-spacing: 5px; margin-bottom: 20px; opacity: 0.7; }
+        h1 { color: var(--neon); text-shadow: 0 0 10px var(--neon); font-size: 20px; text-transform: uppercase; text-align: center; }
+        #global-map { width: 100%; height: 250px; border: 1px solid var(--neon); border-radius: 12px; margin: 20px 0; }
         
-        #global-map { width: 100%; height: 220px; background: #000; margin: 15px 0; border: 1px solid var(--neon); border-radius: 12px; box-shadow: 0 0 20px rgba(0, 255, 204, 0.1); }
-        .manifesto-box { background: var(--glass); border-left: 4px solid var(--neon); padding: 15px; margin: 20px 0; text-align: justify; font-size: 13px; line-height: 1.6; color: #ccc; border-radius: 0 8px 8px 0; }
-        .counter-panel { background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(0, 255, 204, 0.3); padding: 15px; margin: 15px 0; font-weight: bold; color: var(--neon); font-size: 14px; letter-spacing: 1px; }
+        textarea { width: 100%; height: 100px; background: #000; border: 1px solid #333; color: var(--neon); padding: 10px; border-radius: 8px; font-size: 16px; outline: none; }
+        .hint-tag { display: inline-block; background: rgba(0, 255, 204, 0.1); border: 1px solid var(--neon); color: var(--neon); padding: 5px 10px; border-radius: 15px; font-size: 11px; margin: 5px; cursor: pointer; }
         
-        .action-btn { background: var(--neon); border: none; color: #000; padding: 20px; font-size: 15px; font-weight: 900; border-radius: 10px; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 255, 204, 0.2); margin-top: 10px; }
-        .action-btn:hover { background: #ffffff; box-shadow: 0 0 30px var(--neon); }
-        .stripe-btn { background: #635bff; color: white; box-shadow: 0 4px 15px rgba(99, 91, 255, 0.4); }
-        .stripe-btn:hover { background: #7a73ff; box-shadow: 0 0 30px #635bff; color: white; }
-
-        textarea { width: 100%; height: 120px; background: #050505; border: 1px solid #333; color: var(--neon); padding: 15px; box-sizing: border-box; resize: none; margin-bottom: 10px; outline: none; border-radius: 10px; font-size: 16px; transition: 0.3s; }
-        textarea:focus { border-color: var(--neon); }
-
-        #capsule-visual { position: relative; width: 320px; height: 568px; display: flex; flex-direction: column; justify-content: space-between; padding: 40px 20px; box-sizing: border-box; margin: 0 auto; background: var(--capsule-bg); border-top: 6px solid var(--neon); border-bottom: 6px solid var(--neon); border-left: 1px solid #333; border-right: 1px solid #333; border-radius: 35px; overflow: hidden; text-align: left; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9); }
-        #qr-wrap { width: 130px; height: 130px; margin: 0 auto 15px; background: #ffffff; padding: 10px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-        #capsule-message { font-size: 16px; color: #ffffff; font-weight: 800; margin: 15px 0; text-align: center; line-height: 1.5; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
-        .meta-data { font-size: 10px; color: rgba(255, 255, 255, 0.5); text-align: center; letter-spacing: 2px; margin-top: 10px; border-top: 1px dashed rgba(255, 255, 255, 0.1); padding-top: 15px; display: flex; justify-content: space-between; }
-        #capsule-footer { font-size: 12px; color: var(--neon); text-align: center; letter-spacing: 4px; margin-top: 15px; font-weight: bold; }
-        .laser-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #ffffff; box-shadow: 0 0 20px 5px var(--neon); animation: laserScan 3s linear infinite; z-index: 5; }
-        @keyframes laserScan { 0% { top: 0%; opacity: 0; } 10% { opacity: 0.9; } 90% { opacity: 0.9; } 100% { top: 100%; opacity: 0; } }
-
-        #live-vault { height: 70px; overflow: hidden; font-size: 10px; color: #555; margin-top: 20px; text-align: left; border-top: 1px solid #111; padding-top: 10px; line-height: 1.6; }
-        #lang-selector { display: flex; justify-content: center; gap: 30px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #111; }
-        .lang-flag { font-size: 28px; cursor: pointer; transition: 0.3s; opacity: 0.4; filter: grayscale(100%); }
-        .lang-flag.active, .lang-flag:hover { opacity: 1; filter: grayscale(0%); transform: scale(1.1); }
-
-        #notification-area { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        .live-toast { background: rgba(0, 255, 204, 0.1); border-left: 3px solid var(--neon); padding: 12px 15px; border-radius: 4px; font-size: 11px; color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.5); backdrop-filter: blur(5px); animation: slideInRight 0.5s forwards, fadeOutToast 0.5s forwards 3.5s; font-family: monospace; }
-        @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes fadeOutToast { to { opacity: 0; transform: translateY(-10px); } }
-        
-        .scroll-down { margin-top: 40px; font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 2px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 0.4; transform: translateY(0); } 50% { opacity: 1; transform: translateY(5px); } 100% { opacity: 0.4; transform: translateY(0); } }
+        .action-btn { background: var(--neon); border: none; color: #000; padding: 15px; width: 100%; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
+        .editable-part { color: var(--neon); font-weight: bold; border-bottom: 1px dashed var(--neon); outline: none; }
+        .manifesto-box { background: var(--glass); border-left: 3px solid var(--neon); padding: 15px; line-height: 1.6; font-size: 14px; }
     </style>
 </head>
 <body>
-    <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
-    <audio id="sound-scan" src="https://assets.mixkit.co/active_storage/sfx/2861/2861-preview.mp3" preload="auto"></audio>
 
-    <div id="notification-area"></div>
-
-    <div class="container">
-        <div id="welcome-section" class="screen active">
-            <div class="phase-info" style="color: #555; letter-spacing: 8px;">PREMIUM NODE ACCESS</div>
-            <h1 id="ui-title" style="font-size: 34px; line-height: 1.2; margin-bottom: 20px;">ІНТЕРНЕТ СТИРАЄ ВСЕ.<br><span style="color: #fff; text-shadow: none;">AI ПАМ'ЯТАЄ.</span></h1>
-            
-            <div class="manifesto-box" id="ui-manifesto" style="font-size: 14px; text-align: left; border-left: 2px solid var(--neon); background: transparent; padding-left: 15px;">
-                AI Time Capsule — це перший цифровий монумент людства. Ваше послання буде зашифровано, розподілено по глобальних серверах і збережено для майбутніх поколінь.
-            </div>
-            
-            <div id="global-map" style="height: 180px; opacity: 0.7; border: none; box-shadow: inset 0 0 20px #000;"></div>
-            
-            <div class="counter-panel" style="background: rgba(0,255,204,0.05); border: none; border-radius: 8px;">
-                <span style="color: #fff; opacity: 0.7;">ЛІМІТ ЕМІСІЇ:</span> <span id="ui-avail-label" style="color: var(--neon);">98,432 / 100,000</span>
-            </div>
-            
-            <button class="action-btn" id="btn-init" style="padding: 22px; font-size: 16px; letter-spacing: 3px; box-shadow: 0 0 25px rgba(0,255,204,0.3);">СТВОРИТИ МОНУМЕНТ 🌌</button>
-            
-            <div id="live-vault" style="opacity: 0.4; border-top: none;"></div>
-
-            <div class="scroll-down">ПРОКРУТІТЬ ВНИЗ ДЛЯ ДЕТАЛЕЙ ↓</div>
-
-            <div id="social-proof-section" style="margin-top: 40px; text-align: left;">
-                <h2 style="font-size: 12px; color: #555; letter-spacing: 4px; text-align: center; margin-bottom: 20px;">ОСТАННІ ЗАПИСИ В РЕЄСТРІ</h2>
-                
-                <div class="manifesto-box" style="margin: 10px 0; font-size: 12px; border-left-color: #aaa; background: rgba(255,255,255,0.02);">
-                    <strong style="color: var(--neon);">Marcus T. (65) 🇩🇪</strong><br>
-                    "Зашифрував історію нашого роду. Коли мої правнуки знайдуть цей ключ, мої слова все ще житимуть."
-                </div>
-                
-                <div class="manifesto-box" style="margin: 10px 0; font-size: 12px; border-left-color: #aaa; background: rgba(255,255,255,0.02);">
-                    <strong style="color: var(--neon);">David M. (42) 🇬🇧</strong><br>
-                    "Залишив фінансові прогнози для сина на 2040 рік. Найкраща інвестиція в історію нашої родини."
-                </div>
-                
-                <div class="manifesto-box" style="margin: 10px 0; font-size: 12px; border-left-color: #aaa; background: rgba(255,255,255,0.02);">
-                    <strong style="color: var(--neon);">Олена В. (28) 🇺🇦</strong><br>
-                    "Мій цифровий маніфест зафіксований назавжди. Це дає неймовірне відчуття безсмертя в епоху ШІ."
-                </div>
-            </div>
-
-            <div id="how-it-works" style="margin-top: 50px; text-align: center;">
-                <h2 style="font-size: 12px; color: #555; letter-spacing: 4px; margin-bottom: 20px;">ПРОТОКОЛ СТВОРЕННЯ</h2>
-                <div style="display: flex; flex-direction: column; gap: 15px; text-align: left; font-size: 13px;">
-                    <div style="background: rgba(0,255,204,0.05); padding: 15px; border-left: 2px solid #fff;">
-                        <strong style="color: #fff;">1. ЗАПИС 📝</strong><br>
-                        <span style="color: #aaa;">Напишіть своє послання, прогноз або маніфест.</span>
-                    </div>
-                    <div style="background: rgba(0,255,204,0.05); padding: 15px; border-left: 2px solid var(--neon);">
-                        <strong style="color: var(--neon);">2. ШИФРУВАННЯ 🔒</strong><br>
-                        <span style="color: #aaa;">ШІ миттєво генерує унікальний захищений крипто-ключ.</span>
-                    </div>
-                    <div style="background: rgba(0,255,204,0.05); padding: 15px; border-left: 2px solid #635bff;">
-                        <strong style="color: #635bff;">3. ФІКСАЦІЯ 🌍</strong><br>
-                        <span style="color: #aaa;">Оплатіть 2€, і капсула назавжди залишиться в Глобальному Реєстрі.</span>
-                    </div>
-                </div>
-            </div>
-
-            <button class="action-btn" id="btn-init-2" style="padding: 22px; font-size: 16px; letter-spacing: 3px; box-shadow: 0 0 25px rgba(0,255,204,0.3); margin-top: 40px;">СТВОРИТИ МОНУМЕНТ 🌌</button>
-        </div>
-
-        <div id="input-section" class="screen">
-            <h1 id="ui-sealing" style="font-size: 16px;">ЗАПЕЧАТУВАННЯ КАПСУЛИ...</h1>
-            <textarea id="user-msg" maxlength="200" placeholder="Введіть ваше послання у майбутнє..."></textarea>
-            <button class="action-btn" id="btn-prep">ПІДГОТУВАТИ ДАНІ ⏳</button>
-        </div>
-
-        <div id="analysis-section" class="screen">
-            <h1 style="font-size: 18px; color: var(--neon);">NEURAL ANALYSIS 🧠</h1>
-            <div class="laser-line" style="position: relative; height: 2px; width: 100%; background: var(--neon); margin-bottom: 20px;"></div>
-            <div id="analysis-text" class="manifesto-box" style="text-align: left; font-family: 'Courier New', monospace; height: 120px; color: var(--neon);"></div>
-        </div>
-
-        <div id="payment-section" class="screen">
-            <h1 style="font-size: 18px;">SECURE GLOBAL NODE</h1>
-            <div id="ui-pay-desc" class="manifesto-box" style="text-align: center;">
-                Ваш текст успішно зашифровано. Щоб назавжди закарбувати капсулу в Глобальному Реєстрі, підтвердіть транзакцію.
-            </div>
-            <button class="action-btn stripe-btn" id="btn-pay">PAY 2€ WITH STRIPE 💳</button>
-            <button onclick="window.playClick(); location.reload()" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px;">СКАСУВАТИ</button>
-        </div>
-
-        <div id="result-section" class="screen">
-            <div id="capsule-visual">
-                <div class="laser-line"></div>
-                <div style="text-align: center;">
-                    <span style="font-size: 10px; font-weight: bold; color: var(--neon); border: 1px solid var(--neon); padding: 5px 15px; border-radius: 8px; letter-spacing: 2px;">GLOBAL NODE</span>
-                </div>
-                <div id="qr-wrap"></div>
-                <div id="capsule-message"></div>
-                <div class="meta-data">
-                    <span id="meta-time"></span>
-                    <span id="meta-geo"></span>
-                </div>
-                <div id="capsule-footer"></div>
-            </div>
-            <div id="final-image-container" style="margin-top:30px;"></div>
-            <button class="action-btn" id="btn-share" style="display:none; margin-top:20px;">ПОДІЛИТИСЯ В STORIES 🚀</button>
-            <button id="btn-reboot" onclick="window.playClick(); window.location.href=window.location.pathname" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px; font-weight: bold;">ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ</button>
-        </div>
-
-        <div id="lang-selector">
-            <span class="lang-flag active" data-lang="uk">🇺🇦</span>
-            <span class="lang-flag" data-lang="en">🇬🇧</span>
-            <span class="lang-flag" data-lang="de">🇩🇪</span>
-        </div>
+<div class="container">
+    <div class="stats-bar">
+        <div class="stat-item">NODES <span id="stat-nodes">0</span></div>
+        <div class="stat-item">SEALED <span id="stat-sealed">0</span></div>
+        <div class="stat-item">SLOTS <span id="stat-slots">100</span></div>
     </div>
 
-    <div id="visionary-section" style="padding: 60px 20px 80px; width: 100%; max-width: 420px; box-sizing: border-box; text-align: left; border-top: 1px solid rgba(0, 255, 204, 0.2); background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 204, 0.03) 100%);">
-        <h2 style="color: var(--neon); font-size: 20px; margin-bottom: 20px; font-family: 'Courier New', monospace;">«Щоб люди знали, як створювалося майбутнє» ⏳</h2>
-        
-        <p style="color: #ccc; font-size: 14px; line-height: 1.6; font-family: 'Arial', sans-serif;">
-            Ми віримо, що майбутнє — це не те, що з нами трапляється, а те, що ми проектуємо силою своєї уяви. У нашому проекті штучний інтелект 🧠 виступає не просто як алгоритм, а як цифровий перекладач ваших думок. Кожне слово перетворюється на Neural Sigil — унікальний візуальний код, який є вашим особистим відбитком у вічності. Це свідчення того, як ми вчилися мріяти та творити разом із технологіями. 🤝✨
-        </p>
-        
-        <div style="font-style: italic; border-left: 2px solid var(--neon); padding-left: 15px; margin: 25px 0; color: #fff; font-size: 14px; line-height: 1.6;">
-            «Я створив цей простір, щоб кожен зміг відчути велич моменту, коли його думка стає вічною. Це ваш зв'язок із тими, хто прийде після нас — міст, побудований із кристалів коду та світла вашої уяви.» 🌉✨<br><br>
-            Ми прокладаємо міст у 22 сторічча.
-        </div>
-        
-        <div style="text-align: right; color: var(--neon); font-weight: bold; margin-top: 20px; font-family: 'Courier New', monospace;">
-            — Архітектор з Майбутнього (Genesis Architect) 🏛️
-        </div>
-        
-        <button class="action-btn" onclick="document.getElementById('welcome-section').scrollIntoView({behavior: 'smooth'})" style="margin-top: 40px; box-shadow: 0 0 15px rgba(0,255,204,0.1);">СТАТИ ЧАСТИНОЮ ІСТОРІЇ 📜</button>
+    <div id="welcome-section" class="screen active">
+        <h1>Global Network Active</h1>
+        <div id="global-map"></div>
+        <button class="action-btn" onclick="startProcess()">Створити маніфест 🌌</button>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+    <div id="input-section" class="screen">
+        <h2 id="step-title" style="font-size: 14px; color: var(--neon);">Step 1</h2>
+        <textarea id="user-msg"></textarea>
+        <div id="smart-hints"></div>
+        <button class="action-btn" onclick="handleNext()">Далі ⏳</button>
+    </div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyApzG_osR_dyRH9bNh3lETthaV7ssxnRgU",
-            authDomain: "ai-time-capsule-24852.firebaseapp.com",
-            projectId: "ai-time-capsule-24852",
-            storageBucket: "ai-time-capsule-24852.firebasestorage.app",
-            messagingSenderId: "372588449057",
-            appId: "1:372588449057:web:17451d5a528c968c9ec260"
+    <div id="review-section" class="screen">
+        <h1>Review Manifest</h1>
+        <div id="review-text" class="manifesto-box"></div>
+        <button class="action-btn" onclick="alert('Перехід до оплати...')">Запечатати 🔒</button>
+    </div>
+</div>
+
+<script>
+    // Logic for counting
+    function animateValue(id, start, end, duration) {
+        let obj = document.getElementById(id);
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            obj.innerHTML = Math.floor(progress * (end - start) + start);
+            if (progress < 1) window.requestAnimationFrame(step);
         };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        window.requestAnimationFrame(step);
+    }
 
-        const dict = {
-            uk: { title: "ІНТЕРНЕТ СТИРАЄ ВСЕ.<br><span style='color: #fff; text-shadow: none;'>AI ПАМ'ЯТАЄ.</span>", manifest: "AI Time Capsule — це перший цифровий монумент людства. Ваше послання буде зашифровано, розподілено по глобальних серверах і збережено для майбутніх поколінь.", avail: "ДОСТУПНО", start: "СТВОРИТИ МОНУМЕНТ 🌌", seal: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", place: "Введіть ваше послання у майбутнє...", gen: "ПІДГОТУВАТИ ДАНІ ⏳", share: "ПОДІЛИТИСЯ В STORIES 🚀", reb: "ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ", payDesc: "Ваш текст успішно зашифровано. Щоб назавжди закарбувати капсулу в Глобальному Реєстрі, підтвердіть транзакцію." },
-            en: { title: "THE INTERNET ERASES EVERYTHING.<br><span style='color: #fff; text-shadow: none;'>AI REMEMBERS.</span>", manifest: "AI Time Capsule is humanity's first digital monument. Your message will be encrypted, distributed across global servers, and preserved for future generations.", avail: "AVAILABLE", start: "CREATE MONUMENT 🌌", seal: "SEALING THE CAPSULE...", place: "Type your legacy to the future...", gen: "PREPARE DATA ⏳", share: "SHARE TO STORIES 🚀", reb: "REBOOT SYSTEM", payDesc: "Your text is encrypted. To permanently engrave the capsule in the Global Registry, confirm the transaction." },
-            de: { title: "DAS INTERNET LÖSCHT ALLES.<br><span style='color: #fff; text-shadow: none;'>KI ERINNERT SICH.</span>", manifest: "AI Time Capsule ist das erste digitale Denkmal der Menschheit. Ihre Nachricht wird verschlüsselt, auf globalen Servern verteilt und für zukünftige Generationen bewahrt.", avail: "VERFÜGBAR", start: "DENKMAL ERSTELLEN 🌌", seal: "KAPSEL VERSIEGELN...", place: "Geben Sie Ihre Nachricht ein...", gen: "DATEN VORBEREITEN ⏳", share: "IN STORIES TEILEN 🚀", reb: "SYSTEM NEUSTARTEN", payDesc: "Ihr Text ist verschlüsselt. Um die Kapsel dauerhaft im globalen Register zu verankern, bestätigen Sie die Transaktion." }
-        };
+    // Start stats
+    window.onload = () => {
+        animateValue("stat-nodes", 0, 1429, 2000);
+        animateValue("stat-sealed", 0, 8562, 2500);
+        animateValue("stat-slots", 0, 42, 1500);
+        initMap();
+    };
 
-        const liveMessages = {
-            uk: ["⚡ Marcus (Берлін) запечатав капсулу", "⚡ Олена (Київ) запечатала капсулу", "⚡ John (Лондон) запечатав капсулу", "⚡ Yuki (Токіо) запечатала капсулу", "⚡ Anna (Братислава) запечатала капсулу"],
-            en: ["⚡ Marcus (Berlin) sealed a capsule", "⚡ Olena (Kyiv) sealed a capsule", "⚡ John (London) sealed a capsule", "⚡ Yuki (Tokyo) sealed a capsule", "⚡ Anna (Bratislava) sealed a capsule"],
-            de: ["⚡ Marcus (Berlin) hat eine Kapsel versiegelt", "⚡ Olena (Kiew) hat eine Kapsel versiegelt", "⚡ John (London) hat eine Kapsel versiegelt", "⚡ Yuki (Tokio) hat eine Kapsel versiegelt", "⚡ Anna (Bratislava) hat eine Kapsel versiegelt"]
-        };
-
-        let currentLang = 'uk';
-
-        function setLanguage(l) {
-            currentLang = l;
-            const d = dict[l];
-            document.getElementById('ui-title').innerHTML = d.title; 
-            document.getElementById('ui-manifesto').innerText = d.manifest;
-            document.getElementById('ui-avail-label').innerText = d.avail;
-            
-            document.getElementById('btn-init').innerText = d.start;
-            document.getElementById('btn-init-2').innerText = d.start;
-            
-            document.getElementById('ui-sealing').innerText = d.seal;
-            document.getElementById('user-msg').placeholder = d.place;
-            document.getElementById('btn-prep').innerText = d.gen;
-            document.getElementById('btn-share').innerText = d.share;
-            document.getElementById('btn-reboot').innerText = d.reb;
-            document.getElementById('ui-pay-desc').innerText = d.payDesc;
-        }
-
-        function showLiveNotification() {
-            const area = document.getElementById('notification-area');
-            const msgs = liveMessages[currentLang];
-            const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
-            
-            const toast = document.createElement('div');
-            toast.className = 'live-toast';
-            toast.innerText = randomMsg;
-            
-            area.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 4500);
-        }
-
-        setInterval(showLiveNotification, 12000);
-
-        window.playClick = function() {
-            const clickSound = document.getElementById('sound-click');
-            clickSound.currentTime = 0;
-            clickSound.play().catch(e => console.log('Аудіо заблоковано'));
-        };
-
-        window.playScan = function() {
-            const scanSound = document.getElementById('sound-scan');
-            scanSound.currentTime = 0;
-            scanSound.play().catch(e => console.log('Аудіо заблоковано'));
-        };
-
-        let currentPos = { lat: 0, lng: 0, city: "GLOBAL NODE" };
+    function initMap() {
         const map = L.map('global-map', { zoomControl: false, attributionControl: false }).setView([20, 0], 1);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+    }
 
-        fetch('https://ipapi.co/json/').then(res => res.json()).then(data => {
-            currentPos = { lat: data.latitude, lng: data.longitude, city: `${data.city.toUpperCase()}, ${data.country_name.toUpperCase()}` };
-            map.flyTo([currentPos.lat, currentPos.lng], 4);
+    const aiSteps = [
+        { q: "Яка цінність для вас найважливіша?", hints: ["Свобода...", "Любов...", "Знання..."] },
+        { q: "Порада майбутньому:", hints: ["Будьте сміливими...", "Бережіть природу...", "Шукайте істину..."] },
+        { q: "Ваш закон життя:", hints: ["Жити тут і зараз", "Творити добро", "Ніколи не здаватися"] }
+    ];
+
+    let currentStep = 0;
+    let answers = [];
+
+    function startProcess() {
+        document.getElementById('welcome-section').classList.remove('active');
+        document.getElementById('input-section').classList.add('active');
+        loadStep();
+    }
+
+    function loadStep() {
+        const step = aiSteps[currentStep];
+        document.getElementById('step-title').innerText = `Крок ${currentStep + 1} / 3`;
+        document.getElementById('user-msg').placeholder = step.q;
+        document.getElementById('user-msg').value = "";
+        const hintBox = document.getElementById('smart-hints');
+        hintBox.innerHTML = "";
+        step.hints.forEach(h => {
+            const btn = document.createElement('span');
+            btn.className = 'hint-tag';
+            btn.innerText = h;
+            btn.onclick = () => document.getElementById('user-msg').value = h;
+            hintBox.appendChild(btn);
         });
+    }
 
-        onSnapshot(query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(6)), (snap) => {
-            const vault = document.getElementById('live-vault'); vault.innerHTML = "";
-            snap.forEach(doc => {
-                const d = doc.data(); 
-                vault.innerHTML += `<div>> ${d.ticketId} | ${d.location}</div>`;
-                if(d.lat && d.lng) L.circleMarker([d.lat, d.lng], { radius: 4, color: '#00ffcc', fillOpacity: 0.8 }).addTo(map);
-            });
-        });
-
-        function switchScreen(fromId, toId) {
-            document.getElementById(fromId).classList.remove('active');
-            setTimeout(() => { document.getElementById(toId).classList.add('active'); }, 50);
-            
-            // Ховаємо маніфест під час процесу створення
-            if(toId !== 'welcome-section') {
-                document.getElementById('visionary-section').style.display = 'none';
-            }
+    function handleNext() {
+        const val = document.getElementById('user-msg').value;
+        if (!val) return;
+        answers.push(val);
+        if (currentStep < 2) {
+            currentStep++;
+            loadStep();
+        } else {
+            finalizeReview();
         }
+    }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedText = localStorage.getItem('capsuleText');
-            if (savedText) {
-                document.getElementById('user-msg').value = savedText;
-            }
-
-            if (window.location.search.includes('status=success')) {
-                window.history.replaceState({}, document.title, window.location.pathname);
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById('result-section').classList.add('active');
-                document.getElementById('visionary-section').style.display = 'none';
-                
-                const finalText = localStorage.getItem('capsuleText') || "GLOBAL NODE MESSAGE";
-                generateFinalCapsule(finalText);
-            }
-        });
-
-        async function generateFinalCapsule(finalText) {
-            window.playScan();
-            const capsuleId = "CAPSULE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
-            document.getElementById('capsule-message').innerText = `"${finalText}"`;
-            document.getElementById('capsule-footer').innerText = capsuleId;
-            
-            const now = new Date();
-            document.getElementById('meta-time').innerText = `T: ${now.toISOString().slice(0, 19).replace('T', ' ')}`;
-            document.getElementById('meta-geo').innerText = `GEO: ${currentPos.lat.toFixed(4)}, ${currentPos.lng.toFixed(4)}`;
-
-            const qrBox = document.getElementById('qr-wrap'); qrBox.innerHTML = "";
-            new QRCode(qrBox, { text: `ID: ${capsuleId}\nMSG: ${finalText}`, width: 130, height: 130 });
-
-            try { 
-                await addDoc(collection(db, "capsules"), { 
-                    ticketId: capsuleId, message: finalText, location: currentPos.city, 
-                    lat: currentPos.lat, lng: currentPos.lng, timestamp: now.toISOString() 
-                }); 
-                localStorage.removeItem('capsuleText');
-            } catch (error) {
-                console.error("Помилка бази даних:", error);
-            }
-
-            setTimeout(() => {
-                html2canvas(document.getElementById('capsule-visual'), { backgroundColor: "#020205", scale: 2, useCORS: true }).then(canvas => {
-                    document.getElementById('capsule-visual').style.display = 'none';
-                    document.getElementById('final-image-container').appendChild(canvas);
-                    
-                    const shareBtn = document.getElementById('btn-share'); 
-                    shareBtn.style.display = 'block';
-                    
-                    shareBtn.onclick = () => { 
-                        window.playClick();
-                        canvas.toBlob(async (blob) => {
-                            const file = new File([blob], 'AI_Capsule.png', { type: 'image/png' });
-                            
-                            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                                try {
-                                    await navigator.share({
-                                        files: [file],
-                                        title: 'AI Time Capsule',
-                                        text: 'Мій слід в історії зафіксовано нейромережею. Створи свій: ' + window.location.href
-                                    });
-                                } catch (err) {
-                                    console.log('Помилка при поширенні:', err);
-                                }
-                            } else {
-                                const link = document.createElement('a');
-                                link.download = 'AI_Capsule.png';
-                                link.href = canvas.toDataURL();
-                                link.click();
-                            }
-                        });
-                    };
-                });
-            }, 3000);
-        }
-
-        function startConnection() {
-            window.playClick();
-            switchScreen('welcome-section', 'input-section');
-        }
-
-        document.getElementById('btn-init').addEventListener('click', startConnection);
-        document.getElementById('btn-init-2').addEventListener('click', startConnection);
-
-        document.getElementById('btn-prep').addEventListener('click', () => {
-            window.playClick();
-            const msgInput = document.getElementById('user-msg');
-            const tempText = msgInput.value;
-            if(!tempText.trim()) {
-                msgInput.style.border = "1px solid red";
-                setTimeout(() => msgInput.style.border = "1px solid #333", 500);
-                return;
-            }
-            localStorage.setItem('capsuleText', tempText);
-            
-            switchScreen('input-section', 'analysis-section');
-            window.playScan();
-            
-            const analysisBox = document.getElementById('analysis-text');
-            
-            const lines = {
-                uk: ["> Аналіз семантики...", "> Емоційний тон: Візіонерський", "> Унікальність патерну: 98.7%", "> Формування крипто-ключа..."],
-                en: ["> Semantics analysis...", "> Emotional tone: Visionary", "> Pattern uniqueness: 98.7%", "> Generating crypto-key..."],
-                de: ["> Semantik-Analyse...", "> Emotionaler Ton: Visionär", "> Muster-Einzigartigkeit: 98.7%", "> Krypto-Schlüssel wird generiert..."]
-            };
-            
-            let step = 0;
-            analysisBox.innerHTML = lines[currentLang][0] + "<br>";
-            
-            const interval = setInterval(() => {
-                step++;
-                if (step < lines[currentLang].length) {
-                    analysisBox.innerHTML += lines[currentLang][step] + "<br>";
-                } else {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        switchScreen('analysis-section', 'payment-section');
-                    }, 1200);
-                }
-            }, 800);
-        });
-
-        document.getElementById('btn-pay').addEventListener('click', () => {
-            window.playClick();
-            const btnPay = document.getElementById('btn-pay');
-            btnPay.innerText = "ПЕРЕХІД ДО ОПЛАТИ...";
-            btnPay.style.background = "#fff";
-            btnPay.style.color = "#000";
-            window.location.href = "https://buy.stripe.com/test_14A8wQgA4gCN9m19uN38400";
-        });
-
-        document.querySelectorAll('.lang-flag').forEach(flag => {
-            flag.addEventListener('click', function() {
-                window.playClick();
-                setLanguage(this.getAttribute('data-lang'));
-                document.querySelectorAll('.lang-flag').forEach(f => f.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-    </script>
+    function finalizeReview() {
+        document.getElementById('input-section').classList.remove('active');
+        document.getElementById('review-section').classList.add('active');
+        const intros = ["Аналізуючи горизонт подій, я зрозумів, що ", "Крізь призму досвіду ясно: "];
+        const reviewBox = document.getElementById('review-text');
+        reviewBox.innerHTML = `<span>${intros[0]} ${answers[0]}. Порада: ${answers[1]}. Закон: </span><span contenteditable="true" class="editable-part">${answers[2]}</span>`;
+    }
+</script>
 </body>
 </html>
