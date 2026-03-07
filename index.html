@@ -88,15 +88,15 @@
             <div class="stats-panel" id="stats-panel">
                 <div class="stat-item">
                     <span class="stat-label" id="ui-nodes-label">ВУЗЛИ</span>
-                    <span class="stat-value" id="nodes-value">98,432</span>
+                    <span class="stat-value" id="nodes-value">...</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-label" id="ui-sealed-label">ЗАПЕЧАТАНО</span>
-                    <span class="stat-value" id="sealed-value">1,250</span>
+                    <span class="stat-value" id="sealed-value">...</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-label" id="ui-slots-label">МІСЦЯ</span>
-                    <span class="stat-value" id="slots-value">500</span>
+                    <span class="stat-value" id="slots-value">...</span>
                 </div>
             </div>
             
@@ -209,8 +209,9 @@
     </div>
 
     <script type="module">
+        // ДОДАНО getCountFromServer до списку імпортів Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, getCountFromServer } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyApzG_osR_dyRH9bNh3lETthaV7ssxnRgU",
@@ -223,7 +224,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // ПОВНІСТЮ ПЕРЕКЛАДЕНА БАЗА ДАНИХ (+ Словацька)
         const localDatabase = {
             uk: { 
                 phase: "PREMIUM NODE ACCESS", title: "ІНТЕРНЕТ СТИРАЄ ВСЕ.<br><span style='color: #fff; text-shadow: none;'>AI ПАМ'ЯТАЄ.</span>", manifest: "AI Time Capsule — це перший цифровий монумент людства. Ваше послання буде зашифровано, розподілено по глобальних серверах і збережено для майбутніх поколінь.", 
@@ -333,9 +333,28 @@
             updateUI(texts);
         }
 
-        initLanguage();
+        // НОВА ФУНКЦІЯ: Отримання реальної статистики з Firebase
+        async function updateLiveStatistics() {
+            try {
+                const capsulesCollection = collection(db, "capsules");
+                const snapshot = await getCountFromServer(capsulesCollection);
+                const sealedCount = snapshot.data().count;
 
-        // Анімації та логіка Firebase нижче
+                const totalLimit = 100000;
+                const nodesLeft = totalLimit - sealedCount;
+                
+                // Генеруємо випадкове число для активних слотів (від 120 до 450)
+                const activeSlots = Math.floor(Math.random() * (450 - 120 + 1)) + 120;
+
+                // Вставляємо цифри на екран, форматуючи їх комами (напр. 99,995)
+                document.getElementById('nodes-value').innerText = nodesLeft.toLocaleString('en-US');
+                document.getElementById('sealed-value').innerText = sealedCount.toLocaleString('en-US');
+                document.getElementById('slots-value').innerText = activeSlots.toString();
+            } catch (error) {
+                console.error("Помилка завантаження статистики з Firebase:", error);
+            }
+        }
+
         const liveMessages = {
             uk: ["⚡ Marcus (Берлін) запечатав капсулу", "⚡ Олена (Київ) запечатала капсулу", "⚡ John (Лондон) запечатав капсулу", "⚡ Yuki (Токіо) запечатала капсулу"],
             en: ["⚡ Marcus (Berlin) sealed a capsule", "⚡ Olena (Kyiv) sealed a capsule", "⚡ John (London) sealed a capsule", "⚡ Yuki (Tokyo) sealed a capsule"],
@@ -396,6 +415,9 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            initLanguage();
+            updateLiveStatistics(); // Запускаємо перерахунок статистики при завантаженні
+
             const savedText = localStorage.getItem('capsuleText');
             if (savedText) {
                 document.getElementById('user-msg').value = savedText;
