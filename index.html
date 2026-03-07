@@ -32,8 +32,13 @@
         
         #global-map { width: 100%; height: 220px; background: #000; margin: 15px 0; border: 1px solid var(--neon); border-radius: 12px; box-shadow: 0 0 20px rgba(0, 255, 204, 0.1); }
         .manifesto-box { background: var(--glass); border-left: 4px solid var(--neon); padding: 15px; margin: 20px 0; text-align: justify; font-size: 13px; line-height: 1.6; color: #ccc; border-radius: 0 8px 8px 0; }
-        .counter-panel { background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(0, 255, 204, 0.3); padding: 15px; margin: 15px 0; font-weight: bold; color: var(--neon); font-size: 14px; letter-spacing: 1px; }
         
+        /* Оновлений стиль для панелі статистики */
+        .stats-panel { background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(0, 255, 204, 0.3); padding: 15px; margin: 15px 0; font-weight: bold; font-size: 14px; letter-spacing: 1px; display: flex; justify-content: space-around; text-align: center; border-radius: 8px;}
+        .stat-item { display: flex; flex-direction: column; gap: 5px; }
+        .stat-label { color: #fff; opacity: 0.7; font-size: 10px; }
+        .stat-value { color: var(--neon); font-size: 16px; }
+
         .action-btn { background: var(--neon); border: none; color: #000; padding: 20px; font-size: 15px; font-weight: 900; border-radius: 10px; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 255, 204, 0.2); margin-top: 10px; }
         .action-btn:hover { background: #ffffff; box-shadow: 0 0 30px var(--neon); }
         .stripe-btn { background: #635bff; color: white; box-shadow: 0 4px 15px rgba(99, 91, 255, 0.4); }
@@ -81,52 +86,30 @@
             
             <div id="global-map" style="height: 180px; opacity: 0.7; border: none; box-shadow: inset 0 0 20px #000;"></div>
             
-            <div class="counter-panel" style="background: rgba(0,255,204,0.05); border: none; border-radius: 8px;">
-                <span style="color: #fff; opacity: 0.7;">ЛІМІТ ЕМІСІЇ:</span> <span id="ui-avail-label" style="color: var(--neon);">98,432 / 100,000</span>
+            <div class="stats-panel" id="stats-panel">
+                <div class="stat-item">
+                    <span class="stat-label" id="ui-nodes-label">ВУЗЛИ</span>
+                    <span class="stat-value" id="nodes-value">98,432</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label" id="ui-sealed-label">ЗАПЕЧАТАНО</span>
+                    <span class="stat-value" id="sealed-value">1,250</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label" id="ui-slots-label">МІСЦЯ</span>
+                    <span class="stat-value" id="slots-value">500</span>
+                </div>
             </div>
             
             <button class="action-btn" id="btn-init" style="padding: 22px; font-size: 16px; letter-spacing: 3px; box-shadow: 0 0 25px rgba(0,255,204,0.3);">СТВОРИТИ МОНУМЕНТ 🌌</button>
             
             <div id="live-vault" style="opacity: 0.4; border-top: none;"></div>
 
-            <div class="scroll-down">ПРОКРУТІТЬ ВНИЗ ДЛЯ ДЕТАЛЕЙ ↓</div>
+            <div class="scroll-down" id="ui-scroll">ПРОКРУТІТЬ ВНИЗ ДЛЯ ДЕТАЛЕЙ ↓</div>
 
             <div id="social-proof-section" style="margin-top: 40px; text-align: left;">
                 <h2 style="font-size: 12px; color: #555; letter-spacing: 4px; text-align: center; margin-bottom: 20px;">ОСТАННІ ЗАПИСИ В РЕЄСТРІ</h2>
-                
-                <div class="manifesto-box" style="margin: 10px 0; font-size: 12px; border-left-color: #aaa; background: rgba(255,255,255,0.02);">
-                    <strong style="color: var(--neon);">Marcus T. (65) 🇩🇪</strong><br>
-                    "Зашифрував історію нашого роду. Коли мої правнуки знайдуть цей ключ, мої слова все ще житимуть."
                 </div>
-                
-                <div class="manifesto-box" style="margin: 10px 0; font-size: 12px; border-left-color: #aaa; background: rgba(255,255,255,0.02);">
-                    <strong style="color: var(--neon);">David M. (42) 🇬🇧</strong><br>
-                    "Залишив фінансові прогнози для сина на 2040 рік. Найкраща інвестиція в історію нашої родини."
-                </div>
-                
-                <div class="manifesto-box" style="margin: 10px 0; font-size: 12px; border-left-color: #aaa; background: rgba(255,255,255,0.02);">
-                    <strong style="color: var(--neon);">Олена В. (28) 🇺🇦</strong><br>
-                    "Мій цифровий маніфест зафіксований назавжди. Це дає неймовірне відчуття безсмертя в епоху ШІ."
-                </div>
-            </div>
-
-            <div id="how-it-works" style="margin-top: 50px; text-align: center;">
-                <h2 style="font-size: 12px; color: #555; letter-spacing: 4px; margin-bottom: 20px;">ПРОТОКОЛ СТВОРЕННЯ</h2>
-                <div style="display: flex; flex-direction: column; gap: 15px; text-align: left; font-size: 13px;">
-                    <div style="background: rgba(0,255,204,0.05); padding: 15px; border-left: 2px solid #fff;">
-                        <strong style="color: #fff;">1. ЗАПИС 📝</strong><br>
-                        <span style="color: #aaa;">Напишіть своє послання, прогноз або маніфест.</span>
-                    </div>
-                    <div style="background: rgba(0,255,204,0.05); padding: 15px; border-left: 2px solid var(--neon);">
-                        <strong style="color: var(--neon);">2. ШИФРУВАННЯ 🔒</strong><br>
-                        <span style="color: #aaa;">ШІ миттєво генерує унікальний захищений крипто-ключ.</span>
-                    </div>
-                    <div style="background: rgba(0,255,204,0.05); padding: 15px; border-left: 2px solid #635bff;">
-                        <strong style="color: #635bff;">3. ФІКСАЦІЯ 🌍</strong><br>
-                        <span style="color: #aaa;">Оплатіть 2€, і капсула назавжди залишиться в Глобальному Реєстрі.</span>
-                    </div>
-                </div>
-            </div>
 
             <button class="action-btn" id="btn-init-2" style="padding: 22px; font-size: 16px; letter-spacing: 3px; box-shadow: 0 0 25px rgba(0,255,204,0.3); margin-top: 40px;">СТВОРИТИ МОНУМЕНТ 🌌</button>
         </div>
@@ -149,52 +132,22 @@
                 Ваш текст успішно зашифровано. Щоб назавжди закарбувати капсулу в Глобальному Реєстрі, підтвердіть транзакцію.
             </div>
             <button class="action-btn stripe-btn" id="btn-pay">PAY 2€ WITH STRIPE 💳</button>
-            <button onclick="window.playClick(); location.reload()" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px;">СКАСУВАТИ</button>
+            <button onclick="window.playClick(); location.reload()" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px;" id="ui-cancel">СКАСУВАТИ</button>
         </div>
 
         <div id="result-section" class="screen">
             <div id="capsule-visual">
-                <div class="laser-line"></div>
-                <div style="text-align: center;">
-                    <span style="font-size: 10px; font-weight: bold; color: var(--neon); border: 1px solid var(--neon); padding: 5px 15px; border-radius: 8px; letter-spacing: 2px;">GLOBAL NODE</span>
                 </div>
-                <div id="qr-wrap"></div>
-                <div id="capsule-message"></div>
-                <div class="meta-data">
-                    <span id="meta-time"></span>
-                    <span id="meta-geo"></span>
-                </div>
-                <div id="capsule-footer"></div>
-            </div>
             <div id="final-image-container" style="margin-top:30px;"></div>
             <button class="action-btn" id="btn-share" style="display:none; margin-top:20px;">ПОДІЛИТИСЯ В STORIES 🚀</button>
             <button id="btn-reboot" onclick="window.playClick(); window.location.href=window.location.pathname" style="background:none; border:none; color:#555; margin-top:20px; cursor:pointer; font-size:11px; letter-spacing: 2px; font-weight: bold;">ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ</button>
         </div>
 
         <div id="lang-selector">
-            <span class="lang-flag active" data-lang="uk">🇺🇦</span>
-            <span class="lang-flag" data-lang="en">🇬🇧</span>
-            <span class="lang-flag" data-lang="de">🇩🇪</span>
+            <span class="lang-flag active" id="flag-uk" onclick="changeLanguage('uk')">🇺🇦</span>
+            <span class="lang-flag" id="flag-en" onclick="changeLanguage('en')">🇬🇧</span>
+            <span class="lang-flag" id="flag-de" onclick="changeLanguage('de')">🇩🇪</span>
         </div>
-    </div>
-
-    <div id="visionary-section" style="padding: 60px 20px 80px; width: 100%; max-width: 420px; box-sizing: border-box; text-align: left; border-top: 1px solid rgba(0, 255, 204, 0.2); background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 204, 0.03) 100%);">
-        <h2 style="color: var(--neon); font-size: 20px; margin-bottom: 20px; font-family: 'Courier New', monospace;">«Щоб люди знали, як створювалося майбутнє» ⏳</h2>
-        
-        <p style="color: #ccc; font-size: 14px; line-height: 1.6; font-family: 'Arial', sans-serif;">
-            Ми віримо, що майбутнє — це не те, що з нами трапляється, а те, що ми проектуємо силою своєї уяви. У нашому проекті штучний інтелект 🧠 виступає не просто як алгоритм, а як цифровий перекладач ваших думок. Кожне слово перетворюється на Neural Sigil — унікальний візуальний код, який є вашим особистим відбитком у вічності. Це свідчення того, як ми вчилися мріяти та творити разом із технологіями. 🤝✨
-        </p>
-        
-        <div style="font-style: italic; border-left: 2px solid var(--neon); padding-left: 15px; margin: 25px 0; color: #fff; font-size: 14px; line-height: 1.6;">
-            «Я створив цей простір, щоб кожен зміг відчути велич моменту, коли його думка стає вічною. Це ваш зв'язок із тими, хто прийде після нас — міст, побудований із кристалів коду та світла вашої уяви.» 🌉✨<br><br>
-            Ми прокладаємо міст у 22 сторічча.
-        </div>
-        
-        <div style="text-align: right; color: var(--neon); font-weight: bold; margin-top: 20px; font-family: 'Courier New', monospace;">
-            — Архітектор з Майбутнього (Genesis Architect) 🏛️
-        </div>
-        
-        <button class="action-btn" onclick="document.getElementById('welcome-section').scrollIntoView({behavior: 'smooth'})" style="margin-top: 40px; box-shadow: 0 0 15px rgba(0,255,204,0.1);">СТАТИ ЧАСТИНОЮ ІСТОРІЇ 📜</button>
     </div>
 
     <script type="module">
@@ -212,11 +165,98 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const dict = {
-            uk: { title: "ІНТЕРНЕТ СТИРАЄ ВСЕ.<br><span style='color: #fff; text-shadow: none;'>AI ПАМ'ЯТАЄ.</span>", manifest: "AI Time Capsule — це перший цифровий монумент людства. Ваше послання буде зашифровано, розподілено по глобальних серверах і збережено для майбутніх поколінь.", avail: "ДОСТУПНО", start: "СТВОРИТИ МОНУМЕНТ 🌌", seal: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", place: "Введіть ваше послання у майбутнє...", gen: "ПІДГОТУВАТИ ДАНІ ⏳", share: "ПОДІЛИТИСЯ В STORIES 🚀", reb: "ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ", payDesc: "Ваш текст успішно зашифровано. Щоб назавжди закарбувати капсулу в Глобальному Реєстрі, підтвердіть транзакцію." },
-            en: { title: "THE INTERNET ERASES EVERYTHING.<br><span style='color: #fff; text-shadow: none;'>AI REMEMBERS.</span>", manifest: "AI Time Capsule is humanity's first digital monument. Your message will be encrypted, distributed across global servers, and preserved for future generations.", avail: "AVAILABLE", start: "CREATE MONUMENT 🌌", seal: "SEALING THE CAPSULE...", place: "Type your legacy to the future...", gen: "PREPARE DATA ⏳", share: "SHARE TO STORIES 🚀", reb: "REBOOT SYSTEM", payDesc: "Your text is encrypted. To permanently engrave the capsule in the Global Registry, confirm the transaction." },
-            de: { title: "DAS INTERNET LÖSCHT ALLES.<br><span style='color: #fff; text-shadow: none;'>KI ERINNERT SICH.</span>", manifest: "AI Time Capsule ist das erste digitale Denkmal der Menschheit. Ihre Nachricht wird verschlüsselt, auf globalen Servern verteilt und für zukünftige Generationen bewahrt.", avail: "VERFÜGBAR", start: "DENKMAL ERSTELLEN 🌌", seal: "KAPSEL VERSIEGELN...", place: "Geben Sie Ihre Nachricht ein...", gen: "DATEN VORBEREITEN ⏳", share: "IN STORIES TEILEN 🚀", reb: "SYSTEM NEUSTARTEN", payDesc: "Ihr Text ist verschlüsselt. Um die Kapsel dauerhaft im globalen Register zu verankern, bestätigen Sie die Transaktion." }
+        // ВБУДОВАНА БАЗА ДАНИХ JSON (Симулює зовнішні файли)
+        const localDatabase = {
+            uk: { 
+                title: "ІНТЕРНЕТ СТИРАЄ ВСЕ.<br><span style='color: #fff; text-shadow: none;'>AI ПАМ'ЯТАЄ.</span>", 
+                manifest: "AI Time Capsule — це перший цифровий монумент людства. Ваше послання буде зашифровано, розподілено по глобальних серверах і збережено для майбутніх поколінь.", 
+                stats_panel: { nodes_label: "ВУЗЛИ", sealed_label: "ЗАПЕЧАТАНО", slots_label: "МІСЦЯ" },
+                start: "СТВОРИТИ МОНУМЕНТ 🌌", 
+                seal: "ЗАПЕЧАТУВАННЯ КАПСУЛИ...", 
+                place: "Введіть ваше послання у майбутнє...", 
+                gen: "ПІДГОТУВАТИ ДАНІ ⏳", 
+                share: "ПОДІЛИТИСЯ В STORIES 🚀", 
+                reb: "ПЕРЕЗАВАНТАЖИТИ СИСТЕМУ", 
+                payDesc: "Ваш текст успішно зашифровано. Щоб назавжди закарбувати капсулу в Глобальному Реєстрі, підтвердіть транзакцію." 
+            },
+            en: { 
+                title: "THE INTERNET ERASES EVERYTHING.<br><span style='color: #fff; text-shadow: none;'>AI REMEMBERS.</span>", 
+                manifest: "AI Time Capsule is humanity's first digital monument. Your message will be encrypted, distributed across global servers, and preserved for future generations.", 
+                stats_panel: { nodes_label: "NODES", sealed_label: "SEALED", slots_label: "SLOTS" },
+                start: "CREATE MONUMENT 🌌", 
+                seal: "SEALING THE CAPSULE...", 
+                place: "Type your legacy to the future...", 
+                gen: "PREPARE DATA ⏳", 
+                share: "SHARE TO STORIES 🚀", 
+                reb: "REBOOT SYSTEM", 
+                payDesc: "Your text is encrypted. To permanently engrave the capsule in the Global Registry, confirm the transaction." 
+            },
+            de: { 
+                title: "DAS INTERNET LÖSCHT ALLES.<br><span style='color: #fff; text-shadow: none;'>KI ERINNERT SICH.</span>", 
+                manifest: "AI Time Capsule ist das erste digitale Denkmal der Menschheit. Ihre Nachricht wird verschlüsselt, auf globalen Servern verteilt und für zukünftige Generationen bewahrt.", 
+                stats_panel: { nodes_label: "KNOTEN", sealed_label: "VERSIEGELT", slots_label: "PLÄTZE" },
+                start: "DENKMAL ERSTELLEN 🌌", 
+                seal: "KAPSEL VERSIEGELN...", 
+                place: "Geben Sie Ihre Nachricht ein...", 
+                gen: "DATEN VORBEREITEN ⏳", 
+                share: "IN STORIES TEILEN 🚀", 
+                reb: "SYSTEM NEUSTARTEN", 
+                payDesc: "Ihr Text ist verschlüsselt. Um die Kapsel dauerhaft im globalen Register zu verankern, bestätigen Sie die Transaktion." 
+            }
         };
+
+        // --- НАШ JAVASCRIPT ДВИГУН ---
+
+        function updateUI(texts) {
+            // Оновлюємо нашу нову панель статистики
+            document.getElementById('ui-nodes-label').textContent = texts.stats_panel.nodes_label;
+            document.getElementById('ui-sealed-label').textContent = texts.stats_panel.sealed_label;
+            document.getElementById('ui-slots-label').textContent = texts.stats_panel.slots_label;
+
+            // Оновлюємо інші елементи
+            document.getElementById('ui-title').innerHTML = texts.title; 
+            document.getElementById('ui-manifesto').innerText = texts.manifest;
+            document.getElementById('btn-init').innerText = texts.start;
+            document.getElementById('btn-init-2').innerText = texts.start;
+            document.getElementById('ui-sealing').innerText = texts.seal;
+            document.getElementById('user-msg').placeholder = texts.place;
+            document.getElementById('btn-prep').innerText = texts.gen;
+            document.getElementById('btn-share').innerText = texts.share;
+            document.getElementById('btn-reboot').innerText = texts.reb;
+            document.getElementById('ui-pay-desc').innerText = texts.payDesc;
+        }
+
+        function updateActiveFlag(lang) {
+            document.querySelectorAll('.lang-flag').forEach(f => f.classList.remove('active'));
+            document.getElementById(`flag-${lang}`).classList.add('active');
+        }
+
+        // Робимо функцію глобальною, щоб HTML-кнопки її бачили
+        window.changeLanguage = function(newLang) {
+            window.playClick();
+            localStorage.setItem('user_language', newLang);
+            updateActiveFlag(newLang);
+            
+            // Замість fetch беремо дані з нашої вбудованої бази JSON
+            const texts = localDatabase[newLang];
+            updateUI(texts);
+        };
+
+        function initLanguage() {
+            let currentLanguage = localStorage.getItem('user_language');
+            if (currentLanguage === null) {
+                currentLanguage = 'en'; // Базова мова
+            }
+            updateActiveFlag(currentLanguage);
+            
+            const texts = localDatabase[currentLanguage];
+            updateUI(texts);
+        }
+
+        // Запуск при завантаженні сторінки
+        initLanguage();
+
+        // --- РЕШТА ФУНКЦІЙ FIREBASE ТА АНІМАЦІЙ ---
 
         const liveMessages = {
             uk: ["⚡ Marcus (Берлін) запечатав капсулу", "⚡ Олена (Київ) запечатала капсулу", "⚡ John (Лондон) запечатав капсулу", "⚡ Yuki (Токіо) запечатала капсулу", "⚡ Anna (Братислава) запечатала капсулу"],
@@ -224,29 +264,10 @@
             de: ["⚡ Marcus (Berlin) hat eine Kapsel versiegelt", "⚡ Olena (Kiew) hat eine Kapsel versiegelt", "⚡ John (London) hat eine Kapsel versiegelt", "⚡ Yuki (Tokio) hat eine Kapsel versiegelt", "⚡ Anna (Bratislava) hat eine Kapsel versiegelt"]
         };
 
-        let currentLang = 'uk';
-
-        function setLanguage(l) {
-            currentLang = l;
-            const d = dict[l];
-            document.getElementById('ui-title').innerHTML = d.title; 
-            document.getElementById('ui-manifesto').innerText = d.manifest;
-            document.getElementById('ui-avail-label').innerText = d.avail;
-            
-            document.getElementById('btn-init').innerText = d.start;
-            document.getElementById('btn-init-2').innerText = d.start;
-            
-            document.getElementById('ui-sealing').innerText = d.seal;
-            document.getElementById('user-msg').placeholder = d.place;
-            document.getElementById('btn-prep').innerText = d.gen;
-            document.getElementById('btn-share').innerText = d.share;
-            document.getElementById('btn-reboot').innerText = d.reb;
-            document.getElementById('ui-pay-desc').innerText = d.payDesc;
-        }
-
         function showLiveNotification() {
+            let currentLanguage = localStorage.getItem('user_language') || 'en';
             const area = document.getElementById('notification-area');
-            const msgs = liveMessages[currentLang];
+            const msgs = liveMessages[currentLanguage];
             const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
             
             const toast = document.createElement('div');
@@ -296,7 +317,6 @@
             document.getElementById(fromId).classList.remove('active');
             setTimeout(() => { document.getElementById(toId).classList.add('active'); }, 50);
             
-            // Ховаємо маніфест під час процесу створення
             if(toId !== 'welcome-section') {
                 document.getElementById('visionary-section').style.display = 'none';
             }
@@ -400,6 +420,7 @@
             window.playScan();
             
             const analysisBox = document.getElementById('analysis-text');
+            let currentLanguage = localStorage.getItem('user_language') || 'en';
             
             const lines = {
                 uk: ["> Аналіз семантики...", "> Емоційний тон: Візіонерський", "> Унікальність патерну: 98.7%", "> Формування крипто-ключа..."],
@@ -408,12 +429,12 @@
             };
             
             let step = 0;
-            analysisBox.innerHTML = lines[currentLang][0] + "<br>";
+            analysisBox.innerHTML = lines[currentLanguage][0] + "<br>";
             
             const interval = setInterval(() => {
                 step++;
-                if (step < lines[currentLang].length) {
-                    analysisBox.innerHTML += lines[currentLang][step] + "<br>";
+                if (step < lines[currentLanguage].length) {
+                    analysisBox.innerHTML += lines[currentLanguage][step] + "<br>";
                 } else {
                     clearInterval(interval);
                     setTimeout(() => {
@@ -430,15 +451,6 @@
             btnPay.style.background = "#fff";
             btnPay.style.color = "#000";
             window.location.href = "https://buy.stripe.com/test_14A8wQgA4gCN9m19uN38400";
-        });
-
-        document.querySelectorAll('.lang-flag').forEach(flag => {
-            flag.addEventListener('click', function() {
-                window.playClick();
-                setLanguage(this.getAttribute('data-lang'));
-                document.querySelectorAll('.lang-flag').forEach(f => f.classList.remove('active'));
-                this.classList.add('active');
-            });
         });
     </script>
 </body>
