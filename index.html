@@ -47,15 +47,15 @@
         textarea { width: 100%; height: 120px; background: #050505; border: 1px solid #333; color: var(--neon); padding: 15px; box-sizing: border-box; resize: none; margin-bottom: 10px; outline: none; border-radius: 10px; font-size: 16px; transition: 0.3s; }
         textarea:focus { border-color: var(--neon); }
 
-        /* ОНОВЛЕНИЙ ДИЗАЙН КАПСУЛИ З ТВОЇМ ЗОБРАЖЕННЯМ */
+        /* ОНОВЛЕНИЙ БЛОК КАПСУЛИ: змінено відступи */
         #capsule-visual { 
             position: relative; 
             width: 320px; 
             height: 568px; 
             display: flex; 
             flex-direction: column; 
-            justify-content: space-between; 
-            padding: 70px 30px; /* Збільшені відступи, щоб контент вліз у віконце */
+            justify-content: flex-end; /* Притискаємо контент донизу */
+            padding: 180px 40px 60px 40px; /* Величезний відступ зверху, щоб оминути сигіл */
             box-sizing: border-box; 
             margin: 0 auto; 
             background-image: url('https://i.postimg.cc/vHYxRr5f/1772900411494.png');
@@ -66,9 +66,9 @@
             text-align: left; 
         }
         
-        #qr-wrap { width: 110px; height: 110px; margin: 0 auto 10px; background: rgba(255, 255, 255, 0.9); padding: 5px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-        #capsule-message { font-size: 14px; color: #ffffff; font-weight: 800; margin: 10px 0; text-align: center; line-height: 1.4; flex-grow: 1; display: flex; align-items: center; justify-content: center; text-shadow: 0 0 10px var(--neon), 0 0 20px #000; }
-        .meta-data { font-size: 10px; color: rgba(255, 255, 255, 0.8); text-align: center; letter-spacing: 2px; margin-top: 10px; border-top: 1px dashed rgba(255, 255, 255, 0.2); padding-top: 15px; display: flex; justify-content: space-between; text-shadow: 0 0 5px #000; }
+        #capsule-message { font-size: 14px; color: #ffffff; font-weight: 800; margin-bottom: 20px; text-align: center; line-height: 1.4; flex-grow: 1; display: flex; align-items: center; justify-content: center; text-shadow: 0 0 10px var(--neon), 0 0 20px #000; }
+        #qr-wrap { width: 90px; height: 90px; margin: 0 auto 15px; background: rgba(255, 255, 255, 0.95); padding: 5px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .meta-data { font-size: 10px; color: rgba(255, 255, 255, 0.8); text-align: center; letter-spacing: 2px; margin-top: 5px; border-top: 1px dashed rgba(255, 255, 255, 0.2); padding-top: 10px; display: flex; justify-content: space-between; text-shadow: 0 0 5px #000; }
         #capsule-footer { font-size: 12px; color: var(--neon); text-align: center; letter-spacing: 4px; margin-top: 15px; font-weight: bold; text-shadow: 0 0 5px #000; }
         
         .laser-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #ffffff; box-shadow: 0 0 20px 5px var(--neon); animation: laserScan 3s linear infinite; z-index: 5; }
@@ -185,8 +185,8 @@
         <div id="result-section" class="screen">
             <div id="capsule-visual">
                 <div class="laser-line"></div>
-                <div style="text-align: center;"></div> <div id="qr-wrap"></div>
                 <div id="capsule-message"></div>
+                <div id="qr-wrap"></div>
                 <div class="meta-data">
                     <span id="meta-time"></span>
                     <span id="meta-geo"></span>
@@ -460,8 +460,15 @@
             const qrBox = document.getElementById('qr-wrap'); 
             qrBox.innerHTML = "";
             
-            // Малюємо QR-код з трохи меншим розміром (100x100)
-            new QRCode(qrBox, { text: `ID: ${capsuleId}\nMSG: ${finalText}`, width: 100, height: 100 });
+            // Вказуємо жорсткі кольори для QR-коду, щоб уникнути помилки "білого квадрата"
+            new QRCode(qrBox, { 
+                text: `ID: ${capsuleId}\nMSG: ${finalText}`, 
+                width: 90, 
+                height: 90,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.L
+            });
 
             try { 
                 await addDoc(collection(db, "capsules"), { 
