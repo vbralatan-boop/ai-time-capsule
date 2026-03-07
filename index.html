@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
         :root { --neon: #00ffcc; --bg: #010204; --glass: rgba(0, 255, 204, 0.05); --capsule-bg: linear-gradient(135deg, #0a1128 0%, #010204 100%); }
@@ -209,7 +210,6 @@
     </div>
 
     <script type="module">
-        // ДОДАНО getCountFromServer до списку імпортів Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, getCountFromServer } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
@@ -333,7 +333,6 @@
             updateUI(texts);
         }
 
-        // НОВА ФУНКЦІЯ: Отримання реальної статистики з Firebase
         async function updateLiveStatistics() {
             try {
                 const capsulesCollection = collection(db, "capsules");
@@ -343,10 +342,8 @@
                 const totalLimit = 100000;
                 const nodesLeft = totalLimit - sealedCount;
                 
-                // Генеруємо випадкове число для активних слотів (від 120 до 450)
                 const activeSlots = Math.floor(Math.random() * (450 - 120 + 1)) + 120;
 
-                // Вставляємо цифри на екран, форматуючи їх комами (напр. 99,995)
                 document.getElementById('nodes-value').innerText = nodesLeft.toLocaleString('en-US');
                 document.getElementById('sealed-value').innerText = sealedCount.toLocaleString('en-US');
                 document.getElementById('slots-value').innerText = activeSlots.toString();
@@ -416,7 +413,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             initLanguage();
-            updateLiveStatistics(); // Запускаємо перерахунок статистики при завантаженні
+            updateLiveStatistics();
 
             const savedText = localStorage.getItem('capsuleText');
             if (savedText) {
@@ -444,7 +441,10 @@
             document.getElementById('meta-time').innerText = `T: ${now.toISOString().slice(0, 19).replace('T', ' ')}`;
             document.getElementById('meta-geo').innerText = `GEO: ${currentPos.lat.toFixed(4)}, ${currentPos.lng.toFixed(4)}`;
 
-            const qrBox = document.getElementById('qr-wrap'); qrBox.innerHTML = "";
+            const qrBox = document.getElementById('qr-wrap'); 
+            qrBox.innerHTML = "";
+            
+            // Малюємо QR-код
             new QRCode(qrBox, { text: `ID: ${capsuleId}\nMSG: ${finalText}`, width: 130, height: 130 });
 
             try { 
@@ -457,6 +457,7 @@
                 console.error("Помилка бази даних:", error);
             }
 
+            // Робимо паузу 3 секунди, щоб QR-код точно встиг намалюватися, перш ніж робити скріншот
             setTimeout(() => {
                 html2canvas(document.getElementById('capsule-visual'), { backgroundColor: "#020205", scale: 2, useCORS: true }).then(canvas => {
                     document.getElementById('capsule-visual').style.display = 'none';
