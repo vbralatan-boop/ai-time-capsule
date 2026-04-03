@@ -486,4 +486,195 @@
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
         fetch('https://ipapi.co/json/').then(res => res.json()).then(data => {
-            currentPos 
+            currentPos = { lat: data.latitude, lng: data.longitude, city: `${data.city.toUpperCase()}, ${data.country_name.toUpperCase()}` };
+            map.flyTo([currentPos.lat, currentPos.lng], 4);
+        });
+
+        onSnapshot(query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(6)), (snap) => {
+            const vault = document.getElementById('live-vault'); vault.innerHTML = "";
+            snap.forEach(doc => {
+                const d = doc.data(); 
+                vault.innerHTML += `<div>> ${d.ticketId} | ${d.location}</div>`;
+                if(d.lat && d.lng) L.circleMarker([d.lat, d.lng], { radius: 4, color: '#00ffcc', fillOpacity: 0.8 }).addTo(map);
+            });
+        });
+
+        function switchScreen(fromId, toId) {
+            document.getElementById(fromId).classList.remove('active');
+            setTimeout(() => { document.getElementById(toId).classList.add('active'); }, 50);
+            
+            if(toId !== 'welcome-section') {
+                document.getElementById('visionary-section').style.display = 'none';
+            }
+        }
+
+        // ОНОВЛЕНО: Підтягуємо переклад для анімації злому
+        window.startHack = function(btn) {
+            window.playClick();
+            const nodeBlock = btn.parentElement;
+            const hackScreen = nodeBlock.querySelector('.hack-screen');
+            const priorityMsg = nodeBlock.querySelector('.priority-msg');
+            const shareBtn = nodeBlock.querySelector('.share-action-btn');
+            
+            btn.style.display = 'none';
+            hackScreen.style.display = 'block';
+            
+            let currentLanguage = localStorage.getItem('user_language') || 'en';
+            const texts = localDatabase[currentLanguage];
+            const hackSteps = texts.hack_steps;
+            
+            let step = 0;
+            hackScreen.innerHTML = hackSteps[0] + "<br>";
+            
+            const interval = setInterval(() => {
+                step++;
+                if(step < hackSteps.length) {
+                    hackScreen.innerHTML += hackSteps[step] + "<br>";
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        priorityMsg.style.display = 'block';
+                        shareBtn.style.display = 'block';
+                    }, 500);
+                }
+            }, 800);
+        };
+
+        // ОНОВЛЕНО: Підтягуємо переклад для повідомлень поширення
+        window.shareToUnlock = function(btn) {
+            window.playClick();
+            let currentLanguage = localStorage.getItem('user_language') || 'en';
+            const texts = localDatabase[currentLanguage];
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'AI Time Capsule',
+                    text: texts.share_prompt,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                alert(texts.share_alert);
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initLanguage();
+            updateLiveStatistics();
+
+            const savedText = localStorage.getItem('capsuleText');
+            if (savedText) {
+                document.getElementById('user-msg').value = savedText;
+            }
+
+            if (window.location.search.includes('status=success')) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById('result-section').classList.add('active');
+                document.getElementById('visionary-section').style.display = 'none';
+                
+                const finalText = localStorage.getItem('capsuleText') || "GLOBAL NODE MESSAGE";
+                generateFinalCapsule(finalText);
+            }
+        });
+
+        async function generateFinalCapsule(finalText) {
+            window.playScan();
+            const capsuleId = "CAPSULE-" + Math.random().toString(16).slice(2, 8).toUpperCase();
+            document.getElementById('capsule-message').innerText = `"${finalText}"`;
+            document.getElementById('capsule-footer').innerText = capsuleId;
+            
+            const now = new Date();
+            document.getElementById('meta-time').innerText = `T: ${now.toISOString().slice(0, 19).replace('T', ' ')}`;
+            document.getElementById('meta-geo').innerText = `GEO: ${currentPos.lat.toFixed(4)}, ${currentPos.lng.toFixed(4)}`;
+
+            const qrBox = document.getElementById('qr-wrap'); 
+            qrBox.innerHTML = "";
+            
+            new QRCode(qrBox, { 
+                text: capsuleId, 
+                width: 70, 
+                height: 70,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.L
+            });
+
+            try { 
+                await addDoc(collection(db, "capsules"), { 
+                    ticketId: capsuleId, message: finalText, location: currentPos.city, 
+                    lat: currentPos.lat, lng: currentPos.lng, timestamp: now.toISOString() 
+                }); 
+                localStorage.removeItem('capsuleText');
+            } catch (error) {
+                console.error("Помилка бази даних:", error);
+            }
+
+            setTimeout(() => {
+                html2canvas(document.getElementById('capsule-visual'), { backgroundColor: "#020205", scale: 2, useCORS: true }).then(canvas => {
+                    document.getElementById('capsule-visual').style.display = 'none';
+                    document.getElementById('final-image-container').appendChild(canvas);
+                    
+                    const shareBtn = document.getElementById('btn-share'); 
+                    shareBtn.style.display = 'block';
+                    
+                    shareBtn.onclick = () => { 
+                        window.playClick();
+                        canvas.toBlob(async (blob) => {
+                            const file = new File([blob], 'AI_Capsule.png', { type: 'image/png' });
+                            
+                            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                                try {
+                                    await navigator.share({ files: [file], title: 'AI Time Capsule', text: 'Мій слід в історії зафіксовано нейромережею. Створи свій: ' + window.location.href });
+                                } catch (err) { console.log('Помилка при поширенні:', err); }
+                            } else {
+                                const link = document.createElement('a');
+                                link.download = 'AI_Capsule.png'; link.href = canvas.toDataURL(); link.click();
+                            }
+                        });
+                    };
+                });
+            }, 3000);
+        }
+
+        document.getElementById('btn-init').addEventListener('click', () => { window.playClick(); switchScreen('welcome-section', 'input-section'); });
+        document.getElementById('btn-init-2').addEventListener('click', () => { window.playClick(); switchScreen('welcome-section', 'input-section'); });
+
+        document.getElementById('btn-prep').addEventListener('click', () => {
+            window.playClick();
+            const msgInput = document.getElementById('user-msg');
+            const tempText = msgInput.value;
+            if(!tempText.trim()) {
+                msgInput.style.border = "1px solid red"; setTimeout(() => msgInput.style.border = "1px solid #333", 500); return;
+            }
+            localStorage.setItem('capsuleText', tempText);
+            switchScreen('input-section', 'analysis-section');
+            window.playScan();
+            
+            const analysisBox = document.getElementById('analysis-text');
+            let currentLanguage = localStorage.getItem('user_language') || 'en';
+            
+            const lines = {
+                uk: ["> Аналіз семантики...", "> Емоційний тон: Візіонерський", "> Унікальність патерну: 98.7%", "> Формування крипто-ключа..."],
+                en: ["> Semantics analysis...", "> Emotional tone: Visionary", "> Pattern uniqueness: 98.7%", "> Generating crypto-key..."],
+                sk: ["> Sémantická analýza...", "> Emocionálny tón: Vizionársky", "> Unikátnosť vzoru: 98.7%", "> Generovanie kryptokľúča..."],
+                de: ["> Semantik-Analyse...", "> Emotionaler Ton: Visionär", "> Muster-Einzigartigkeit: 98.7%", "> Krypto-Schlüssel wird generiert..."]
+            };
+            
+            let step = 0; analysisBox.innerHTML = lines[currentLanguage][0] + "<br>";
+            const interval = setInterval(() => {
+                step++;
+                if (step < lines[currentLanguage].length) { analysisBox.innerHTML += lines[currentLanguage][step] + "<br>"; } 
+                else { clearInterval(interval); setTimeout(() => { switchScreen('analysis-section', 'payment-section'); }, 1200); }
+            }, 800);
+        });
+
+        document.getElementById('btn-pay').addEventListener('click', () => {
+            window.playClick();
+            const btnPay = document.getElementById('btn-pay');
+            btnPay.innerText = "...";
+            btnPay.style.background = "#fff"; btnPay.style.color = "#000";
+            window.location.href = "https://buy.stripe.com/test_14A8wQgA4gCN9m19uN38400";
+        });
+    </script>
+</body>
+</html>
