@@ -661,7 +661,7 @@ if (savedText)
             if(!tempText.trim()) {
                 msgInput.style.border = "1px solid red"; setTimeout(() => msgInput.style.border = "1px solid #333", 500); return;
             }
-            localStorage.setItem('capsuleText', tempText);
+            safeStorage.set('capsuleText', tempText); // Запис через безпечний шлюз
             switchScreen('input-section', 'analysis-section');
             window.playScan();
             
@@ -688,7 +688,16 @@ if (savedText)
             const btnPay = document.getElementById('btn-pay');
             btnPay.innerText = "...";
             btnPay.style.background = "#fff"; btnPay.style.color = "#000";
-            window.location.href = "https://buy.stripe.com/test_14A8wQgA4gCN9m19uN38400";
+            // 1. Створюємо унікальний токен наміру (Time-based lock)
+safeStorage.set('tx_intent', 'pending_' + Date.now()); 
+
+// 2. Формуємо URL та обходимо кеш браузера (Cache-Busting)
+const checkoutUrl = new URL("https://buy.stripe.com/test_14A8wQgA4gCN9m19uN38400");
+const uniqueRef = Math.random().toString(16).slice(2, 10);
+checkoutUrl.searchParams.append('client_reference_id', uniqueRef);
+
+// 3. Виконуємо жорсткий редирект
+window.location.href = checkoutUrl.toString();
         });
     </script>
 </body>
