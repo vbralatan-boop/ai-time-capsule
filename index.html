@@ -671,4 +671,56 @@
                                 catch (err) { console.log('Помилка при поширенні:', err); }
                             } else {
                                 const link = document.createElement('a');
-                                link.download = 'AI_
+                                link.download = 'AI_Capsule.png'; link.href = canvas.toDataURL(); link.click();
+                            }
+                        });
+                    };
+                });
+            }, 3000);
+        }
+
+        document.getElementById('btn-init').addEventListener('click', () => { window.playClick(); switchScreen('welcome-section', 'input-section'); });
+        document.getElementById('btn-init-2').addEventListener('click', () => { window.playClick(); switchScreen('welcome-section', 'input-section'); });
+
+        document.getElementById('btn-prep').addEventListener('click', () => {
+            window.playClick();
+            const msgInput = document.getElementById('user-msg');
+            const tempText = msgInput.value;
+            if(!tempText.trim()) {
+                msgInput.style.border = "1px solid red"; setTimeout(() => msgInput.style.border = "1px solid #333", 500); return;
+            }
+            safeStorage.set('capsuleText', tempText);
+            switchScreen('input-section', 'analysis-section');
+            window.playScan();
+            
+            let currentLanguage = safeStorage.get('user_language') || 'en';
+            const analysisBox = document.getElementById('analysis-text');
+            const lines = {
+                uk: ["> Аналіз семантики...", "> Емоційний тон: Візіонерський", "> Унікальність патерну: 98.7%", "> Формування крипто-ключа..."],
+                en: ["> Semantics analysis...", "> Emotional tone: Visionary", "> Pattern uniqueness: 98.7%", "> Generating crypto-key..."],
+                sk: ["> Sémantická analýza...", "> Emocionálny tón: Vizionársky", "> Unikátnosť vzoru: 98.7%", "> Generovanie kryptokľúča..."],
+                de: ["> Semantik-Analyse...", "> Emotionaler Ton: Visionär", "> Muster-Einzigartigkeit: 98.7%", "> Krypto-Schlüssel wird generiert..."]
+            };
+            
+            let step = 0; analysisBox.innerHTML = lines[currentLanguage][0] + "<br>";
+            const interval = setInterval(() => {
+                step++;
+                if (step < lines[currentLanguage].length) { analysisBox.innerHTML += lines[currentLanguage][step] + "<br>"; } 
+                else { clearInterval(interval); setTimeout(() => { switchScreen('analysis-section', 'payment-section'); }, 1200); }
+            }, 800);
+        });
+
+        document.getElementById('btn-pay').addEventListener('click', () => {
+            window.playClick();
+            const btnPay = document.getElementById('btn-pay');
+            btnPay.innerText = "...";
+            btnPay.style.background = "#fff"; btnPay.style.color = "#000";
+            
+            safeStorage.set('tx_intent', 'pending_' + Date.now()); 
+            const checkoutUrl = new URL("https://buy.stripe.com/test_14A8wQgA4gCN9m19uN38400");
+            checkoutUrl.searchParams.append('client_reference_id', Math.random().toString(16).slice(2, 10));
+            window.location.href = checkoutUrl.toString();
+        });
+    </script>
+</body>
+</html>
