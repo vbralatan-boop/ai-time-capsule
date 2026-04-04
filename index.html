@@ -482,6 +482,11 @@
         };
 
         let currentPos = { lat: 0, lng: 0, city: "GLOBAL NODE" };
+        const safeStorage = {
+    get: (k) => { try { return localStorage.getItem(k); } catch(e) { return null; } },
+    set: (k, v) => { try { localStorage.setItem(k, v); } catch(e) { console.warn('Storage locked'); } },
+    remove: (k) => { try { localStorage.removeItem(k); } catch(e) {} }
+};
         const map = L.map('global-map', { zoomControl: false, attributionControl: false }).setView([20, 0], 1);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
@@ -561,20 +566,21 @@
             initLanguage();
             updateLiveStatistics();
 
-            const savedText = localStorage.getItem('capsuleText');
-            if (savedText) {
-                document.getElementById('user-msg').value = savedText;
-            }
+            const savedText = safeStorage.get('capsuleText');
+if (savedText) 
+{ document.getElementById('user-msg').value = savedText; }
 
-            if (window.location.search.includes('status=success')) {
-                window.history.replaceState({}, document.title, window.location.pathname);
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById('result-section').classList.add('active');
-                document.getElementById('visionary-section').style.display = 'none';
-                
-                const finalText = localStorage.getItem('capsuleText') || "GLOBAL NODE MESSAGE";
-                generateFinalCapsule(finalText);
-            }
+            if (window.location.search.includes('status=success') && safeStorage.get('tx_intent')) {
+    safeStorage.remove('tx_intent'); 
+    window.history.replaceState({}, document.title, window.location.pathname);
+    
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('result-section').classList.add('active');
+    document.getElementById('visionary-section').style.display = 'none';
+    
+    const finalText = safeStorage.get('capsuleText') || "GLOBAL NODE MESSAGE";
+    generateFinalCapsule(finalText);
+}
         });
 
         async function generateFinalCapsule(finalText) {
