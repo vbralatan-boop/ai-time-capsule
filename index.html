@@ -32,7 +32,7 @@
         .phase-info { font-size: 10px; color: var(--neon); letter-spacing: 5px; margin-bottom: 20px; opacity: 0.7; }
         
         /* ОПТИМІЗОВАНА КАРТА */
-        #global-map { width: 100%; height: 180px; border: 1px solid rgba(0, 255, 204, 0.2); border-radius: 8px; filter: brightness(1.4) contrast(1.2); box-shadow: 0 0 15px rgba(0,255,204,0.05); margin: 15px 0; }
+        #global-map { width: 100%; height: 180px; border: 1px solid rgba(0, 255, 204, 0.4); border-radius: 8px; box-shadow: 0 0 20px rgba(0,255,204,0.1); margin: 15px 0; background: #050505; }
         
         .manifesto-box { background: var(--glass); border-left: 4px solid var(--neon); padding: 15px; margin: 20px 0; text-align: justify; font-size: 13px; line-height: 1.6; color: #ccc; border-radius: 0 8px 8px 0; }
         
@@ -181,7 +181,7 @@
             
             <button class="action-btn" id="btn-init" style="padding: 22px; font-size: 16px; letter-spacing: 3px; box-shadow: 0 0 25px rgba(0,255,204,0.3);">СТВОРИТИ МОНУМЕНТ 🌌</button>
             
-            <div id="live-vault"></div>
+            <div id="live-vault">> SYNCING GLOBAL REGISTRY...<br>> WAITING FOR NEURAL NODES...</div>
 
             <div class="scroll-down" id="ui-scroll">ПРОКРУТІТЬ ВНИЗ ДЛЯ ДЕТАЛЕЙ ↓</div>
 
@@ -607,25 +607,32 @@
             }
         };
 
-        window.addEventListener('DOMContentLoaded', () => {
-            initLanguage();
-            updateLiveStatistics();
+        const initSystem = () => {
+    initLanguage();
+    updateLiveStatistics();
 
-            const savedText = safeStorage.get('capsuleText');
-            if (savedText) { document.getElementById('user-msg').value = savedText; }
+    const savedText = safeStorage.get('capsuleText');
+    if (savedText) { document.getElementById('user-msg').value = savedText; }
 
-            if (window.location.search.includes('status=success') && safeStorage.get('tx_intent')) {
-                safeStorage.remove('tx_intent'); 
-                window.history.replaceState({}, document.title, window.location.pathname);
-                
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById('result-section').classList.add('active');
-                document.getElementById('visionary-section').style.display = 'none';
-                
-                const finalText = safeStorage.get('capsuleText') || "GLOBAL NODE MESSAGE";
-                generateFinalCapsule(finalText);
-            }
-        });
+    if (window.location.search.includes('status=success') && safeStorage.get('tx_intent')) {
+        safeStorage.remove('tx_intent'); 
+        window.history.replaceState({}, document.title, window.location.pathname);
+        
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById('result-section').classList.add('active');
+        document.getElementById('visionary-section').style.display = 'none';
+        
+        const finalText = safeStorage.get('capsuleText') || "GLOBAL NODE MESSAGE";
+        generateFinalCapsule(finalText);
+    }
+};
+
+// Куленепробивний запуск: перевіряємо, чи сторінка вже завантажилась
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSystem);
+} else {
+    initSystem();
+}
 
         async function generateFinalCapsule(finalText) {
             window.playScan();
