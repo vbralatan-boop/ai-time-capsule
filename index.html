@@ -31,7 +31,9 @@
         h1 { color: var(--neon); text-shadow: 0 0 15px var(--neon); font-size: 24px; letter-spacing: 4px; text-transform: uppercase; margin: 0 0 10px; }
         .phase-info { font-size: 10px; color: var(--neon); letter-spacing: 5px; margin-bottom: 20px; opacity: 0.7; }
         
-        #global-map { width: 100%; height: 220px; background: #000; margin: 15px 0; border: 1px solid var(--neon); border-radius: 12px; box-shadow: 0 0 20px rgba(0, 255, 204, 0.1); }
+        /* ОПТИМІЗОВАНА КАРТА */
+        #global-map { width: 100%; height: 180px; border: 1px solid rgba(0, 255, 204, 0.2); border-radius: 8px; filter: brightness(1.4) contrast(1.2); box-shadow: 0 0 15px rgba(0,255,204,0.05); margin: 15px 0; }
+        
         .manifesto-box { background: var(--glass); border-left: 4px solid var(--neon); padding: 15px; margin: 20px 0; text-align: justify; font-size: 13px; line-height: 1.6; color: #ccc; border-radius: 0 8px 8px 0; }
         
         .stats-panel { background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(0, 255, 204, 0.3); padding: 15px; margin: 15px 0; font-weight: bold; font-size: 14px; letter-spacing: 1px; display: flex; justify-content: space-around; text-align: center; border-radius: 8px;}
@@ -45,7 +47,6 @@
 
         textarea { width: 100%; height: 120px; background: #050505; border: 1px solid #333; color: var(--neon); padding: 15px; box-sizing: border-box; resize: none; margin-bottom: 10px; outline: none; border-radius: 10px; font-size: 16px; transition: 0.3s; }
 
-        /* ОНОВЛЕНИЙ БЛОК КАПСУЛИ */
         #capsule-visual { 
             position: relative; 
             width: 320px; 
@@ -118,7 +119,11 @@
         .laser-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #ffffff; box-shadow: 0 0 20px 5px var(--neon); animation: laserScan 3s linear infinite; z-index: 5; }
         @keyframes laserScan { 0% { top: 0%; opacity: 0; } 10% { opacity: 0.9; } 90% { opacity: 0.9; } 100% { top: 100%; opacity: 0; } }
 
-        #live-vault { height: 70px; overflow: hidden; font-size: 10px; color: #555; margin-top: 20px; text-align: left; border-top: 1px solid #111; padding-top: 10px; line-height: 1.6; }
+        /* ОПТИМІЗОВАНА ЧИТАБЕЛЬНІСТЬ ТЕКСТІВ */
+        #live-vault { height: 80px; overflow: hidden; font-size: 11px; color: var(--neon); opacity: 0.9; margin-top: 25px; text-align: left; border-top: 1px solid rgba(0, 255, 204, 0.1); padding-top: 12px; line-height: 1.8; font-family: monospace; text-shadow: 0 0 5px rgba(0, 255, 204, 0.3); }
+        .scroll-down { margin-top: 45px; font-size: 11px; color: #fff; opacity: 0.8; letter-spacing: 3px; font-weight: bold; animation: pulse 2s infinite; text-transform: uppercase; }
+        @keyframes pulse { 0% { opacity: 0.4; transform: translateY(0); } 50% { opacity: 1; transform: translateY(5px); } 100% { opacity: 0.4; transform: translateY(0); } }
+
         #lang-selector { display: flex; justify-content: center; gap: 20px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #111; }
         .lang-flag { font-size: 26px; cursor: pointer; transition: 0.3s; opacity: 0.4; filter: grayscale(100%); }
         .lang-flag.active, .lang-flag:hover { opacity: 1; filter: grayscale(0%); transform: scale(1.1); }
@@ -127,11 +132,7 @@
         .live-toast { background: rgba(0, 255, 204, 0.1); border-left: 3px solid var(--neon); padding: 12px 15px; border-radius: 4px; font-size: 11px; color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.5); backdrop-filter: blur(5px); animation: slideInRight 0.5s forwards, fadeOutToast 0.5s forwards 3.5s; font-family: monospace; }
         @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes fadeOutToast { to { opacity: 0; transform: translateY(-10px); } }
-        
-        .scroll-down { margin-top: 40px; font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 2px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 0.4; transform: translateY(0); } 50% { opacity: 1; transform: translateY(5px); } 100% { opacity: 0.4; transform: translateY(0); } }
 
-        /* СТИЛІ СТІНИ РЕЄСТРУ */
         #registry-wall { margin-top: 40px; text-align: left; width: 100%; }
         .registry-title { font-size: 12px; color: #555; letter-spacing: 4px; text-align: center; margin-bottom: 20px; }
         .node-block { background: rgba(0, 255, 204, 0.03); border: 1px solid rgba(0, 255, 204, 0.2); border-left: 3px solid var(--neon); padding: 15px; margin-bottom: 15px; border-radius: 4px; position: relative; overflow: hidden; }
@@ -161,7 +162,7 @@
                 AI Time Capsule — це перший цифровий монумент людства. Ваше послання буде зашифровано, розподілено по глобальних серверах і збережено для майбутніх поколінь.
             </div>
             
-            <div id="global-map" style="height: 180px; border: 1px solid rgba(0, 255, 204, 0.2); border-radius: 8px; filter: brightness(1.4) contrast(1.2); box-shadow: 0 0 15px rgba(0,255,204,0.05);"></div>
+            <div id="global-map"></div>
             
             <div class="stats-panel" id="stats-panel">
                 <div class="stat-item">
@@ -180,7 +181,7 @@
             
             <button class="action-btn" id="btn-init" style="padding: 22px; font-size: 16px; letter-spacing: 3px; box-shadow: 0 0 25px rgba(0,255,204,0.3);">СТВОРИТИ МОНУМЕНТ 🌌</button>
             
-            <div id="live-vault" style="opacity: 0.4; border-top: none;"></div>
+            <div id="live-vault"></div>
 
             <div class="scroll-down" id="ui-scroll">ПРОКРУТІТЬ ВНИЗ ДЛЯ ДЕТАЛЕЙ ↓</div>
 
@@ -308,7 +309,13 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // ОНОВЛЕНО: Додані нові змінні для перекладу терміналу
+        // КЛІЄНТСЬКИЙ ЗАХИСТ: Безпечна обгортка пам'яті
+        const safeStorage = {
+            get: (k) => { try { return localStorage.getItem(k); } catch(e) { return null; } },
+            set: (k, v) => { try { localStorage.setItem(k, v); } catch(e) { console.warn('Storage locked'); } },
+            remove: (k) => { try { localStorage.removeItem(k); } catch(e) {} }
+        };
+
         const localDatabase = {
             uk: { 
                 phase: "PREMIUM NODE ACCESS", title: "ІНТЕРНЕТ СТИРАЄ ВСЕ.<br><span style='color: #fff; text-shadow: none;'>AI ПАМ'ЯТАЄ.</span>", manifest: "AI Time Capsule — це перший цифровий монумент людства. Ваше послання буде зашифровано, розподілено по глобальних серверах і збережено для майбутніх поколінь.", 
@@ -368,41 +375,33 @@
             document.getElementById('ui-phase').innerText = texts.phase;
             document.getElementById('ui-title').innerHTML = texts.title; 
             document.getElementById('ui-manifesto').innerText = texts.manifest;
-            
             document.getElementById('ui-nodes-label').textContent = texts.stats.nodes;
             document.getElementById('ui-sealed-label').textContent = texts.stats.sealed;
             document.getElementById('ui-slots-label').textContent = texts.stats.slots;
-            
             document.getElementById('ui-scroll').innerText = texts.scroll;
             document.getElementById('ui-social-title').innerText = texts.social_title;
-            
             document.getElementById('ui-how-title').innerText = texts.how_title;
             document.getElementById('ui-step1-t').innerText = texts.s1_t; document.getElementById('ui-step1-d').innerText = texts.s1_d;
             document.getElementById('ui-step2-t').innerText = texts.s2_t; document.getElementById('ui-step2-d').innerText = texts.s2_d;
             document.getElementById('ui-step3-t').innerText = texts.s3_t; document.getElementById('ui-step3-d').innerText = texts.s3_d;
-
             document.getElementById('btn-init').innerText = texts.start;
             document.getElementById('btn-init-2').innerText = texts.start;
             document.getElementById('ui-sealing').innerText = texts.seal;
             document.getElementById('user-msg').placeholder = texts.place;
             document.getElementById('btn-prep').innerText = texts.gen;
-            
             document.getElementById('ui-analysis-title').innerText = texts.analysis_title;
             document.getElementById('ui-payment-title').innerText = texts.payment_title;
             document.getElementById('ui-pay-desc').innerText = texts.payDesc;
             document.getElementById('btn-pay').innerText = texts.btn_stripe;
             document.getElementById('btn-cancel').innerText = texts.btn_cancel;
-            
             document.getElementById('btn-share').innerText = texts.share;
             document.getElementById('btn-reboot').innerText = texts.reb;
-
             document.getElementById('ui-vision-h2').innerText = texts.v_h2;
             document.getElementById('ui-vision-p').innerText = texts.v_p;
             document.getElementById('ui-vision-quote').innerHTML = texts.v_quote;
             document.getElementById('ui-vision-author').innerText = texts.v_author;
             document.getElementById('btn-history').innerText = texts.btn_hist;
 
-            // ОНОВЛЕНО: Масова заміна тексту для кнопок і повідомлень у терміналі
             document.querySelectorAll('.unlock-btn').forEach(el => el.innerText = texts.unlock_btn);
             document.querySelectorAll('.encrypted').forEach(el => el.innerText = texts.encrypted_text);
             document.querySelectorAll('.priority-msg').forEach(el => el.innerText = texts.priority_msg);
@@ -416,18 +415,16 @@
 
         window.changeLanguage = function(newLang) {
             window.playClick();
-            localStorage.setItem('user_language', newLang);
+            safeStorage.set('user_language', newLang);
             updateActiveFlag(newLang);
             const texts = localDatabase[newLang];
             updateUI(texts);
         };
 
         function initLanguage() {
-            let currentLanguage = localStorage.getItem('user_language');
-            if (currentLanguage === null) { currentLanguage = 'en'; }
+            let currentLanguage = safeStorage.get('user_language') || 'en';
             updateActiveFlag(currentLanguage);
-            const texts = localDatabase[currentLanguage];
-            updateUI(texts);
+            updateUI(localDatabase[currentLanguage]);
         }
 
         async function updateLiveStatistics() {
@@ -438,23 +435,19 @@
 
                 const totalLimit = 100000;
                 const nodesLeft = totalLimit - sealedCount;
-                
                 const activeSlots = Math.floor(Math.random() * (450 - 120 + 1)) + 120;
 
                 document.getElementById('nodes-value').innerText = nodesLeft.toLocaleString('en-US');
                 document.getElementById('sealed-value').innerText = sealedCount.toLocaleString('en-US');
                 document.getElementById('slots-value').innerText = activeSlots.toString();
             } catch (error) {
-    console.error("Firebase Timeout/Rules Blocked. Init fallback.", error);
-    
-    // Fallback: Елегантна деградація (збереження довіри користувача)
-    const mockSealed = 142; 
-    const totalLimit = 100000;
-    const activeSlots = Math.floor(Math.random() * (450 - 120 + 1)) + 120;
-    
-    document.getElementById('nodes-value').innerText = (totalLimit - mockSealed).toLocaleString('en-US');
-    document.getElementById('sealed-value').innerText = mockSealed.toLocaleString('en-US');
-    document.getElementById('slots-value').innerText = activeSlots.toString();
+                console.error("Firebase Fallback Init", error);
+                const mockSealed = 142; 
+                const totalLimit = 100000;
+                const activeSlots = Math.floor(Math.random() * (450 - 120 + 1)) + 120;
+                document.getElementById('nodes-value').innerText = (totalLimit - mockSealed).toLocaleString('en-US');
+                document.getElementById('sealed-value').innerText = mockSealed.toLocaleString('en-US');
+                document.getElementById('slots-value').innerText = activeSlots.toString();
             }
         }
 
@@ -466,7 +459,7 @@
         };
 
         function showLiveNotification() {
-            let currentLanguage = localStorage.getItem('user_language') || 'en';
+            let currentLanguage = safeStorage.get('user_language') || 'en';
             const area = document.getElementById('notification-area');
             const msgs = liveMessages[currentLanguage];
             const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
@@ -480,14 +473,47 @@
 
         let notificationTimer = setInterval(showLiveNotification, 12000);
 
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-        clearInterval(notificationTimer); // Зупиняємо витік пам'яті (Sleep Mode)
-    } else {
-        showLiveNotification(); // Миттєва ілюзія активності при поверненні
-        notificationTimer = setInterval(showLiveNotification, 12000); // Перезапуск циклу
-    }
-});
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                clearInterval(notificationTimer);
+            } else {
+                showLiveNotification();
+                notificationTimer = setInterval(showLiveNotification, 12000);
+            }
+        });
+
+        // GHOST PROTOCOL (Соціальний доказ)
+        function spawnGhostNode() {
+            const cities = [
+                {lat: 50.45, lng: 30.52, n: "Kyiv"}, {lat: 48.85, lng: 2.35, n: "Paris"}, 
+                {lat: 40.71, lng: -74.00, n: "NYC"}, {lat: 35.68, lng: 139.65, n: "Tokyo"},
+                {lat: 52.52, lng: 13.40, n: "Berlin"}, {lat: 41.38, lng: 2.17, n: "Barcelona"},
+                {lat: 51.50, lng: -0.12, n: "London"}, {lat: 48.20, lng: 16.37, n: "Vienna"}
+            ];
+            const city = cities[Math.floor(Math.random() * cities.length)];
+            const ghostId = "NODE-" + Math.random().toString(16).slice(2, 6).toUpperCase();
+            
+            const marker = L.circleMarker([city.lat + (Math.random()*2-1), city.lng + (Math.random()*2-1)], {
+                radius: 5, color: '#00ffcc', fillColor: '#00ffcc', fillOpacity: 0.8, weight: 2
+            }).addTo(map);
+
+            const vault = document.getElementById('live-vault');
+            const entry = document.createElement('div');
+            entry.style.color = '#00ffcc';
+            entry.innerText = `> ${ghostId} | ENCRYPTED | ${city.n.toUpperCase()} NODE ONLINE`;
+            vault.prepend(entry);
+
+            setTimeout(() => { map.removeLayer(marker); if(entry) entry.remove(); }, 300000);
+        }
+
+        const startGhostProtocol = () => {
+            const delay = Math.floor(Math.random() * (50000 - 25000 + 1)) + 25000;
+            setTimeout(() => {
+                spawnGhostNode();
+                startGhostProtocol();
+            }, delay);
+        };
+        startGhostProtocol();
 
         window.playClick = function() {
             const clickSound = document.getElementById('sound-click');
@@ -500,24 +526,30 @@ document.addEventListener('visibilitychange', () => {
         };
 
         let currentPos = { lat: 0, lng: 0, city: "GLOBAL NODE" };
-        const safeStorage = {
-    get: (k) => { try { return localStorage.getItem(k); } catch(e) { return null; } },
-    set: (k, v) => { try { localStorage.setItem(k, v); } catch(e) { console.warn('Storage locked'); } },
-    remove: (k) => { try { localStorage.removeItem(k); } catch(e) {} }
-};
+        
         const map = L.map('global-map', { zoomControl: false, attributionControl: false }).setView([20, 0], 1);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
-        fetch('https://ipapi.co/json/').then(res => res.json()).then(data => {
-            currentPos = { lat: data.latitude, lng: data.longitude, city: `${data.city.toUpperCase()}, ${data.country_name.toUpperCase()}` };
-            map.flyTo([currentPos.lat, currentPos.lng], 4);
-        });
+        // БЕЗПЕКА: Обробка блокування AdBlock / Brave Shields
+        fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+                if(data && data.latitude) {
+                    currentPos = { lat: data.latitude, lng: data.longitude, city: `${data.city.toUpperCase()}, ${data.country_name.toUpperCase()}` };
+                    map.flyTo([currentPos.lat, currentPos.lng], 4);
+                }
+            })
+            .catch(err => console.warn('IP Tracking Blocked (AdBlock). Stealth mode active.'));
 
+        // БЕЗПЕКА: Захист від XSS ін'єкцій при читанні бази
         onSnapshot(query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(6)), (snap) => {
-            const vault = document.getElementById('live-vault'); vault.innerHTML = "";
+            const vault = document.getElementById('live-vault'); 
+            vault.innerHTML = "";
             snap.forEach(doc => {
                 const d = doc.data(); 
-                vault.innerHTML += `<div>> ${d.ticketId} | ${d.location}</div>`;
+                const entry = document.createElement('div');
+                entry.innerText = `> ${d.ticketId} | ${d.location}`; // innerText блокує XSS
+                vault.appendChild(entry);
                 if(d.lat && d.lng) L.circleMarker([d.lat, d.lng], { radius: 4, color: '#00ffcc', fillOpacity: 0.8 }).addTo(map);
             });
         });
@@ -525,13 +557,11 @@ document.addEventListener('visibilitychange', () => {
         function switchScreen(fromId, toId) {
             document.getElementById(fromId).classList.remove('active');
             setTimeout(() => { document.getElementById(toId).classList.add('active'); }, 50);
-            
             if(toId !== 'welcome-section') {
                 document.getElementById('visionary-section').style.display = 'none';
             }
         }
 
-        // ОНОВЛЕНО: Підтягуємо переклад для анімації злому
         window.startHack = function(btn) {
             window.playClick();
             const nodeBlock = btn.parentElement;
@@ -542,7 +572,7 @@ document.addEventListener('visibilitychange', () => {
             btn.style.display = 'none';
             hackScreen.style.display = 'block';
             
-            let currentLanguage = localStorage.getItem('user_language') || 'en';
+            let currentLanguage = safeStorage.get('user_language') || 'en';
             const texts = localDatabase[currentLanguage];
             const hackSteps = texts.hack_steps;
             
@@ -563,20 +593,17 @@ document.addEventListener('visibilitychange', () => {
             }, 800);
         };
 
-        // ОНОВЛЕНО: Підтягуємо переклад для повідомлень поширення
         window.shareToUnlock = function(btn) {
             window.playClick();
-            let currentLanguage = localStorage.getItem('user_language') || 'en';
-            const texts = localDatabase[currentLanguage];
-
+            let currentLanguage = safeStorage.get('user_language') || 'en';
             if (navigator.share) {
                 navigator.share({
                     title: 'AI Time Capsule',
-                    text: texts.share_prompt,
+                    text: localDatabase[currentLanguage].share_prompt,
                     url: window.location.href
                 }).catch(console.error);
             } else {
-                alert(texts.share_alert);
+                alert(localDatabase[currentLanguage].share_alert);
             }
         };
 
@@ -585,20 +612,19 @@ document.addEventListener('visibilitychange', () => {
             updateLiveStatistics();
 
             const savedText = safeStorage.get('capsuleText');
-if (savedText) 
-{ document.getElementById('user-msg').value = savedText; }
+            if (savedText) { document.getElementById('user-msg').value = savedText; }
 
             if (window.location.search.includes('status=success') && safeStorage.get('tx_intent')) {
-    safeStorage.remove('tx_intent'); 
-    window.history.replaceState({}, document.title, window.location.pathname);
-    
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById('result-section').classList.add('active');
-    document.getElementById('visionary-section').style.display = 'none';
-    
-    const finalText = safeStorage.get('capsuleText') || "GLOBAL NODE MESSAGE";
-    generateFinalCapsule(finalText);
-}
+                safeStorage.remove('tx_intent'); 
+                window.history.replaceState({}, document.title, window.location.pathname);
+                
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById('result-section').classList.add('active');
+                document.getElementById('visionary-section').style.display = 'none';
+                
+                const finalText = safeStorage.get('capsuleText') || "GLOBAL NODE MESSAGE";
+                generateFinalCapsule(finalText);
+            }
         });
 
         async function generateFinalCapsule(finalText) {
@@ -615,12 +641,7 @@ if (savedText)
             qrBox.innerHTML = "";
             
             new QRCode(qrBox, { 
-                text: capsuleId, 
-                width: 70, 
-                height: 70,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.L
+                text: capsuleId, width: 70, height: 70, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L
             });
 
             try { 
@@ -628,7 +649,7 @@ if (savedText)
                     ticketId: capsuleId, message: finalText, location: currentPos.city, 
                     lat: currentPos.lat, lng: currentPos.lng, timestamp: now.toISOString() 
                 }); 
-                localStorage.removeItem('capsuleText');
+                safeStorage.remove('capsuleText'); // БЕЗПЕКА: Змінено localStorage на safeStorage
             } catch (error) {
                 console.error("Помилка бази даних:", error);
             }
@@ -645,69 +666,9 @@ if (savedText)
                         window.playClick();
                         canvas.toBlob(async (blob) => {
                             const file = new File([blob], 'AI_Capsule.png', { type: 'image/png' });
-                            
                             if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                                try {
-                                    await navigator.share({ files: [file], title: 'AI Time Capsule', text: 'Мій слід в історії зафіксовано нейромережею. Створи свій: ' + window.location.href });
-                                } catch (err) { console.log('Помилка при поширенні:', err); }
+                                try { await navigator.share({ files: [file], title: 'AI Time Capsule', text: 'Мій слід в історії зафіксовано нейромережею. Створи свій: ' + window.location.href }); } 
+                                catch (err) { console.log('Помилка при поширенні:', err); }
                             } else {
                                 const link = document.createElement('a');
-                                link.download = 'AI_Capsule.png'; link.href = canvas.toDataURL(); link.click();
-                            }
-                        });
-                    };
-                });
-            }, 3000);
-        }
-
-        document.getElementById('btn-init').addEventListener('click', () => { window.playClick(); switchScreen('welcome-section', 'input-section'); });
-        document.getElementById('btn-init-2').addEventListener('click', () => { window.playClick(); switchScreen('welcome-section', 'input-section'); });
-
-        document.getElementById('btn-prep').addEventListener('click', () => {
-            window.playClick();
-            const msgInput = document.getElementById('user-msg');
-            const tempText = msgInput.value;
-            if(!tempText.trim()) {
-                msgInput.style.border = "1px solid red"; setTimeout(() => msgInput.style.border = "1px solid #333", 500); return;
-            }
-            safeStorage.set('capsuleText', tempText); // Запис через безпечний шлюз
-            switchScreen('input-section', 'analysis-section');
-            window.playScan();
-            
-            const analysisBox = document.getElementById('analysis-text');
-            let currentLanguage = localStorage.getItem('user_language') || 'en';
-            
-            const lines = {
-                uk: ["> Аналіз семантики...", "> Емоційний тон: Візіонерський", "> Унікальність патерну: 98.7%", "> Формування крипто-ключа..."],
-                en: ["> Semantics analysis...", "> Emotional tone: Visionary", "> Pattern uniqueness: 98.7%", "> Generating crypto-key..."],
-                sk: ["> Sémantická analýza...", "> Emocionálny tón: Vizionársky", "> Unikátnosť vzoru: 98.7%", "> Generovanie kryptokľúča..."],
-                de: ["> Semantik-Analyse...", "> Emotionaler Ton: Visionär", "> Muster-Einzigartigkeit: 98.7%", "> Krypto-Schlüssel wird generiert..."]
-            };
-            
-            let step = 0; analysisBox.innerHTML = lines[currentLanguage][0] + "<br>";
-            const interval = setInterval(() => {
-                step++;
-                if (step < lines[currentLanguage].length) { analysisBox.innerHTML += lines[currentLanguage][step] + "<br>"; } 
-                else { clearInterval(interval); setTimeout(() => { switchScreen('analysis-section', 'payment-section'); }, 1200); }
-            }, 800);
-        });
-
-        document.getElementById('btn-pay').addEventListener('click', () => {
-            window.playClick();
-            const btnPay = document.getElementById('btn-pay');
-            btnPay.innerText = "...";
-            btnPay.style.background = "#fff"; btnPay.style.color = "#000";
-            // 1. Створюємо унікальний токен наміру (Time-based lock)
-safeStorage.set('tx_intent', 'pending_' + Date.now()); 
-
-// 2. Формуємо URL та обходимо кеш браузера (Cache-Busting)
-const checkoutUrl = new URL("https://buy.stripe.com/test_14A8wQgA4gCN9m19uN38400");
-const uniqueRef = Math.random().toString(16).slice(2, 10);
-checkoutUrl.searchParams.append('client_reference_id', uniqueRef);
-
-// 3. Виконуємо жорсткий редирект
-window.location.href = checkoutUrl.toString();
-        });
-    </script>
-</body>
-</html>
+                                link.download = 'AI_
