@@ -497,7 +497,8 @@
                 radius: 5, color: '#00ffcc', fillColor: '#00ffcc', fillOpacity: 0.8, weight: 2
             }).addTo(map);
 
-            const vault = document.getElementById('live-vault');
+            const vault = document.getElementById('live-vault'); 
+if (!snap.empty) { vault.innerHTML = ""; } // Видаляє резервний текст ТІЛЬКИ якщо є реальні дані
             const entry = document.createElement('div');
             entry.style.color = '#00ffcc';
             entry.innerText = `> ${ghostId} | ENCRYPTED | ${city.n.toUpperCase()} NODE ONLINE`;
@@ -506,11 +507,15 @@
             setTimeout(() => { map.removeLayer(marker); if(entry) entry.remove(); }, 300000);
         }
 
-        const startGhostProtocol = () => {
-            const delay = Math.floor(Math.random() * (50000 - 25000 + 1)) + 25000;
-            setTimeout(() => {
-                spawnGhostNode();
-                startGhostProtocol();
+        const startGhostProtocol = (isFirst = false) => {
+    // Перша точка з'являється через 1.5 сек, наступні - кожні 15-30 сек
+    const delay = isFirst ? 1500 : Math.floor(Math.random() * (30000 - 15000 + 1)) + 15000;
+    setTimeout(() => {
+        spawnGhostNode();
+        startGhostProtocol(false);
+    }, delay);
+};
+startGhostProtocol(true);
             }, delay);
         };
         startGhostProtocol();
