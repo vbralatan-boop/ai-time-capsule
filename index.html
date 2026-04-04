@@ -469,7 +469,16 @@
             setTimeout(() => { toast.remove(); }, 4500);
         }
 
-        setInterval(showLiveNotification, 12000);
+        let notificationTimer = setInterval(showLiveNotification, 12000);
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        clearInterval(notificationTimer); // Зупиняємо витік пам'яті (Sleep Mode)
+    } else {
+        showLiveNotification(); // Миттєва ілюзія активності при поверненні
+        notificationTimer = setInterval(showLiveNotification, 12000); // Перезапуск циклу
+    }
+});
 
         window.playClick = function() {
             const clickSound = document.getElementById('sound-click');
