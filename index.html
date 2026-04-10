@@ -31,19 +31,10 @@
         h1 { color: var(--neon); text-shadow: 0 0 15px var(--neon); font-size: 24px; letter-spacing: 4px; text-transform: uppercase; margin: 0 0 10px; }
         .phase-info { font-size: 10px; color: var(--neon); letter-spacing: 5px; margin-bottom: 20px; opacity: 0.7; }
         
-        /* ОПТИМІЗОВАНА КАРТА */
         #global-map { width: 100%; height: 180px; border: 1px solid rgba(0, 255, 204, 0.4); border-radius: 8px; box-shadow: 0 0 20px rgba(0,255,204,0.1); margin: 15px 0; background: #050505; }
         
-        /* ЕФЕКТ ГЛОБАЛЬНОГО СПАЛАХУ ДЛЯ КАРТИ (ПОВЕРНУТО) */
-        .ghost-pulse {
-            width: 12px; height: 12px; background: var(--neon);
-            border-radius: 50%; box-shadow: 0 0 10px var(--neon);
-            animation: mapPulse 1.5s ease-out infinite;
-        }
-        @keyframes mapPulse {
-            0% { transform: scale(0.5); opacity: 1; box-shadow: 0 0 10px var(--neon); }
-            100% { transform: scale(3.5); opacity: 0; box-shadow: 0 0 40px var(--neon); }
-        }
+        .ghost-pulse { width: 12px; height: 12px; background: var(--neon); border-radius: 50%; box-shadow: 0 0 10px var(--neon); animation: mapPulse 1.5s ease-out infinite; }
+        @keyframes mapPulse { 0% { transform: scale(0.5); opacity: 1; box-shadow: 0 0 10px var(--neon); } 100% { transform: scale(3.5); opacity: 0; box-shadow: 0 0 40px var(--neon); } }
 
         .manifesto-box { background: var(--glass); border-left: 4px solid var(--neon); padding: 15px; margin: 20px 0; text-align: justify; font-size: 13px; line-height: 1.6; color: #ccc; border-radius: 0 8px 8px 0; }
         
@@ -66,7 +57,6 @@
         .laser-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #ffffff; box-shadow: 0 0 20px 5px var(--neon); animation: laserScan 3s linear infinite; z-index: 5; }
         @keyframes laserScan { 0% { top: 0%; opacity: 0; } 10% { opacity: 0.9; } 90% { opacity: 0.9; } 100% { top: 100%; opacity: 0; } }
 
-        /* ОПТИМІЗОВАНА ЧИТАБЕЛЬНІСТЬ ТЕКСТІВ */
         #live-vault { height: 80px; overflow: hidden; font-size: 11px; color: var(--neon); opacity: 0.9; margin-top: 25px; text-align: left; border-top: 1px solid rgba(0, 255, 204, 0.1); padding-top: 12px; line-height: 1.8; font-family: monospace; text-shadow: 0 0 5px rgba(0, 255, 204, 0.3); }
         .scroll-down { margin-top: 45px; font-size: 11px; color: #fff; opacity: 0.8; letter-spacing: 3px; font-weight: bold; animation: pulse 2s infinite; text-transform: uppercase; }
         @keyframes pulse { 0% { opacity: 0.4; transform: translateY(0); } 50% { opacity: 1; transform: translateY(5px); } 100% { opacity: 0.4; transform: translateY(0); } }
@@ -242,8 +232,8 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, getCountFromServer } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyApzG_osR_dyRH9bNh3lETthaV7ssxnRgU",
@@ -256,6 +246,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // БЕЗПЕКА: Куленепробивне сховище (Self-Healing)
         const safeStorage = {
             get: (k) => { try { return localStorage.getItem(k); } catch(e) { return null; } },
             set: (k, v) => { try { localStorage.setItem(k, v); } catch(e) { console.warn('Storage locked'); } },
@@ -318,57 +309,64 @@
         };
 
         function updateUI(texts) {
-            document.getElementById('ui-phase').innerText = texts.phase;
-            document.getElementById('ui-title').innerHTML = texts.title; 
-            document.getElementById('ui-manifesto').innerText = texts.manifest;
-            document.getElementById('ui-nodes-label').textContent = texts.stats.nodes;
-            document.getElementById('ui-sealed-label').textContent = texts.stats.sealed;
-            document.getElementById('ui-slots-label').textContent = texts.stats.slots;
-            document.getElementById('ui-scroll').innerText = texts.scroll;
-            document.getElementById('ui-social-title').innerText = texts.social_title;
-            document.getElementById('ui-how-title').innerText = texts.how_title;
-            document.getElementById('ui-step1-t').innerText = texts.s1_t; document.getElementById('ui-step1-d').innerText = texts.s1_d;
-            document.getElementById('ui-step2-t').innerText = texts.s2_t; document.getElementById('ui-step2-d').innerText = texts.s2_d;
-            document.getElementById('ui-step3-t').innerText = texts.s3_t; document.getElementById('ui-step3-d').innerText = texts.s3_d;
-            document.getElementById('btn-init').innerText = texts.start;
-            document.getElementById('btn-init-2').innerText = texts.start;
-            document.getElementById('ui-sealing').innerText = texts.seal;
-            document.getElementById('user-msg').placeholder = texts.place;
-            document.getElementById('btn-prep').innerText = texts.gen;
-            document.getElementById('ui-analysis-title').innerText = texts.analysis_title;
-            document.getElementById('ui-payment-title').innerText = texts.payment_title;
-            document.getElementById('ui-pay-desc').innerText = texts.payDesc;
-            document.getElementById('btn-pay').innerText = texts.btn_stripe;
-            document.getElementById('btn-cancel').innerText = texts.btn_cancel;
-            document.getElementById('btn-share').innerText = texts.share;
-            document.getElementById('btn-reboot').innerText = texts.reb;
-            document.getElementById('ui-vision-h2').innerText = texts.v_h2;
-            document.getElementById('ui-vision-p').innerText = texts.v_p;
-            document.getElementById('ui-vision-quote').innerHTML = texts.v_quote;
-            document.getElementById('ui-vision-author').innerText = texts.v_author;
-            document.getElementById('btn-history').innerText = texts.btn_hist;
+            try {
+                document.getElementById('ui-phase').innerText = texts.phase;
+                document.getElementById('ui-title').innerHTML = texts.title; 
+                document.getElementById('ui-manifesto').innerText = texts.manifest;
+                document.getElementById('ui-nodes-label').textContent = texts.stats.nodes;
+                document.getElementById('ui-sealed-label').textContent = texts.stats.sealed;
+                document.getElementById('ui-slots-label').textContent = texts.stats.slots;
+                document.getElementById('ui-scroll').innerText = texts.scroll;
+                document.getElementById('ui-social-title').innerText = texts.social_title;
+                document.getElementById('ui-how-title').innerText = texts.how_title;
+                document.getElementById('ui-step1-t').innerText = texts.s1_t; document.getElementById('ui-step1-d').innerText = texts.s1_d;
+                document.getElementById('ui-step2-t').innerText = texts.s2_t; document.getElementById('ui-step2-d').innerText = texts.s2_d;
+                document.getElementById('ui-step3-t').innerText = texts.s3_t; document.getElementById('ui-step3-d').innerText = texts.s3_d;
+                document.getElementById('btn-init').innerText = texts.start;
+                document.getElementById('btn-init-2').innerText = texts.start;
+                document.getElementById('ui-sealing').innerText = texts.seal;
+                document.getElementById('user-msg').placeholder = texts.place;
+                document.getElementById('btn-prep').innerText = texts.gen;
+                document.getElementById('ui-analysis-title').innerText = texts.analysis_title;
+                document.getElementById('ui-payment-title').innerText = texts.payment_title;
+                document.getElementById('ui-pay-desc').innerText = texts.payDesc;
+                document.getElementById('btn-pay').innerText = texts.btn_stripe;
+                document.getElementById('btn-cancel').innerText = texts.btn_cancel;
+                document.getElementById('btn-share').innerText = texts.share;
+                document.getElementById('btn-reboot').innerText = texts.reb;
+                document.getElementById('ui-vision-h2').innerText = texts.v_h2;
+                document.getElementById('ui-vision-p').innerText = texts.v_p;
+                document.getElementById('ui-vision-quote').innerHTML = texts.v_quote;
+                document.getElementById('ui-vision-author').innerText = texts.v_author;
+                document.getElementById('btn-history').innerText = texts.btn_hist;
 
-            document.querySelectorAll('.unlock-btn').forEach(el => el.innerText = texts.unlock_btn);
-            document.querySelectorAll('.encrypted').forEach(el => el.innerText = texts.encrypted_text);
-            document.querySelectorAll('.priority-msg').forEach(el => el.innerText = texts.priority_msg);
-            document.querySelectorAll('.share-action-btn').forEach(el => el.innerText = texts.share_btn);
+                document.querySelectorAll('.unlock-btn').forEach(el => el.innerText = texts.unlock_btn);
+                document.querySelectorAll('.encrypted').forEach(el => el.innerText = texts.encrypted_text);
+                document.querySelectorAll('.priority-msg').forEach(el => el.innerText = texts.priority_msg);
+                document.querySelectorAll('.share-action-btn').forEach(el => el.innerText = texts.share_btn);
+            } catch (e) { console.error("UI Update Error", e); }
         }
 
         function updateActiveFlag(lang) {
             document.querySelectorAll('.lang-flag').forEach(f => f.classList.remove('active'));
-            document.getElementById(`flag-${lang}`).classList.add('active');
+            const flag = document.getElementById(`flag-${lang}`);
+            if(flag) flag.classList.add('active');
         }
 
         window.changeLanguage = function(newLang) {
             window.playClick();
             safeStorage.set('user_language', newLang);
             updateActiveFlag(newLang);
-            const texts = localDatabase[newLang];
-            updateUI(texts);
+            updateUI(localDatabase[newLang]);
         };
 
+        // БЕЗПЕКА: Якщо пам'ять пошкоджена, гарантовано повертаємо англійську
         function initLanguage() {
-            let currentLanguage = safeStorage.get('user_language') || 'en';
+            let currentLanguage = safeStorage.get('user_language');
+            if (!currentLanguage || !localDatabase[currentLanguage]) {
+                currentLanguage = 'en';
+                safeStorage.set('user_language', 'en');
+            }
             updateActiveFlag(currentLanguage);
             updateUI(localDatabase[currentLanguage]);
         }
@@ -405,7 +403,8 @@
         };
 
         function showLiveNotification() {
-            let currentLanguage = safeStorage.get('user_language') || 'en';
+            let currentLanguage = safeStorage.get('user_language');
+            if (!liveMessages[currentLanguage]) currentLanguage = 'en';
             const area = document.getElementById('notification-area');
             const msgs = liveMessages[currentLanguage];
             const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
@@ -420,15 +419,11 @@
         let notificationTimer = setInterval(showLiveNotification, 12000);
 
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                clearInterval(notificationTimer);
-            } else {
-                showLiveNotification();
-                notificationTimer = setInterval(showLiveNotification, 12000);
-            }
+            if (document.hidden) { clearInterval(notificationTimer); } 
+            else { showLiveNotification(); notificationTimer = setInterval(showLiveNotification, 12000); }
         });
 
-        // GHOST PROTOCOL: Створення неонових пульсацій
+        // GHOST PROTOCOL
         function spawnGhostNode() {
             const cities = [
                 {lat: 50.45, lng: 30.52, n: "Kyiv"}, {lat: 48.85, lng: 2.35, n: "Paris"}, 
@@ -439,16 +434,10 @@
             const city = cities[Math.floor(Math.random() * cities.length)];
             const ghostId = "NODE-" + Math.random().toString(16).slice(2, 6).toUpperCase();
             
-            // Новий пульсуючий маркер замість статичного кола
-            const pulseIcon = L.divIcon({ 
-                className: 'ghost-pulse', 
-                iconSize: [12, 12], 
-                iconAnchor: [6, 6] 
-            });
+            const pulseIcon = L.divIcon({ className: 'ghost-pulse', iconSize: [12, 12], iconAnchor: [6, 6] });
             const marker = L.marker([city.lat, city.lng], { icon: pulseIcon }).addTo(map);
 
             const vault = document.getElementById('live-vault'); 
-            // Безпечне очищення тексту-заглушки
             if (vault.innerHTML.includes('SYNCING')) { vault.innerHTML = ""; } 
             
             const entry = document.createElement('div');
@@ -460,30 +449,24 @@
         }
 
         const startGhostProtocol = (isFirst = false) => {
-            // Перша точка вибухне через 1.5 сек, наступні - рандомно
             const delay = isFirst ? 1500 : Math.floor(Math.random() * (30000 - 15000 + 1)) + 15000;
-            setTimeout(() => {
-                spawnGhostNode();
-                startGhostProtocol(false);
-            }, delay);
+            setTimeout(() => { spawnGhostNode(); startGhostProtocol(false); }, delay);
         };
 
         window.playClick = function() {
             const clickSound = document.getElementById('sound-click');
-            clickSound.currentTime = 0; clickSound.play().catch(e => console.log('Аудіо заблоковано'));
+            if(clickSound) { clickSound.currentTime = 0; clickSound.play().catch(e => console.log('Аудіо блоковано')); }
         };
 
         window.playScan = function() {
             const scanSound = document.getElementById('sound-scan');
-            scanSound.currentTime = 0; scanSound.play().catch(e => console.log('Аудіо заблоковано'));
+            if(scanSound) { scanSound.currentTime = 0; scanSound.play().catch(e => console.log('Аудіо блоковано')); }
         };
 
         let currentPos = { lat: 0, lng: 0, city: "GLOBAL NODE" };
-        
         const map = L.map('global-map', { zoomControl: false, attributionControl: false }).setView([20, 0], 1);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
-        // БЕЗПЕКА: Обробка блокування AdBlock / Brave Shields
         fetch('https://ipapi.co/json/')
             .then(res => res.json())
             .then(data => {
@@ -492,28 +475,30 @@
                     map.flyTo([currentPos.lat, currentPos.lng], 4);
                 }
             })
-            .catch(err => console.warn('IP Tracking Blocked (AdBlock). Stealth mode active.'));
+            .catch(err => console.warn('IP Tracking Blocked.'));
 
-        // БЕЗПЕКА: Захист від XSS ін'єкцій при читанні бази
+        // БЕЗПЕКА: Усунення дублювання UI в терміналі
         onSnapshot(query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(6)), (snap) => {
-            const vault = document.getElementById('live-vault'); 
-            if (!snap.empty && vault.innerHTML.includes('SYNCING')) { vault.innerHTML = ""; }
-            
-            snap.forEach(doc => {
-                const d = doc.data(); 
-                const entry = document.createElement('div');
-                entry.innerText = `> ${d.ticketId} | ${d.location}`;
-                vault.appendChild(entry);
-                if(d.lat && d.lng) L.circleMarker([d.lat, d.lng], { radius: 4, color: '#00ffcc', fillOpacity: 0.8 }).addTo(map);
-            });
+            try {
+                const vault = document.getElementById('live-vault'); 
+                document.querySelectorAll('.real-node').forEach(n => n.remove());
+                if (!snap.empty && vault.innerHTML.includes('SYNCING')) { vault.innerHTML = ""; }
+                
+                snap.forEach(doc => {
+                    const d = doc.data(); 
+                    const entry = document.createElement('div');
+                    entry.className = 'real-node';
+                    entry.innerText = `> ${d.ticketId} | ${d.location}`;
+                    vault.appendChild(entry);
+                    if(d.lat && d.lng) L.circleMarker([d.lat, d.lng], { radius: 4, color: '#00ffcc', fillOpacity: 0.8 }).addTo(map);
+                });
+            } catch(e) { console.warn("Snapshot render error", e); }
         });
 
         function switchScreen(fromId, toId) {
             document.getElementById(fromId).classList.remove('active');
             setTimeout(() => { document.getElementById(toId).classList.add('active'); }, 50);
-            if(toId !== 'welcome-section') {
-                document.getElementById('visionary-section').style.display = 'none';
-            }
+            if(toId !== 'welcome-section') { document.getElementById('visionary-section').style.display = 'none'; }
         }
 
         window.startHack = function(btn) {
@@ -527,69 +512,54 @@
             hackScreen.style.display = 'block';
             
             let currentLanguage = safeStorage.get('user_language') || 'en';
-            const texts = localDatabase[currentLanguage];
-            const hackSteps = texts.hack_steps;
+            if(!localDatabase[currentLanguage]) currentLanguage = 'en';
+            const hackSteps = localDatabase[currentLanguage].hack_steps;
             
             let step = 0;
             hackScreen.innerHTML = hackSteps[0] + "<br>";
             
             const interval = setInterval(() => {
                 step++;
-                if(step < hackSteps.length) {
-                    hackScreen.innerHTML += hackSteps[step] + "<br>";
-                } else {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        priorityMsg.style.display = 'block';
-                        shareBtn.style.display = 'block';
-                    }, 500);
-                }
+                if(step < hackSteps.length) { hackScreen.innerHTML += hackSteps[step] + "<br>"; } 
+                else { clearInterval(interval); setTimeout(() => { priorityMsg.style.display = 'block'; shareBtn.style.display = 'block'; }, 500); }
             }, 800);
         };
 
         window.shareToUnlock = function(btn) {
             window.playClick();
             let currentLanguage = safeStorage.get('user_language') || 'en';
+            if(!localDatabase[currentLanguage]) currentLanguage = 'en';
             if (navigator.share) {
-                navigator.share({
-                    title: 'AI Time Capsule',
-                    text: localDatabase[currentLanguage].share_prompt,
-                    url: window.location.href
-                }).catch(console.error);
-            } else {
-                alert(localDatabase[currentLanguage].share_alert);
-            }
+                navigator.share({ title: 'AI Time Capsule', text: localDatabase[currentLanguage].share_prompt, url: window.location.href }).catch(console.error);
+            } else { alert(localDatabase[currentLanguage].share_alert); }
         };
 
         const initSystem = () => {
-            initLanguage();
-            updateLiveStatistics();
-            startGhostProtocol(true); // ЗАПУСК ПРИМАРНОГО ПРОТОКОЛУ ТІЛЬКИ ПІСЛЯ ЗАВАНТАЖЕННЯ
+            try {
+                initLanguage();
+                updateLiveStatistics();
+                startGhostProtocol(true);
 
-            const savedText = safeStorage.get('capsuleText');
-            if (savedText) { document.getElementById('user-msg').value = savedText; }
+                const savedText = safeStorage.get('capsuleText');
+                if (savedText) { document.getElementById('user-msg').value = savedText; }
 
-            // ОПТИМІЗОВАНО: Довіряємо URL від Stripe, обходимо стирання пам'яті мобільними браузерами
-if (window.location.search.includes('status=success')) {
-    safeStorage.remove('tx_intent'); 
-    window.history.replaceState({}, document.title, window.location.pathname);
-    
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById('result-section').classList.add('active');
-    document.getElementById('visionary-section').style.display = 'none';
-    
-    // Якщо Safari видалив текст користувача, генеруємо резервний зашифрований блок, щоб уникнути помилки
-    const finalText = safeStorage.get('capsuleText') || "[ ENCRYPTED GLOBAL DATA ]";
-    generateFinalCapsule(finalText);
-}
+                // ПЕРЕВІРКА STRIPE: Якщо URL містить status=success
+                if (window.location.search.includes('status=success')) {
+                    safeStorage.remove('tx_intent'); 
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    
+                    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                    document.getElementById('result-section').classList.add('active');
+                    document.getElementById('visionary-section').style.display = 'none';
+                    
+                    const finalText = safeStorage.get('capsuleText') || "[ ENCRYPTED GLOBAL DATA ]";
+                    generateFinalCapsule(finalText);
+                }
+            } catch (error) { console.error("CRITICAL INIT FAILURE:", error); }
         };
 
-        // Куленепробивний запуск: перевіряємо, чи сторінка вже завантажилась
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initSystem);
-        } else {
-            initSystem();
-        }
+        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initSystem); } 
+        else { initSystem(); }
 
         async function generateFinalCapsule(finalText) {
             window.playScan();
@@ -603,20 +573,12 @@ if (window.location.search.includes('status=success')) {
 
             const qrBox = document.getElementById('qr-wrap'); 
             qrBox.innerHTML = "";
-            
-            new QRCode(qrBox, { 
-                text: capsuleId, width: 70, height: 70, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L
-            });
+            new QRCode(qrBox, { text: capsuleId, width: 70, height: 70, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L });
 
             try { 
-                await addDoc(collection(db, "capsules"), { 
-                    ticketId: capsuleId, message: finalText, location: currentPos.city, 
-                    lat: currentPos.lat, lng: currentPos.lng, timestamp: now.toISOString() 
-                }); 
+                await addDoc(collection(db, "capsules"), { ticketId: capsuleId, message: finalText, location: currentPos.city, lat: currentPos.lat, lng: currentPos.lng, timestamp: now.toISOString() }); 
                 safeStorage.remove('capsuleText'); 
-            } catch (error) {
-                console.error("Помилка бази даних:", error);
-            }
+            } catch (error) { console.error("Помилка бази даних:", error); }
 
             setTimeout(() => {
                 html2canvas(document.getElementById('capsule-visual'), { backgroundColor: "#020205", scale: 2, useCORS: true }).then(canvas => {
@@ -625,17 +587,15 @@ if (window.location.search.includes('status=success')) {
                     
                     const shareBtn = document.getElementById('btn-share'); 
                     shareBtn.style.display = 'block';
-                    
                     shareBtn.onclick = () => { 
                         window.playClick();
                         canvas.toBlob(async (blob) => {
                             const file = new File([blob], 'AI_Capsule.png', { type: 'image/png' });
                             if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                                try { await navigator.share({ files: [file], title: 'AI Time Capsule', text: 'Мій слід в історії зафіксовано нейромережею. Створи свій: ' + window.location.href }); } 
+                                try { await navigator.share({ files: [file], title: 'AI Time Capsule', text: 'Мій слід в історії: ' + window.location.href }); } 
                                 catch (err) { console.log('Помилка при поширенні:', err); }
                             } else {
-                                const link = document.createElement('a');
-                                link.download = 'AI_Capsule.png'; link.href = canvas.toDataURL(); link.click();
+                                const link = document.createElement('a'); link.download = 'AI_Capsule.png'; link.href = canvas.toDataURL(); link.click();
                             }
                         });
                     };
@@ -650,26 +610,26 @@ if (window.location.search.includes('status=success')) {
             window.playClick();
             const msgInput = document.getElementById('user-msg');
             const tempText = msgInput.value;
-            if(!tempText.trim()) {
-                msgInput.style.border = "1px solid red"; setTimeout(() => msgInput.style.border = "1px solid #333", 500); return;
-            }
+            if(!tempText.trim()) { msgInput.style.border = "1px solid red"; setTimeout(() => msgInput.style.border = "1px solid #333", 500); return; }
             safeStorage.set('capsuleText', tempText);
             switchScreen('input-section', 'analysis-section');
             window.playScan();
             
-            let currentLanguage = safeStorage.get('user_language') || 'en';
+            let currentLanguage = safeStorage.get('user_language');
+            if(!localDatabase[currentLanguage]) currentLanguage = 'en';
             const analysisBox = document.getElementById('analysis-text');
-            const lines = {
+            const lines = localDatabase[currentLanguage].hack_steps; // Reuse hack_steps or fallback
+            const realLines = {
                 uk: ["> Аналіз семантики...", "> Емоційний тон: Візіонерський", "> Унікальність патерну: 98.7%", "> Формування крипто-ключа..."],
                 en: ["> Semantics analysis...", "> Emotional tone: Visionary", "> Pattern uniqueness: 98.7%", "> Generating crypto-key..."],
                 sk: ["> Sémantická analýza...", "> Emocionálny tón: Vizionársky", "> Unikátnosť vzoru: 98.7%", "> Generovanie kryptokľúča..."],
                 de: ["> Semantik-Analyse...", "> Emotionaler Ton: Visionär", "> Muster-Einzigartigkeit: 98.7%", "> Krypto-Schlüssel wird generiert..."]
             };
             
-            let step = 0; analysisBox.innerHTML = lines[currentLanguage][0] + "<br>";
+            let step = 0; analysisBox.innerHTML = realLines[currentLanguage][0] + "<br>";
             const interval = setInterval(() => {
                 step++;
-                if (step < lines[currentLanguage].length) { analysisBox.innerHTML += lines[currentLanguage][step] + "<br>"; } 
+                if (step < realLines[currentLanguage].length) { analysisBox.innerHTML += realLines[currentLanguage][step] + "<br>"; } 
                 else { clearInterval(interval); setTimeout(() => { switchScreen('analysis-section', 'payment-section'); }, 1200); }
             }, 800);
         });
@@ -677,8 +637,7 @@ if (window.location.search.includes('status=success')) {
         document.getElementById('btn-pay').addEventListener('click', () => {
             window.playClick();
             const btnPay = document.getElementById('btn-pay');
-            btnPay.innerText = "...";
-            btnPay.style.background = "#fff"; btnPay.style.color = "#000";
+            btnPay.innerText = "..."; btnPay.style.background = "#fff"; btnPay.style.color = "#000";
             
             safeStorage.set('tx_intent', 'pending_' + Date.now()); 
             const checkoutUrl = new URL("https://buy.stripe.com/test_14A8wQgA4gCN9m19uN38400");
