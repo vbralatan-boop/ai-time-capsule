@@ -34,6 +34,17 @@
         /* ОПТИМІЗОВАНА КАРТА */
         #global-map { width: 100%; height: 180px; border: 1px solid rgba(0, 255, 204, 0.4); border-radius: 8px; box-shadow: 0 0 20px rgba(0,255,204,0.1); margin: 15px 0; background: #050505; }
         
+        /* ЕФЕКТ ГЛОБАЛЬНОГО СПАЛАХУ ДЛЯ КАРТИ (ПОВЕРНУТО) */
+        .ghost-pulse {
+            width: 12px; height: 12px; background: var(--neon);
+            border-radius: 50%; box-shadow: 0 0 10px var(--neon);
+            animation: mapPulse 1.5s ease-out infinite;
+        }
+        @keyframes mapPulse {
+            0% { transform: scale(0.5); opacity: 1; box-shadow: 0 0 10px var(--neon); }
+            100% { transform: scale(3.5); opacity: 0; box-shadow: 0 0 40px var(--neon); }
+        }
+
         .manifesto-box { background: var(--glass); border-left: 4px solid var(--neon); padding: 15px; margin: 20px 0; text-align: justify; font-size: 13px; line-height: 1.6; color: #ccc; border-radius: 0 8px 8px 0; }
         
         .stats-panel { background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(0, 255, 204, 0.3); padding: 15px; margin: 15px 0; font-weight: bold; font-size: 14px; letter-spacing: 1px; display: flex; justify-content: space-around; text-align: center; border-radius: 8px;}
@@ -47,75 +58,11 @@
 
         textarea { width: 100%; height: 120px; background: #050505; border: 1px solid #333; color: var(--neon); padding: 15px; box-sizing: border-box; resize: none; margin-bottom: 10px; outline: none; border-radius: 10px; font-size: 16px; transition: 0.3s; }
 
-        #capsule-visual { 
-            position: relative; 
-            width: 320px; 
-            height: 568px; 
-            margin: 0 auto; 
-            background-image: url('https://i.postimg.cc/vHYxRr5f/1772900411494.png');
-            background-size: 100% 100%;
-            background-position: center;
-            background-repeat: no-repeat;
-            overflow: hidden; 
-        }
-        
-        #capsule-message { 
-            position: absolute;
-            top: 45%; 
-            left: 10%;
-            width: 80%;
-            font-size: 14px; 
-            color: #ffffff; 
-            font-weight: 800; 
-            text-align: center; 
-            line-height: 1.4; 
-            text-shadow: 0 0 10px var(--neon), 0 0 20px #000; 
-        }
-
-        #qr-wrap { 
-            position: absolute;
-            bottom: 22%; 
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px; 
-            height: 80px; 
-            background: rgba(255, 255, 255, 0.95); 
-            padding: 5px; 
-            border-radius: 8px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-        }
-
-        .meta-data { 
-            position: absolute;
-            bottom: 12%; 
-            left: 10%;
-            width: 80%;
-            font-size: 10px; 
-            color: rgba(255, 255, 255, 0.8); 
-            text-align: center; 
-            letter-spacing: 2px; 
-            border-top: 1px dashed rgba(255, 255, 255, 0.2); 
-            padding-top: 8px; 
-            display: flex; 
-            justify-content: space-between; 
-            text-shadow: 0 0 5px #000; 
-        }
-
-        #capsule-footer { 
-            position: absolute;
-            bottom: 6%; 
-            left: 10%;
-            width: 80%;
-            font-size: 12px; 
-            color: var(--neon); 
-            text-align: center; 
-            letter-spacing: 4px; 
-            font-weight: bold; 
-            text-shadow: 0 0 5px #000; 
-        }
-        
+        #capsule-visual { position: relative; width: 320px; height: 568px; margin: 0 auto; background-image: url('https://i.postimg.cc/vHYxRr5f/1772900411494.png'); background-size: 100% 100%; background-position: center; background-repeat: no-repeat; overflow: hidden; }
+        #capsule-message { position: absolute; top: 45%; left: 10%; width: 80%; font-size: 14px; color: #ffffff; font-weight: 800; text-align: center; line-height: 1.4; text-shadow: 0 0 10px var(--neon), 0 0 20px #000; }
+        #qr-wrap { position: absolute; bottom: 22%; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; background: rgba(255, 255, 255, 0.95); padding: 5px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .meta-data { position: absolute; bottom: 12%; left: 10%; width: 80%; font-size: 10px; color: rgba(255, 255, 255, 0.8); text-align: center; letter-spacing: 2px; border-top: 1px dashed rgba(255, 255, 255, 0.2); padding-top: 8px; display: flex; justify-content: space-between; text-shadow: 0 0 5px #000; }
+        #capsule-footer { position: absolute; bottom: 6%; left: 10%; width: 80%; font-size: 12px; color: var(--neon); text-align: center; letter-spacing: 4px; font-weight: bold; text-shadow: 0 0 5px #000; }
         .laser-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #ffffff; box-shadow: 0 0 20px 5px var(--neon); animation: laserScan 3s linear infinite; z-index: 5; }
         @keyframes laserScan { 0% { top: 0%; opacity: 0; } 10% { opacity: 0.9; } 90% { opacity: 0.9; } 100% { top: 100%; opacity: 0; } }
 
@@ -309,7 +256,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // КЛІЄНТСЬКИЙ ЗАХИСТ: Безпечна обгортка пам'яті
         const safeStorage = {
             get: (k) => { try { return localStorage.getItem(k); } catch(e) { return null; } },
             set: (k, v) => { try { localStorage.setItem(k, v); } catch(e) { console.warn('Storage locked'); } },
@@ -482,7 +428,7 @@
             }
         });
 
-        // GHOST PROTOCOL (Соціальний доказ)
+        // GHOST PROTOCOL: Створення неонових пульсацій
         function spawnGhostNode() {
             const cities = [
                 {lat: 50.45, lng: 30.52, n: "Kyiv"}, {lat: 48.85, lng: 2.35, n: "Paris"}, 
@@ -493,12 +439,18 @@
             const city = cities[Math.floor(Math.random() * cities.length)];
             const ghostId = "NODE-" + Math.random().toString(16).slice(2, 6).toUpperCase();
             
-            const marker = L.circleMarker([city.lat + (Math.random()*2-1), city.lng + (Math.random()*2-1)], {
-                radius: 5, color: '#00ffcc', fillColor: '#00ffcc', fillOpacity: 0.8, weight: 2
-            }).addTo(map);
+            // Новий пульсуючий маркер замість статичного кола
+            const pulseIcon = L.divIcon({ 
+                className: 'ghost-pulse', 
+                iconSize: [12, 12], 
+                iconAnchor: [6, 6] 
+            });
+            const marker = L.marker([city.lat, city.lng], { icon: pulseIcon }).addTo(map);
 
             const vault = document.getElementById('live-vault'); 
-if (!snap.empty) { vault.innerHTML = ""; } // Видаляє резервний текст ТІЛЬКИ якщо є реальні дані
+            // Безпечне очищення тексту-заглушки
+            if (vault.innerHTML.includes('SYNCING')) { vault.innerHTML = ""; } 
+            
             const entry = document.createElement('div');
             entry.style.color = '#00ffcc';
             entry.innerText = `> ${ghostId} | ENCRYPTED | ${city.n.toUpperCase()} NODE ONLINE`;
@@ -508,17 +460,13 @@ if (!snap.empty) { vault.innerHTML = ""; } // Видаляє резервний 
         }
 
         const startGhostProtocol = (isFirst = false) => {
-    // Перша точка з'являється через 1.5 сек, наступні - кожні 15-30 сек
-    const delay = isFirst ? 1500 : Math.floor(Math.random() * (30000 - 15000 + 1)) + 15000;
-    setTimeout(() => {
-        spawnGhostNode();
-        startGhostProtocol(false);
-    }, delay);
-};
-startGhostProtocol(true);
+            // Перша точка вибухне через 1.5 сек, наступні - рандомно
+            const delay = isFirst ? 1500 : Math.floor(Math.random() * (30000 - 15000 + 1)) + 15000;
+            setTimeout(() => {
+                spawnGhostNode();
+                startGhostProtocol(false);
             }, delay);
         };
-        startGhostProtocol();
 
         window.playClick = function() {
             const clickSound = document.getElementById('sound-click');
@@ -549,11 +497,12 @@ startGhostProtocol(true);
         // БЕЗПЕКА: Захист від XSS ін'єкцій при читанні бази
         onSnapshot(query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(6)), (snap) => {
             const vault = document.getElementById('live-vault'); 
-            vault.innerHTML = "";
+            if (!snap.empty && vault.innerHTML.includes('SYNCING')) { vault.innerHTML = ""; }
+            
             snap.forEach(doc => {
                 const d = doc.data(); 
                 const entry = document.createElement('div');
-                entry.innerText = `> ${d.ticketId} | ${d.location}`; // innerText блокує XSS
+                entry.innerText = `> ${d.ticketId} | ${d.location}`;
                 vault.appendChild(entry);
                 if(d.lat && d.lng) L.circleMarker([d.lat, d.lng], { radius: 4, color: '#00ffcc', fillOpacity: 0.8 }).addTo(map);
             });
@@ -613,31 +562,32 @@ startGhostProtocol(true);
         };
 
         const initSystem = () => {
-    initLanguage();
-    updateLiveStatistics();
+            initLanguage();
+            updateLiveStatistics();
+            startGhostProtocol(true); // ЗАПУСК ПРИМАРНОГО ПРОТОКОЛУ ТІЛЬКИ ПІСЛЯ ЗАВАНТАЖЕННЯ
 
-    const savedText = safeStorage.get('capsuleText');
-    if (savedText) { document.getElementById('user-msg').value = savedText; }
+            const savedText = safeStorage.get('capsuleText');
+            if (savedText) { document.getElementById('user-msg').value = savedText; }
 
-    if (window.location.search.includes('status=success') && safeStorage.get('tx_intent')) {
-        safeStorage.remove('tx_intent'); 
-        window.history.replaceState({}, document.title, window.location.pathname);
-        
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById('result-section').classList.add('active');
-        document.getElementById('visionary-section').style.display = 'none';
-        
-        const finalText = safeStorage.get('capsuleText') || "GLOBAL NODE MESSAGE";
-        generateFinalCapsule(finalText);
-    }
-};
+            if (window.location.search.includes('status=success') && safeStorage.get('tx_intent')) {
+                safeStorage.remove('tx_intent'); 
+                window.history.replaceState({}, document.title, window.location.pathname);
+                
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById('result-section').classList.add('active');
+                document.getElementById('visionary-section').style.display = 'none';
+                
+                const finalText = safeStorage.get('capsuleText') || "GLOBAL NODE MESSAGE";
+                generateFinalCapsule(finalText);
+            }
+        };
 
-// Куленепробивний запуск: перевіряємо, чи сторінка вже завантажилась
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSystem);
-} else {
-    initSystem();
-}
+        // Куленепробивний запуск: перевіряємо, чи сторінка вже завантажилась
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSystem);
+        } else {
+            initSystem();
+        }
 
         async function generateFinalCapsule(finalText) {
             window.playScan();
@@ -661,7 +611,7 @@ if (document.readyState === 'loading') {
                     ticketId: capsuleId, message: finalText, location: currentPos.city, 
                     lat: currentPos.lat, lng: currentPos.lng, timestamp: now.toISOString() 
                 }); 
-                safeStorage.remove('capsuleText'); // БЕЗПЕКА: Змінено localStorage на safeStorage
+                safeStorage.remove('capsuleText'); 
             } catch (error) {
                 console.error("Помилка бази даних:", error);
             }
