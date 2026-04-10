@@ -569,17 +569,19 @@
             const savedText = safeStorage.get('capsuleText');
             if (savedText) { document.getElementById('user-msg').value = savedText; }
 
-            if (window.location.search.includes('status=success') && safeStorage.get('tx_intent')) {
-                safeStorage.remove('tx_intent'); 
-                window.history.replaceState({}, document.title, window.location.pathname);
-                
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById('result-section').classList.add('active');
-                document.getElementById('visionary-section').style.display = 'none';
-                
-                const finalText = safeStorage.get('capsuleText') || "GLOBAL NODE MESSAGE";
-                generateFinalCapsule(finalText);
-            }
+            // ОПТИМІЗОВАНО: Довіряємо URL від Stripe, обходимо стирання пам'яті мобільними браузерами
+if (window.location.search.includes('status=success')) {
+    safeStorage.remove('tx_intent'); 
+    window.history.replaceState({}, document.title, window.location.pathname);
+    
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('result-section').classList.add('active');
+    document.getElementById('visionary-section').style.display = 'none';
+    
+    // Якщо Safari видалив текст користувача, генеруємо резервний зашифрований блок, щоб уникнути помилки
+    const finalText = safeStorage.get('capsuleText') || "[ ENCRYPTED GLOBAL DATA ]";
+    generateFinalCapsule(finalText);
+}
         };
 
         // Куленепробивний запуск: перевіряємо, чи сторінка вже завантажилась
