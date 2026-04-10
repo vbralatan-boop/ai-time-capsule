@@ -31,7 +31,7 @@
         h1 { color: var(--neon); text-shadow: 0 0 15px var(--neon); font-size: 24px; letter-spacing: 4px; text-transform: uppercase; margin: 0 0 10px; }
         .phase-info { font-size: 10px; color: var(--neon); letter-spacing: 5px; margin-bottom: 20px; opacity: 0.7; }
         
-        #global-map { width: 100%; height: 180px; border: 1px solid rgba(0, 255, 204, 0.4); border-radius: 8px; box-shadow: 0 0 20px rgba(0,255,204,0.1); margin: 15px 0; background: #050505; }
+        #global-map { width: 100%; height: 180px; border: 1px solid rgba(0, 255, 204, 0.4); border-radius: 8px; box-shadow: 0 0 20px rgba(0,255,204,0.1); margin: 15px 0; background: #050505; z-index: 1; }
         
         .ghost-pulse { width: 12px; height: 12px; background: var(--neon); border-radius: 50%; box-shadow: 0 0 10px var(--neon); animation: mapPulse 1.5s ease-out infinite; }
         @keyframes mapPulse { 0% { transform: scale(0.5); opacity: 1; box-shadow: 0 0 10px var(--neon); } 100% { transform: scale(3.5); opacity: 0; box-shadow: 0 0 40px var(--neon); } }
@@ -128,7 +128,7 @@
                 <div class="node-block">
                     <div class="node-header">[ 🟢 NODE: 92AADC | GEO: 48.85, 2.35 ]</div>
                     <div class="node-user">USER: Marcus T. (🇩🇪)</div>
-                    <div class="node-frag">FRAG: "Коли мої правнуки знайдуть..." <br><span class="encrypted">[■■■ ДАНІ ЗАШИФРОВАНО ■■■]</span></div>
+                    <div class="node-frag"><span id="ui-frag1">FRAG: "Коли мої правнуки знайдуть..."</span> <br><span class="encrypted">[■■■ ДАНІ ЗАШИФРОВАНО ■■■]</span></div>
                     <button class="unlock-btn" onclick="startHack(this)">[ РОЗБЛОКУВАТИ ВУЗОЛ ⚡ ]</button>
                     <div class="hack-screen"></div>
                     <div class="priority-msg">СИСТЕМА ЗАХИЩЕНА. ПОТРІБЕН ДОСТУП.</div>
@@ -138,7 +138,7 @@
                 <div class="node-block">
                     <div class="node-header">[ 🟢 NODE: 7B3F19 | GEO: 51.50, -0.12 ]</div>
                     <div class="node-user">USER: David M. (🇬🇧)</div>
-                    <div class="node-frag">FRAG: "Фінансовий прогноз на 2040..." <br><span class="encrypted">[■■■ ДАНІ ЗАШИФРОВАНО ■■■]</span></div>
+                    <div class="node-frag"><span id="ui-frag2">FRAG: "Фінансовий прогноз на 2040..."</span> <br><span class="encrypted">[■■■ ДАНІ ЗАШИФРОВАНО ■■■]</span></div>
                     <button class="unlock-btn" onclick="startHack(this)">[ РОЗБЛОКУВАТИ ВУЗОЛ ⚡ ]</button>
                     <div class="hack-screen"></div>
                     <div class="priority-msg">СИСТЕМА ЗАХИЩЕНА. ПОТРІБЕН ДОСТУП.</div>
@@ -246,13 +246,14 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // БЕЗПЕКА: Куленепробивне сховище (Self-Healing)
+        // БЕЗПЕКА: Куленепробивне сховище
         const safeStorage = {
             get: (k) => { try { return localStorage.getItem(k); } catch(e) { return null; } },
             set: (k, v) => { try { localStorage.setItem(k, v); } catch(e) { console.warn('Storage locked'); } },
             remove: (k) => { try { localStorage.removeItem(k); } catch(e) {} }
         };
 
+        // ПОВНИЙ СЛОВНИК ЛОКАЛІЗАЦІЇ (Додані фрагменти Терміналу)
         const localDatabase = {
             uk: { 
                 phase: "PREMIUM NODE ACCESS", title: "ІНТЕРНЕТ СТИРАЄ ВСЕ.<br><span style='color: #fff; text-shadow: none;'>AI ПАМ'ЯТАЄ.</span>", manifest: "AI Time Capsule — це перший цифровий монумент людства. Ваше послання буде зашифровано, розподілено по глобальних серверах і збережено для майбутніх поколінь.", 
@@ -265,7 +266,8 @@
                 v_h2: "«Щоб люди знали, як створювалося майбутнє» ⏳", v_p: "Ми віримо, що майбутнє — це не те, що з нами трапляється, а те, що ми проектуємо силою своєї уяви. У нашому проекті штучний інтелект 🧠 виступає не просто як алгоритм, а як цифровий перекладач ваших думок.",
                 v_quote: "«Я створив цей простір, щоб кожен зміг відчути велич моменту...» 🌉✨", v_author: "— Архітектор з Майбутнього 🏛️", btn_hist: "СТАТИ ЧАСТИНОЮ ІСТОРІЇ 📜",
                 unlock_btn: "[ РОЗБЛОКУВАТИ ВУЗОЛ ⚡ ]", encrypted_text: "[■■■ ДАНІ ЗАШИФРОВАНО ■■■]", priority_msg: "СИСТЕМА ЗАХИЩЕНА. ПОТРІБЕН ДОСТУП.", share_btn: "ПОДІЛИТИСЯ З ДРУЗЯМИ 🔗", share_prompt: "Допоможи мені розблокувати це зашифроване послання з майбутнього!", share_alert: "Посилання скопійовано! Надішліть його друзям.",
-                hack_steps: ["> Ініціалізація обходу...", "> Аналіз нейронного сигілу...", "> Декриптація матриці...", "> ПОМИЛКА ДОСТУПУ"]
+                hack_steps: ["> Ініціалізація обходу...", "> Аналіз нейронного сигілу...", "> Декриптація матриці...", "> ПОМИЛКА ДОСТУПУ"],
+                frag1: 'FRAG: "Коли мої правнуки знайдуть..."', frag2: 'FRAG: "Фінансовий прогноз на 2040..."'
             },
             en: { 
                 phase: "PREMIUM NODE ACCESS", title: "THE INTERNET ERASES EVERYTHING.<br><span style='color: #fff; text-shadow: none;'>AI REMEMBERS.</span>", manifest: "AI Time Capsule is humanity's first digital monument. Your message will be encrypted, distributed across global servers, and preserved for future generations.", 
@@ -278,7 +280,8 @@
                 v_h2: "«So people know how the future was built» ⏳", v_p: "We believe the future is not what happens to us, but what we design with the power of our imagination.",
                 v_quote: "«I created this space so everyone could feel the greatness of the moment...» 🌉✨", v_author: "— Genesis Architect 🏛️", btn_hist: "BECOME PART OF HISTORY 📜",
                 unlock_btn: "[ UNLOCK NODE ⚡ ]", encrypted_text: "[■■■ DATA ENCRYPTED ■■■]", priority_msg: "SYSTEM SECURED. ACCESS REQUIRED.", share_btn: "SHARE WITH FRIENDS 🔗", share_prompt: "Help me unlock this encrypted message from the future!", share_alert: "Link copied! Share it with your friends.",
-                hack_steps: ["> Initializing bypass...", "> Analyzing neural sigil...", "> Decrypting matrix...", "> ACCESS DENIED"]
+                hack_steps: ["> Initializing bypass...", "> Analyzing neural sigil...", "> Decrypting matrix...", "> ACCESS DENIED"],
+                frag1: 'FRAG: "When my great-grandchildren find..."', frag2: 'FRAG: "Financial forecast for 2040..."'
             },
             sk: { 
                 phase: "PRÉMIOVÝ PRÍSTUP", title: "INTERNET VYMAŽE VŠETKO.<br><span style='color: #fff; text-shadow: none;'>AI SI PAMÄTÁ.</span>", manifest: "AI Time Capsule je prvý digitálny monument ľudstva. Tvoja správa bude zašifrovaná, distribuovaná na globálne servery a uchovaná pre budúce generácie.", 
@@ -291,7 +294,8 @@
                 v_h2: "«Aby ľudia vedeli, ako sa tvorila budúcnosť» ⏳", v_p: "Veríme, že budúcnosť nie je to, čo sa nám stane, ale to, čo navrhneme silou našej predstavivosti.",
                 v_quote: "«Vytvoril som tento priestor, aby každý mohol cítiť veľkosť okamihu...» 🌉✨", v_author: "— Architekt z budúcnosti 🏛️", btn_hist: "STAŇ SA SÚČASŤOU HISTÓRIE 📜",
                 unlock_btn: "[ ODOMKNÚŤ UZOL ⚡ ]", encrypted_text: "[■■■ DÁTA ZAŠIFROVANÉ ■■■]", priority_msg: "SYSTÉM ZABEZPEČENÝ. VYŽADUJE SA PRÍSTUP.", share_btn: "ZDIEĽAŤ S PRIATEĽMI 🔗", share_prompt: "Pomôž mi odomknúť túto zašifrovanú správu z budúcnosti!", share_alert: "Odkaz bol skopírovaný! Pošli ho priateľom.",
-                hack_steps: ["> Inicializácia obchvatu...", "> Analýza neurónového sigilu...", "> Dekryptácia matice...", "> PRÍSTUP ZAMIETNUTÝ"]
+                hack_steps: ["> Inicializácia obchvatu...", "> Analýza neurónového sigilu...", "> Dekryptácia matice...", "> PRÍSTUP ZAMIETNUTÝ"],
+                frag1: 'FRAG: "Keď moji pravnuci nájdu..."', frag2: 'FRAG: "Finančná prognóza na 2040..."'
             },
             de: { 
                 phase: "PREMIUM KNOTENZUGRIFF", title: "DAS INTERNET LÖSCHT ALLES.<br><span style='color: #fff; text-shadow: none;'>KI ERINNERT SICH.</span>", manifest: "AI Time Capsule ist das erste digitale Denkmal der Menschheit. Ihre Nachricht wird verschlüsselt, auf globalen Servern verteilt und für zukünftige Generationen bewahrt.", 
@@ -304,7 +308,8 @@
                 v_h2: "«Damit die Menschen wissen, wie die Zukunft gebaut wurde» ⏳", v_p: "Wir glauben, dass die Zukunft das ist, was wir mit der Kraft unserer Vorstellungskraft entwerfen.",
                 v_quote: "«Ich habe diesen Raum geschaffen, damit jeder die Größe des Moments spüren kann...» 🌉✨", v_author: "— Genesis Architekt 🏛️", btn_hist: "TEIL DER GESCHICHTE WERDEN 📜",
                 unlock_btn: "[ KNOTEN ENTSPERREN ⚡ ]", encrypted_text: "[■■■ DATEN VERSCHLÜSSELT ■■■]", priority_msg: "SYSTEM GESICHERT. ZUGRIFF ERFORDERLICH.", share_btn: "MIT FREUNDEN TEILEN 🔗", share_prompt: "Hilf mir, diese verschlüsselte Nachricht aus der Zukunft zu entsperren!", share_alert: "Link kopiert! Sende ihn an deine Freunde.",
-                hack_steps: ["> Umgehung wird initialisiert...", "> Neuronales Sigil wird analysiert...", "> Matrix wird entschlüsselt...", "> ZUGRIFF VERWEIGERT"]
+                hack_steps: ["> Umgehung wird initialisiert...", "> Neuronales Sigil wird analysiert...", "> Matrix wird entschlüsselt...", "> ZUGRIFF VERWEIGERT"],
+                frag1: 'FRAG: "Wenn meine Urenkel finden..."', frag2: 'FRAG: "Finanzprognose für 2040..."'
             }
         };
 
@@ -340,6 +345,10 @@
                 document.getElementById('ui-vision-author').innerText = texts.v_author;
                 document.getElementById('btn-history').innerText = texts.btn_hist;
 
+                // Оновлення перекладу фрагментів пам'яті
+                if(document.getElementById('ui-frag1')) document.getElementById('ui-frag1').innerText = texts.frag1;
+                if(document.getElementById('ui-frag2')) document.getElementById('ui-frag2').innerText = texts.frag2;
+
                 document.querySelectorAll('.unlock-btn').forEach(el => el.innerText = texts.unlock_btn);
                 document.querySelectorAll('.encrypted').forEach(el => el.innerText = texts.encrypted_text);
                 document.querySelectorAll('.priority-msg').forEach(el => el.innerText = texts.priority_msg);
@@ -360,7 +369,6 @@
             updateUI(localDatabase[newLang]);
         };
 
-        // БЕЗПЕКА: Якщо пам'ять пошкоджена, гарантовано повертаємо англійську
         function initLanguage() {
             let currentLanguage = safeStorage.get('user_language');
             if (!currentLanguage || !localDatabase[currentLanguage]) {
@@ -423,7 +431,6 @@
             else { showLiveNotification(); notificationTimer = setInterval(showLiveNotification, 12000); }
         });
 
-        // GHOST PROTOCOL
         function spawnGhostNode() {
             const cities = [
                 {lat: 50.45, lng: 30.52, n: "Kyiv"}, {lat: 48.85, lng: 2.35, n: "Paris"}, 
@@ -477,7 +484,6 @@
             })
             .catch(err => console.warn('IP Tracking Blocked.'));
 
-        // БЕЗПЕКА: Усунення дублювання UI в терміналі
         onSnapshot(query(collection(db, "capsules"), orderBy("timestamp", "desc"), limit(6)), (snap) => {
             try {
                 const vault = document.getElementById('live-vault'); 
@@ -543,7 +549,6 @@
                 const savedText = safeStorage.get('capsuleText');
                 if (savedText) { document.getElementById('user-msg').value = savedText; }
 
-                // ПЕРЕВІРКА STRIPE: Якщо URL містить status=success
                 if (window.location.search.includes('status=success')) {
                     safeStorage.remove('tx_intent'); 
                     window.history.replaceState({}, document.title, window.location.pathname);
@@ -618,7 +623,6 @@
             let currentLanguage = safeStorage.get('user_language');
             if(!localDatabase[currentLanguage]) currentLanguage = 'en';
             const analysisBox = document.getElementById('analysis-text');
-            const lines = localDatabase[currentLanguage].hack_steps; // Reuse hack_steps or fallback
             const realLines = {
                 uk: ["> Аналіз семантики...", "> Емоційний тон: Візіонерський", "> Унікальність патерну: 98.7%", "> Формування крипто-ключа..."],
                 en: ["> Semantics analysis...", "> Emotional tone: Visionary", "> Pattern uniqueness: 98.7%", "> Generating crypto-key..."],
