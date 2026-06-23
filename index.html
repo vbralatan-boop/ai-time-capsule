@@ -644,7 +644,7 @@
             btnPay.innerText = "..."; btnPay.style.background = "#fff"; btnPay.style.color = "#000";
             
             safeStorage.set('tx_intent', 'pending_' + Date.now()); 
-            const checkoutUrl = new URL("https://buy.stripe.com/5kQ00kgG95qDbEK5tp5Vu00);
+            const checkoutUrl = new URL("https://buy.stripe.com/5kQ00kgG95qDbEK5tp5Vu00");
             checkoutUrl.searchParams.append('client_reference_id', Math.random().toString(16).slice(2, 10));
             window.location.href = checkoutUrl.toString();
         });
